@@ -359,14 +359,14 @@ function initCostCalculator() {
       const scopeName = scopeInput.getAttribute('data-name');
       const urgencyName = urgencyInput.getAttribute('data-name');
       
-      const message = `Привет, Александр! Хочу заказать дизайн проекта:%0A%0A` +
-        `• Услуга: ${encodeURIComponent(serviceName)}%0A` +
-        `• Объём: ${encodeURIComponent(scopeName)}%0A` +
-        `• Срочность: ${encodeURIComponent(urgencyName)}%0A` +
-        `• Расчётная стоимость: ~${finalPrice.toLocaleString('ru-RU')} ₽ (${finalDays} дн.)%0A%0A` +
-        `Давай обсудим детали?`;
+      const message = `Привет, Александр! Пишу по поводу дизайна:%0A%0A` +
+        `• Задача: ${encodeURIComponent(serviceName)}%0A` +
+        `• Объем: ${encodeURIComponent(scopeName)}%0A` +
+        `• Сроки: ${encodeURIComponent(urgencyName)}%0A` +
+        `• Примерная смета: ~${finalPrice.toLocaleString('ru-RU')} ₽ (~${finalDays} раб. дн.)%0A%0A` +
+        `Хочу обсудить детали.`;
 
-      ctaBtn.href = `https://t.me/yarovenko_designer?text=${message}`;
+      ctaBtn.href = `https://t.me/MrRebrik?text=${message}`;
     }
   }
 
@@ -389,10 +389,10 @@ function initCopyEmail() {
   if (!btn || !toast) return;
 
   btn.addEventListener('click', async () => {
-    const email = btn.getAttribute('data-email') || 'alexander.yarovenko.design@gmail.com';
+    const email = btn.getAttribute('data-email') || 'jarovenkoaleksander@yandex.ru';
     try {
       await navigator.clipboard.writeText(email);
-      showToast(`Скопировано в буфер: ${email}`);
+      showToast(`Email скопирован: ${email}`);
       if (window.sfx) window.sfx.success();
     } catch (e) {
       // Fallback
