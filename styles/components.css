@@ -3,6 +3,43 @@
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
+   0. Scroll Progress Indicator (Compliant with modern-web-guidance)
+   -------------------------------------------------------------------------- */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(179, 247, 125, 0.35) 0%, var(--accent) 100%);
+  box-shadow: 0 0 12px var(--accent-glow);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  z-index: 9990;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    @keyframes grow-scroll-progress {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    .scroll-progress {
+      animation: grow-scroll-progress auto linear;
+      animation-timeline: scroll();
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
    1. Site Header & Navigation
    -------------------------------------------------------------------------- */
 .site-header {
@@ -416,8 +453,21 @@
   border-bottom: 1px solid var(--border-subtle);
   padding: 1.25rem 0;
   display: flex;
+  align-items: center;
   user-select: none;
   position: relative;
+}
+
+.marquee-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, var(--bg-secondary) 72%);
+  pointer-events: none;
+  z-index: 2;
 }
 
 .marquee-track {
@@ -426,6 +476,52 @@
   white-space: nowrap;
   animation: marquee-slide 28s linear infinite;
   will-change: transform;
+}
+
+.marquee-container.is-paused .marquee-track,
+.marquee-container:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.marquee-pause-btn {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(8, 9, 13, 0.92);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-medium);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--text-secondary);
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.marquee-pause-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.marquee-pause-btn:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+  .marquee-pause-btn {
+    display: none;
+  }
 }
 
 .marquee-item {
@@ -520,6 +616,25 @@
   perspective: 1000px;
 }
 
+.work-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    420px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(179, 247, 125, 0.085),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.work-card:hover::before {
+  opacity: 1;
+}
+
 .work-card:hover {
   border-color: var(--border-active);
   box-shadow: var(--shadow-neon);
@@ -538,9 +653,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: top center;
+  object-position: center center;
   transition: transform 0.65s var(--ease-out-expo), filter 0.65s var(--ease-out-expo);
-  filter: brightness(0.92) contrast(1.04);
+  filter: brightness(0.95) contrast(1.03);
 }
 
 .work-card:hover .card-media img {
@@ -659,7 +774,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   5. Modal Dialog (Compliant with modern-web-guidance)
+   5. Modal Dialog (Compliant with modern-web-guidance animate-to-from-top-layer)
    -------------------------------------------------------------------------- */
 dialog#project-modal {
   margin: auto;
@@ -673,6 +788,15 @@ dialog#project-modal {
   max-height: 90vh;
   box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8), 0 0 60px var(--accent-glow);
   outline: none;
+  opacity: 0;
+  transition-property: opacity, transform, display, overlay;
+  transition-duration: 0.3s;
+  transition-timing-function: var(--ease-out-expo);
+  transition-behavior: allow-discrete;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: scale(0.94) translateY(16px);
+  }
 }
 
 /* Modern Web Guidance: MANDATORY scroll lock & backdrop rules */
@@ -680,21 +804,47 @@ dialog:modal {
   overscroll-behavior: contain;
 }
 
-dialog::backdrop {
-  background: rgba(4, 5, 8, 0.82);
+dialog#project-modal::backdrop {
+  background-color: rgba(4, 5, 8, 0);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   overflow: hidden;
   overscroll-behavior: contain;
+  transition-property: background-color, display, overlay;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-out;
+  transition-behavior: allow-discrete;
 }
 
-/* Modal Open/Close Animations */
-dialog[open] {
-  animation: modal-enter 0.35s var(--ease-out-expo) forwards;
+:is(dialog#project-modal[open]):where(:not([data-closing])) {
+  opacity: 1;
+
+  @starting-style {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: scale(1) translateY(0);
+
+    @starting-style {
+      transform: scale(0.94) translateY(16px);
+    }
+  }
+
+  &::backdrop {
+    background-color: rgba(4, 5, 8, 0.82);
+
+    @starting-style {
+      background-color: rgba(4, 5, 8, 0);
+    }
+  }
 }
 
-dialog[open]::backdrop {
-  animation: backdrop-enter 0.35s ease-out forwards;
+@media (prefers-reduced-motion: reduce) {
+  dialog#project-modal,
+  dialog#project-modal::backdrop {
+    transition-duration: 0.1s;
+  }
 }
 
 .modal-inner-scroll {

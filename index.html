@@ -23,6 +23,9 @@
 </head>
 <body>
 
+  <!-- Scroll Progress Indicator -->
+  <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
   <!-- Background Interactive Canvas & Ambience -->
   <canvas id="bg-canvas"></canvas>
   <div class="noise-overlay" aria-hidden="true"></div>
@@ -139,26 +142,27 @@
     </section>
 
     <!-- 3. Infinite Marquee Ticker -->
-    <div class="marquee-container" aria-hidden="true">
-      <div class="marquee-track">
+    <div class="marquee-container" id="marquee-container">
+      <div class="marquee-track" aria-hidden="true">
         <div class="marquee-item">ВЕБ-ДИЗАЙН <span class="separator">✦</span></div>
-        <div class="marquee-item">ИНФОГРАФИКА ДЛЯ WB И OZON <span class="separator">✦</span></div>
-        <div class="marquee-item">САЙТЫ ПОД КЛЮЧ <span class="separator">✦</span></div>
+        <div class="marquee-item">FINTECH &amp; SAAS ПРОДУКТЫ <span class="separator">✦</span></div>
+        <div class="marquee-item">E-COMMERCE &amp; РИТЕЙЛ <span class="separator">✦</span></div>
         <div class="marquee-item">UI/UX ИНТЕРФЕЙСЫ <span class="separator">✦</span></div>
         <div class="marquee-item">БРЕНДИНГ И АЙДЕНТИКА <span class="separator">✦</span></div>
-        <div class="marquee-item">АККУРАТНЫЕ АВТОЛЕЙАУТЫ <span class="separator">✦</span></div>
-        <div class="marquee-item">МОБИЛЬНАЯ АДАПТАЦИЯ <span class="separator">✦</span></div>
+        <div class="marquee-item">ДИЗАЙН-СИСТЕМЫ FIGMA <span class="separator">✦</span></div>
+        <div class="marquee-item">МОБИЛЬНЫЕ ПРИЛОЖЕНИЯ <span class="separator">✦</span></div>
         <div class="marquee-item">УВАЖЕНИЕ К ВЕРСТКЕ <span class="separator">✦</span></div>
         <!-- Duplicate for loop -->
         <div class="marquee-item">ВЕБ-ДИЗАЙН <span class="separator">✦</span></div>
-        <div class="marquee-item">ИНФОГРАФИКА ДЛЯ WB И OZON <span class="separator">✦</span></div>
-        <div class="marquee-item">САЙТЫ ПОД КЛЮЧ <span class="separator">✦</span></div>
+        <div class="marquee-item">FINTECH &amp; SAAS ПРОДУКТЫ <span class="separator">✦</span></div>
+        <div class="marquee-item">E-COMMERCE &amp; РИТЕЙЛ <span class="separator">✦</span></div>
         <div class="marquee-item">UI/UX ИНТЕРФЕЙСЫ <span class="separator">✦</span></div>
         <div class="marquee-item">БРЕНДИНГ И АЙДЕНТИКА <span class="separator">✦</span></div>
-        <div class="marquee-item">АККУРАТНЫЕ АВТОЛЕЙАУТЫ <span class="separator">✦</span></div>
-        <div class="marquee-item">МОБИЛЬНАЯ АДАПТАЦИЯ <span class="separator">✦</span></div>
+        <div class="marquee-item">ДИЗАЙН-СИСТЕМЫ FIGMA <span class="separator">✦</span></div>
+        <div class="marquee-item">МОБИЛЬНЫЕ ПРИЛОЖЕНИЯ <span class="separator">✦</span></div>
         <div class="marquee-item">УВАЖЕНИЕ К ВЕРСТКЕ <span class="separator">✦</span></div>
       </div>
+      <button type="button" class="marquee-pause-btn" id="marquee-toggle" aria-label="Поставить бегущую строку на паузу">Пауза</button>
     </div>
 
     <!-- 4. Selected Works -->
@@ -169,20 +173,20 @@
           <span class="section-tag">01 // Портфолио</span>
           <h2 class="section-title">Работы, за которые <span class="text-accent">не стыдно</span></h2>
           <p class="section-subtitle">
-            Несколько показательных проектов: от интернет-магазинов и сервисов до карточек товаров на маркетплейсах и фирменного стиля.
+            Ключевые проекты за последнее время: финтех-интерфейсы, мобильные приложения, интернет-магазины, E-commerce упаковка и брендинг.
           </p>
         </div>
 
         <div class="portfolio-controls reveal-init delay-1">
           <div class="filter-group" role="tablist" aria-label="Фильтрация проектов">
             <button type="button" class="filter-btn active" data-filter="all" role="tab" aria-selected="true">Все работы</button>
-            <button type="button" class="filter-btn" data-filter="ui-ux" role="tab" aria-selected="false">Сайты & UI/UX</button>
-            <button type="button" class="filter-btn" data-filter="infographics" role="tab" aria-selected="false">Инфографика для маркетплейсов</button>
-            <button type="button" class="filter-btn" data-filter="branding" role="tab" aria-selected="false">Брендинг & Презентации</button>
+            <button type="button" class="filter-btn" data-filter="ui-ux" role="tab" aria-selected="false">Сайты &amp; UI/UX</button>
+            <button type="button" class="filter-btn" data-filter="infographics" role="tab" aria-selected="false">E-com &amp; Карточки</button>
+            <button type="button" class="filter-btn" data-filter="branding" role="tab" aria-selected="false">Брендинг &amp; Системы</button>
           </div>
 
           <div class="portfolio-counter">
-            Показано: <strong id="visible-count">10 из 10</strong>
+            Показано: <strong id="visible-count">8 из 8</strong>
           </div>
         </div>
 
@@ -263,18 +267,18 @@
 
             <div class="awards-timeline">
               <div class="award-item">
-                <span class="award-year">2024–н.в.</span>
+                <span class="award-year">2025–н.в.</span>
                 <div class="award-details">
-                  <h5>E-commerce &amp; UI/UX флагманские проекты</h5>
-                  <span>Карточки товаров и интерфейсы для брендов с оборотом 500M+ ₽</span>
+                  <h5>Ведущий Product &amp; UI/UX дизайнер</h5>
+                  <span>SaaS-интерфейсы, финтех-кабинеты и дизайн-системы для технологических стартапов</span>
                 </div>
               </div>
 
               <div class="award-item">
-                <span class="award-year">2023</span>
+                <span class="award-year">2024</span>
                 <div class="award-details">
-                  <h5>1-е место на форуме в Шерегеше</h5>
-                  <span>Проектирование и защита кликабельного прототипа «Родная Сибирь»</span>
+                  <h5>Арт-дирекшн E-commerce и упаковки</h5>
+                  <span>Флагманские карточки товаров с 3D-подачей и ростом CTR до +42%</span>
                 </div>
               </div>
 
@@ -282,15 +286,15 @@
                 <span class="award-year">2022–23</span>
                 <div class="award-details">
                   <h5>Проектирование дизайн-систем в Figma</h5>
-                  <span>UI-киты на 140+ компонентов: автолейауты, токены и стандарты доступности</span>
+                  <span>UI-киты на 180+ компонентов: автолейауты, токены, переменные и доступность</span>
                 </div>
               </div>
 
               <div class="award-item">
                 <span class="award-year">2020–22</span>
                 <div class="award-details">
-                  <h5>200+ карточек для Wildberries и Ozon</h5>
-                  <span>Вывод товаров в топ поисковой выдачи, рост CTR до +38%</span>
+                  <h5>200+ коммерческих сайтов и карточек</h5>
+                  <span>Интерактивные конфигураторы, интернет-магазины и брендинг под ключ</span>
                 </div>
               </div>
 
@@ -298,7 +302,7 @@
                 <span class="award-year">2018–20</span>
                 <div class="award-details">
                   <h5>Старт в коммерческом дизайне</h5>
-                  <span>Первые коммерческие заказы: брендинг, полиграфия и адаптивная верстка</span>
+                  <span>Первые заказы: фирменные стили, полиграфия, логотипы и адаптивная верстка</span>
                 </div>
               </div>
             </div>
@@ -638,10 +642,10 @@
       </div>
 
       <div class="modal-footer-cta">
-        <a href="https://www.figma.com/design/zffYx01O7kiW8c8zDvIH8W/%D0%A4%D1%80%D0%B8%D0%BB%D0%B0%D0%BD%D1%81?m=auto&t=55vxUHpUim2frseH-6" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
-          Посмотреть в Figma ↗
-        </a>
-        <a href="https://t.me/MrRebrik" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+        <button type="button" class="btn btn-secondary" id="modal-copy-link-btn">
+          Скопировать ссылку на кейс
+        </button>
+        <a href="https://t.me/MrRebrik" target="_blank" rel="noopener noreferrer" class="btn btn-primary" id="modal-discuss-btn">
           Обсудить похожую задачу →
         </a>
       </div>

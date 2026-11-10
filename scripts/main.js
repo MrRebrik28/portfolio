@@ -4,6 +4,8 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  initScrollProgressFallback();
+  initMarqueeToggle();
   initLiveClock();
   initCustomCursor();
   initHeaderScroll();
@@ -16,7 +18,43 @@ document.addEventListener('DOMContentLoaded', () => {
   initCopyEmail();
   initScrollObserver();
   initInteractiveSFX();
+  openCaseFromHash();
 });
+
+/* --------------------------------------------------------------------------
+   0. Scroll Progress Fallback & Accessible Marquee Control
+   -------------------------------------------------------------------------- */
+function initScrollProgressFallback() {
+  const progress = document.getElementById('scroll-progress');
+  if (!progress) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  if (!CSS.supports('animation-timeline', 'scroll()')) {
+    const updateProgress = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = scrollable > 0 ? Math.min(Math.max(window.scrollY / scrollable, 0), 1) : 0;
+      progress.style.transform = `scaleX(${pct})`;
+    };
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+  }
+}
+
+function initMarqueeToggle() {
+  const container = document.getElementById('marquee-container');
+  const toggleBtn = document.getElementById('marquee-toggle');
+  if (!container || !toggleBtn) return;
+
+  toggleBtn.addEventListener('click', () => {
+    const isPaused = container.classList.toggle('is-paused');
+    toggleBtn.textContent = isPaused ? 'Продолжить' : 'Пауза';
+    toggleBtn.setAttribute(
+      'aria-label',
+      isPaused ? 'Возобновить бегущую строку' : 'Поставить бегущую строку на паузу'
+    );
+    if (window.sfx) window.sfx.click();
+  });
+}
 
 /* --------------------------------------------------------------------------
    1. Live Clock (Siberia / Kemerovo Timezone UTC+7)
@@ -191,8 +229,12 @@ function initPortfolioFilters() {
   const filterBtns = document.querySelectorAll('.filter-btn');
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
+      filterBtns.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
       btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
       const cat = btn.getAttribute('data-filter');
       renderWorks(cat);
       if (window.sfx) window.sfx.click();
@@ -218,10 +260,11 @@ function initCardClickEvents() {
 }
 
 /* --------------------------------------------------------------------------
-   5. 3D Card Tilt Effect
+   5. 3D Card Tilt & Spotlight Effect
    -------------------------------------------------------------------------- */
 function initTiltCards() {
   if (window.matchMedia('(pointer: coarse)').matches) return;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const cards = document.querySelectorAll('.work-card');
   cards.forEach(card => {
@@ -229,12 +272,19 @@ function initTiltCards() {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
+
+      // Spotlight gradient coordinates
+      card.style.setProperty('--mouse-x', `${x.toFixed(1)}px`);
+      card.style.setProperty('--mouse-y', `${y.toFixed(1)}px`);
+
+      if (reducedMotion) return;
+
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
 
       // Max tilt angles (degrees)
-      const rotateX = ((centerY - y) / centerY) * 7;
-      const rotateY = ((x - centerX) / centerX) * 7;
+      const rotateX = ((centerY - y) / centerY) * 6;
+      const rotateY = ((x - centerX) / centerX) * 6;
 
       card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-6px)`;
     });
@@ -246,8 +296,49 @@ function initTiltCards() {
 }
 
 /* --------------------------------------------------------------------------
-   6. Project Detail Modal (Modern Web Guidance compliant)
+   6. Project Detail Modal (Top-layer Animate & Deep-Linking)
    -------------------------------------------------------------------------- */
+let supportsDisplayTransition;
+let activeModalCaseId = null;
+
+function canTransitionDisplay() {
+  if (supportsDisplayTransition !== undefined) return supportsDisplayTransition;
+  if (!window.CSS?.supports?.('transition-behavior', 'allow-discrete') || !document.body) {
+    return false;
+  }
+  const probe = document.createElement('div');
+  probe.style.cssText = 'transition: display 1s allow-discrete !important; display: block;';
+  document.body.appendChild(probe);
+  getComputedStyle(probe).display;
+  probe.style.display = 'none';
+  supportsDisplayTransition = getComputedStyle(probe).display === 'block';
+  probe.remove();
+  return supportsDisplayTransition;
+}
+
+function supportsTopLayerExit() {
+  return Boolean(window.CSS?.supports?.('overlay', 'auto') && canTransitionDisplay());
+}
+
+async function closeTopLayer(element) {
+  if (!element || !element.open) return;
+
+  if (!supportsTopLayerExit()) {
+    element.setAttribute('data-closing', '');
+    const animations = element.getAnimations({ subtree: true });
+    if (animations.length > 0) {
+      await Promise.race([
+        Promise.allSettled(animations.map((a) => a.finished)),
+        new Promise((r) => setTimeout(r, 600)),
+      ]);
+    }
+    if (!element.hasAttribute('data-closing')) return;
+    element.removeAttribute('data-closing');
+  }
+
+  element.close();
+}
+
 function initModalLogic() {
   const modal = document.getElementById('project-modal');
   if (!modal) return;
@@ -257,16 +348,33 @@ function initModalLogic() {
     closeBtn.addEventListener('click', () => closeProjectModal());
   }
 
-  // Modern Web Guidance fallback for click outside (light-dismiss)
+  const copyCaseBtn = document.getElementById('modal-copy-link-btn');
+  if (copyCaseBtn) {
+    copyCaseBtn.addEventListener('click', async () => {
+      if (!activeModalCaseId) return;
+      const baseUrl = `${window.location.origin}${window.location.pathname}`;
+      const caseUrl = `${baseUrl}#case-${activeModalCaseId}`;
+      try {
+        await navigator.clipboard.writeText(caseUrl);
+        showToast('Ссылка на кейс скопирована');
+        if (window.sfx) window.sfx.success();
+      } catch (_err) {
+        showToast(caseUrl);
+      }
+    });
+  }
+
+  // Click outside (light-dismiss)
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
       closeProjectModal();
     }
   });
 
-  // Esc key native handling hook
-  modal.addEventListener('cancel', () => {
-    if (window.sfx) window.sfx.modalClose();
+  // Route Esc / native cancel through top-layer exit transition
+  modal.addEventListener('cancel', (event) => {
+    event.preventDefault();
+    closeProjectModal();
   });
 }
 
@@ -274,6 +382,9 @@ function openProjectModal(id) {
   const item = portfolioData.find(p => p.id === id);
   const modal = document.getElementById('project-modal');
   if (!item || !modal) return;
+
+  activeModalCaseId = item.id;
+  modal.removeAttribute('data-closing');
 
   // Populate Modal Fields
   document.getElementById('modal-title').textContent = item.title;
@@ -292,6 +403,12 @@ function openProjectModal(id) {
   document.getElementById('modal-tagline').textContent = item.tagline;
   document.getElementById('modal-desc').textContent = item.description;
 
+  const discussBtn = document.getElementById('modal-discuss-btn');
+  if (discussBtn) {
+    const msg = `Привет, Александр! Посмотрел кейс «${item.title}», хочу обсудить похожую задачу.`;
+    discussBtn.href = `https://t.me/MrRebrik?text=${encodeURIComponent(msg)}`;
+  }
+
   // Highlights / Design Rules
   const highlightsList = document.getElementById('modal-highlights-list');
   highlightsList.innerHTML = item.designHighlights.map(h => `<li>${h}</li>`).join('');
@@ -305,7 +422,10 @@ function openProjectModal(id) {
     </div>
   `).join('');
 
-  // Show native modal
+  // Show native modal & sync URL hash
+  if (history.replaceState) {
+    history.replaceState(null, '', `#case-${item.id}`);
+  }
   modal.showModal();
   if (window.sfx) window.sfx.modalOpen();
 }
@@ -313,8 +433,22 @@ function openProjectModal(id) {
 function closeProjectModal() {
   const modal = document.getElementById('project-modal');
   if (!modal || !modal.open) return;
-  modal.close();
+
+  activeModalCaseId = null;
+  if (history.replaceState && window.location.hash.startsWith('#case-')) {
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+  closeTopLayer(modal);
   if (window.sfx) window.sfx.modalClose();
+}
+
+function openCaseFromHash() {
+  const hash = window.location.hash;
+  if (!hash || !hash.startsWith('#case-')) return;
+  const caseId = hash.replace('#case-', '');
+  if (portfolioData.some(p => p.id === caseId)) {
+    openProjectModal(caseId);
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -381,12 +515,25 @@ function initCostCalculator() {
 }
 
 /* --------------------------------------------------------------------------
-   8. Copy Email to Clipboard & Toast
+   8. Copy Email to Clipboard & Shared Toast
    -------------------------------------------------------------------------- */
+let toastTimer = null;
+
+function showToast(msg) {
+  const toast = document.getElementById('toast-notice');
+  if (!toast) return;
+  const textEl = toast.querySelector('.toast-msg');
+  if (textEl) textEl.textContent = msg;
+  toast.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3200);
+}
+
 function initCopyEmail() {
   const btn = document.getElementById('copy-email-btn');
-  const toast = document.getElementById('toast-notice');
-  if (!btn || !toast) return;
+  if (!btn) return;
 
   btn.addEventListener('click', async () => {
     const email = btn.getAttribute('data-email') || 'jarovenkoaleksander@yandex.ru';
@@ -394,20 +541,10 @@ function initCopyEmail() {
       await navigator.clipboard.writeText(email);
       showToast(`Email скопирован: ${email}`);
       if (window.sfx) window.sfx.success();
-    } catch (e) {
-      // Fallback
+    } catch (_e) {
       showToast(`Email: ${email}`);
     }
   });
-
-  function showToast(msg) {
-    const textEl = toast.querySelector('.toast-msg');
-    if (textEl) textEl.textContent = msg;
-    toast.classList.add('show');
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 3200);
-  }
 }
 
 /* --------------------------------------------------------------------------
@@ -443,9 +580,14 @@ function initInteractiveSFX() {
     });
   }
 
-  document.querySelectorAll('a, button, .work-card, .filter-btn, .calc-option-label').forEach(el => {
-    el.addEventListener('mouseenter', () => {
+  let lastHovered = null;
+  document.addEventListener('mouseover', (e) => {
+    const target = e.target.closest('a, button, .work-card, .filter-btn, .calc-option-label');
+    if (target && target !== lastHovered) {
+      lastHovered = target;
       if (window.sfx) window.sfx.hover();
-    });
+    } else if (!target) {
+      lastHovered = null;
+    }
   });
 }
