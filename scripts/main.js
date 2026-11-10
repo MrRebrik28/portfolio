@@ -260,11 +260,10 @@ function initCardClickEvents() {
 }
 
 /* --------------------------------------------------------------------------
-   5. 3D Card Tilt & Spotlight Effect
+   5. Architectural Card Spotlight Effect
    -------------------------------------------------------------------------- */
 function initTiltCards() {
   if (window.matchMedia('(pointer: coarse)').matches) return;
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const cards = document.querySelectorAll('.work-card');
   cards.forEach(card => {
@@ -273,24 +272,9 @@ function initTiltCards() {
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
 
-      // Spotlight gradient coordinates
+      // Spotlight gradient coordinates inside crisp 1px grid cell
       card.style.setProperty('--mouse-x', `${x.toFixed(1)}px`);
       card.style.setProperty('--mouse-y', `${y.toFixed(1)}px`);
-
-      if (reducedMotion) return;
-
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      // Max tilt angles (degrees)
-      const rotateX = ((centerY - y) / centerY) * 6;
-      const rotateY = ((x - centerX) / centerX) * 6;
-
-      card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-6px)`;
-    });
-
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
     });
   });
 }
