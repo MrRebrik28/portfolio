@@ -3,308 +3,442 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Александр Яровенко — Портфолио дизайнера</title>
-  <meta name="description" content="Портфолио Александра Яровенко (22 года). Удобные сайты, понятный UI/UX и сочная инфографика для маркетплейсов Wildberries и Ozon. Кемерово, Сибирь.">
-  <meta name="keywords" content="дизайнер, веб-дизайн, инфографика маркетплейсы, Александр Яровенко, Wildberries, Ozon, Figma, UI UX">
-  <meta name="theme-color" content="#08090D">
-  
+  <title>Александр Яровенко | Цифровой дизайн, интерфейсы и упаковка товаров</title>
+  <meta name="description" content="Портфолио цифрового дизайнера Александра Яровенко. Сайты, интерфейсы и карточки для маркетплейсов с чистой структурой в Figma, проверкой на мобильных экранах и передачей в разработку.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#000000">
+
   <!-- Open Graph -->
-  <meta property="og:title" content="Александр Яровенко — Портфолио дизайнера">
-  <meta property="og:description" content="Удобные сайты, понятные интерфейсы и продающая инфографика для маркетплейсов.">
+  <meta property="og:title" content="Александр Яровенко | Цифровой дизайн и интерфейсы">
+  <meta property="og:description" content="Сайты, личные кабинеты и карточки товаров для маркетплейсов. Более шести лет практики и системный порядок в Figma.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mrrebrik28.github.io/portfolio/">
+  <meta property="og:image" content="https://mrrebrik28.github.io/portfolio/assets/projects/kinetix_pay.jpg">
+
+  <!-- Branded Geometric Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23181818' stroke='%23313131'/%3E%3Crect x='9' y='9' width='14' height='14' rx='4' fill='%23A9DC76'/%3E%3C/svg%3E">
+
+  <!-- Structured Data for Search & AEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "name": "Александр Яровенко",
+        "jobTitle": "Цифровой дизайнер",
+        "url": "https://mrrebrik28.github.io/portfolio/",
+        "email": "mailto:jarovenkoaleksander@yandex.ru",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Кемерово",
+          "addressCountry": "RU"
+        },
+        "sameAs": [
+          "https://t.me/MrRebrik",
+          "https://github.com/MrRebrik28"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Сколько времени занимает разработка сайта или серии карточек?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Серия карточек для маркетплейсов готова за 3 рабочих дня. Посадочная страница с мобильной версией занимает от 5 до 7 рабочих дней, а сервис или каталог с библиотекой компонентов требует от 12 дней."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "В каком виде вы передаете макеты разработчикам?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Передаю чистый файл Figma с отдельными секциями, переменными для отступов, радиусов и цветов, стилями текста и всеми состояниями интерактивных элементов."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Проверяются ли макеты для смартфонов до начала верстки?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Да, каждый экран проверяется под ширину 390 пикселей и планшеты 768 пикселей без горизонтальной прокрутки и мелких кнопок."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles/components.css">
   <link rel="stylesheet" href="styles/animations.css">
-
-  <!-- Favicon SVG -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='2' fill='%2308090D' stroke='%23B3F77D' stroke-opacity='0.4'/%3E%3Crect x='10' y='10' width='12' height='12' fill='%23B3F77D'/%3E%3C/svg%3E">
 </head>
 <body>
 
-  <!-- Scroll Progress Indicator -->
+  <a href="#main-heading" class="skip-link visually-hidden">Перейти к основному содержанию</a>
+
+  <div id="top-sentinel" aria-hidden="true"></div>
   <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
 
-  <!-- Background Interactive Canvas & Ambience -->
-  <canvas id="bg-canvas"></canvas>
-  <div class="noise-overlay" aria-hidden="true"></div>
-  <div class="ambient-glow" aria-hidden="true"></div>
+  <!-- Floating Translucent Header (B7) -->
+  <header class="header-shell">
+    <div class="floating-nav" id="floating-nav">
+      <a href="#hero" class="brand-link title-4" aria-label="Наверх страницы">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>Яровенко</span>
+      </a>
 
-  <!-- Custom Cursor Elements -->
-  <div class="cursor-dot" aria-hidden="true"></div>
-  <div class="cursor-outline" aria-hidden="true"></div>
+      <nav aria-label="Основное меню">
+        <ul class="desktop-nav-list">
+          <li><a href="#benefits" class="nav-link title-4">Преимущества</a></li>
+          <li><a href="#works" class="nav-link title-4">Проекты</a></li>
+          <li><a href="#process" class="nav-link title-4">Этапы</a></li>
+          <li><a href="#faq" class="nav-link title-4">Вопросы</a></li>
+        </ul>
+      </nav>
 
-  <div class="page-wrapper">
-
-    <!-- 1. Site Header -->
-    <header class="site-header">
-      <div class="container header-container">
-        <a href="#hero" class="brand-logo" aria-label="Александр Яровенко">
-          <span class="brand-dot" aria-hidden="true"></span>
-          <div class="brand-text">
-            <span class="brand-name">ЯРОВЕНКО</span>
-            <span class="brand-role">ДИЗАЙН // 22 ГОДА</span>
-          </div>
-        </a>
-
-        <nav class="desktop-nav" aria-label="Основная навигация">
-          <ul class="nav-menu">
-            <li><a href="#works" class="nav-link"><span class="nav-num">01//</span>Проекты</a></li>
-            <li><a href="#about" class="nav-link"><span class="nav-num">02//</span>Обо мне</a></li>
-            <li><a href="#principles" class="nav-link"><span class="nav-num">03//</span>Подход</a></li>
-            <li><a href="#calculator" class="nav-link"><span class="nav-num">04//</span>Калькулятор</a></li>
-            <li><a href="#contact" class="nav-link"><span class="nav-num">05//</span>Контакты</a></li>
-          </ul>
-        </nav>
-
-        <div class="header-actions">
-          <button type="button" class="sfx-btn" id="sfx-toggle" aria-label="Переключить звуковые эффекты" aria-pressed="true">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-            </svg>
-            <span class="sfx-state">ЗВУК ВКЛ</span>
-          </button>
-
-          <a href="#contact" class="btn btn-primary">Написать мне →</a>
-
-          <button type="button" class="mobile-nav-toggle" aria-label="Открыть мобильное меню" aria-expanded="false">
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </div>
+      <div class="nav-actions">
+        <a href="#brief" class="btn btn-primary button-sm nav-cta-desktop">Обсудить задачу</a>
+        <button type="button" class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Открыть меню навигации">
+          <span class="menu-line menu-line-top" aria-hidden="true"></span>
+          <span class="menu-line menu-line-bottom" aria-hidden="true"></span>
+        </button>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <!-- 2. Hero Section -->
+  <!-- Full-Height Blurred Mobile Navigation Drawer (B7) -->
+  <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+    <nav aria-label="Мобильное меню">
+      <ul class="mobile-drawer-list">
+        <li class="mobile-drawer-item" style="--stagger-index: 0;">
+          <a href="#benefits" class="mobile-drawer-link title-1">
+            <span>Преимущества</span>
+            <svg width="20" height="20" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="56" y1="128" x2="200" y2="128"></line>
+              <polyline points="144 72 200 128 144 184"></polyline>
+            </svg>
+          </a>
+        </li>
+        <li class="mobile-drawer-item" style="--stagger-index: 1;">
+          <a href="#works" class="mobile-drawer-link title-1">
+            <span>Проекты</span>
+            <svg width="20" height="20" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="56" y1="128" x2="200" y2="128"></line>
+              <polyline points="144 72 200 128 144 184"></polyline>
+            </svg>
+          </a>
+        </li>
+        <li class="mobile-drawer-item" style="--stagger-index: 2;">
+          <a href="#process" class="mobile-drawer-link title-1">
+            <span>Этапы работы</span>
+            <svg width="20" height="20" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="56" y1="128" x2="200" y2="128"></line>
+              <polyline points="144 72 200 128 144 184"></polyline>
+            </svg>
+          </a>
+        </li>
+        <li class="mobile-drawer-item" style="--stagger-index: 3;">
+          <a href="#faq" class="mobile-drawer-link title-1">
+            <span>Частые вопросы</span>
+            <svg width="20" height="20" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="56" y1="128" x2="200" y2="128"></line>
+              <polyline points="144 72 200 128 144 184"></polyline>
+            </svg>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="mobile-drawer-footer mobile-drawer-item" style="--stagger-index: 4;">
+      <a href="#brief" class="btn btn-primary button-md" style="width: 100%;">Обсудить задачу</a>
+    </div>
+  </div>
+
+  <main id="main-content">
+
+    <!-- 1. Hero Section (B5: gradient ONLY on hero H1 text, no eyebrow pill, one primary CTA) -->
     <section class="hero-section" id="hero">
-      <div class="container">
-        
-        <div class="hero-meta-bar reveal-init">
-          <div class="status-badge">
-            <span class="status-dot"></span>
-            <span>ОТКРЫТ К НОВЫМ ПРОЕКТАМ</span>
-          </div>
-          <div class="time-badge">
-            <span>КЕМЕРОВО, СИБИРЬ:</span>
-            <span class="time-val" id="live-time">Загрузка...</span>
-          </div>
-        </div>
+      <div class="container hero-layout">
 
-        <div class="hero-title-wrap reveal-init delay-1">
-          <h1 class="hero-headline">
-            <span class="hero-line">АЛЕКСАНДР</span>
-            <span class="hero-line outline-text glitch-hover" data-text="ЯРОВЕНКО">ЯРОВЕНКО</span>
-            <span class="hero-line accent-text">DIGITAL DESIGNER</span>
+        <div class="hero-copy-block reveal-init reveal-visible">
+          <h1 id="main-heading" tabindex="-1" class="heading-1 hero-headline">
+            Сайты и интерфейсы<br>без хаоса в макетах
           </h1>
-        </div>
 
-        <div class="hero-desc-grid reveal-init delay-2">
-          <div class="hero-bio-col">
-            <p class="hero-bio">
-              Мне <strong>22 года</strong>, живу в Кемерове. Делаю аккуратные сайты, понятный UI/UX и сочную инфографику для маркетплейсов. По образованию я программист, поэтому собираю макеты так, чтобы их было <strong>легко верстать</strong>, а пользователям — просто ориентироваться.
-            </p>
-            <div class="hero-actions">
-              <a href="#works" class="btn btn-primary">Посмотреть работы ↓</a>
-              <a href="#calculator" class="btn btn-secondary">Прикинуть стоимость</a>
-            </div>
-          </div>
+          <p class="title-2 hero-subheadline">
+            Меня зовут Александр Яровенко, я проектирую продукты и карточки товаров уже более шести лет. Техническая база программиста помогает собирать макеты в Figma по точным сеткам без лишних доработок на этапе верстки.
+          </p>
 
-          <div class="hero-stats-col">
-            <div class="hero-stats-row">
-              <div class="stat-item">
-                <span class="stat-value">6+ лет</span>
-                <span class="stat-label">В дизайне и графике</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-value">300+</span>
-                <span class="stat-label">Макетов и карточек</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-value">Figma</span>
-                <span class="stat-label">Порядок в слоях</span>
-              </div>
+          <div class="hero-action-row">
+            <a href="#brief" class="btn btn-primary button-md">Обсудить задачу</a>
+            <div class="hero-proof body-6">
+              <span class="hero-proof-dot" aria-hidden="true"></span>
+              <span>Более 6 лет опыта и свыше 300 макетов в работе</span>
             </div>
           </div>
         </div>
 
-        <div class="scroll-indicator" aria-hidden="true">
-          <div class="mouse-icon">
-            <div class="mouse-wheel"></div>
+        <div class="hero-visual-frame reveal-init delay-1">
+          <div class="hero-visual-inner">
+            <div class="hero-media-crop">
+              <img src="assets/projects/kinetix_pay.jpg" alt="Интерфейс финтех кабинета Kinetix Pay с картой и аналитикой расходов" width="1376" height="768" loading="eager">
+            </div>
+
+            <div class="hero-visual-meta">
+              <div class="hero-stat-list">
+                <div class="hero-stat-card">
+                  <span class="heading-4 hero-stat-value mono-num">6+ лет</span>
+                  <span class="body-6 hero-stat-desc">Практики в проектировании сайтов, мобильных экранов и упаковки</span>
+                </div>
+                <div class="hero-stat-card">
+                  <span class="heading-4 hero-stat-value mono-num">300+</span>
+                  <span class="body-6 hero-stat-desc">Завершенных экранов и товарных карточек для Wildberries и Ozon</span>
+                </div>
+                <div class="hero-stat-card">
+                  <span class="heading-4 hero-stat-value mono-num">Figma</span>
+                  <span class="body-6 hero-stat-desc">Переменные, автолейауты и полный разбор состояний элементов</span>
+                </div>
+              </div>
+
+              <button type="button" class="btn btn-secondary button-sm" id="hero-preview-case" style="width: 100%;">
+                Разобрать кейс Kinetix Pay
+              </button>
+            </div>
           </div>
-          <span>ЛИСТАТЬ</span>
         </div>
 
       </div>
     </section>
 
-    <!-- 3. Infinite Marquee Ticker -->
-    <div class="marquee-container" id="marquee-container">
-      <div class="marquee-track" aria-hidden="true">
-        <div class="marquee-item">ВЕБ-ДИЗАЙН <span class="separator">✦</span></div>
-        <div class="marquee-item">FINTECH &amp; SAAS ПРОДУКТЫ <span class="separator">✦</span></div>
-        <div class="marquee-item">E-COMMERCE &amp; РИТЕЙЛ <span class="separator">✦</span></div>
-        <div class="marquee-item">UI/UX ИНТЕРФЕЙСЫ <span class="separator">✦</span></div>
-        <div class="marquee-item">БРЕНДИНГ И АЙДЕНТИКА <span class="separator">✦</span></div>
-        <div class="marquee-item">ДИЗАЙН-СИСТЕМЫ FIGMA <span class="separator">✦</span></div>
-        <div class="marquee-item">МОБИЛЬНЫЕ ПРИЛОЖЕНИЯ <span class="separator">✦</span></div>
-        <div class="marquee-item">УВАЖЕНИЕ К ВЕРСТКЕ <span class="separator">✦</span></div>
-        <!-- Duplicate for loop -->
-        <div class="marquee-item">ВЕБ-ДИЗАЙН <span class="separator">✦</span></div>
-        <div class="marquee-item">FINTECH &amp; SAAS ПРОДУКТЫ <span class="separator">✦</span></div>
-        <div class="marquee-item">E-COMMERCE &amp; РИТЕЙЛ <span class="separator">✦</span></div>
-        <div class="marquee-item">UI/UX ИНТЕРФЕЙСЫ <span class="separator">✦</span></div>
-        <div class="marquee-item">БРЕНДИНГ И АЙДЕНТИКА <span class="separator">✦</span></div>
-        <div class="marquee-item">ДИЗАЙН-СИСТЕМЫ FIGMA <span class="separator">✦</span></div>
-        <div class="marquee-item">МОБИЛЬНЫЕ ПРИЛОЖЕНИЯ <span class="separator">✦</span></div>
-        <div class="marquee-item">УВАЖЕНИЕ К ВЕРСТКЕ <span class="separator">✦</span></div>
-      </div>
-      <button type="button" class="marquee-pause-btn" id="marquee-toggle" aria-label="Поставить бегущую строку на паузу">Пауза</button>
-    </div>
+    <div class="divider-line" aria-hidden="true"></div>
 
-    <!-- 4. Selected Works -->
-    <section class="section" id="works">
+    <!-- 2. Problem to Solution & Benefits (Asymmetric Bento Grid) -->
+    <section class="section" id="benefits">
       <div class="container">
-        
+
         <div class="section-header reveal-init">
-          <span class="section-tag">01 // Портфолио</span>
-          <h2 class="section-title">Работы, за которые <span class="text-accent">не стыдно</span></h2>
-          <p class="section-subtitle">
-            Ключевые проекты за последнее время: финтех-интерфейсы, мобильные приложения, интернет-магазины, E-commerce упаковка и брендинг.
+          <h2 class="heading-2">Почему макеты тормозят запуск и как я это убираю</h2>
+          <p class="body-3 section-desc">
+            Красивая картинка без логики и компонентов обходится дорого на верстке. Я проектирую дизайн как готовую систему для команды разработки и покупателей.
           </p>
         </div>
 
-        <div class="portfolio-controls reveal-init delay-1">
-          <div class="filter-group" role="tablist" aria-label="Фильтрация проектов">
-            <button type="button" class="filter-btn active" data-filter="all" role="tab" aria-selected="true">Все работы</button>
-            <button type="button" class="filter-btn" data-filter="ui-ux" role="tab" aria-selected="false">Сайты &amp; UI/UX</button>
-            <button type="button" class="filter-btn" data-filter="infographics" role="tab" aria-selected="false">E-com &amp; Карточки</button>
-            <button type="button" class="filter-btn" data-filter="branding" role="tab" aria-selected="false">Брендинг &amp; Системы</button>
+        <div class="benefits-bento">
+
+          <div class="bento-card bento-span-7 reveal-init">
+            <div class="icon-badge" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="40" y="40" width="72" height="72" rx="8"></rect>
+                <rect x="144" y="40" width="72" height="72" rx="8"></rect>
+                <rect x="40" y="144" width="176" height="72" rx="8"></rect>
+              </svg>
+            </div>
+            <div class="bento-body">
+              <h3 class="heading-5">Порядок в слоях и состояниях вместо догадок</h3>
+              <p class="body-3 bento-text">
+                Разработчики получают не разрозненные картинки, а структурированный файл с переменными цветов и отступов, текстовыми стилями и прорисованными состояниями наведения, нажатия и ошибок.
+              </p>
+            </div>
+            <div class="comparison-pair">
+              <div class="comparison-col">
+                <span class="caption-3" style="color: var(--text-tertiary);">Обычная проблема</span>
+                <p class="body-6 bento-text">Случайные отступы, безымянные слои и отсутствие мобильной адаптации заставляют программистов переспрашивать каждую деталь.</p>
+              </div>
+              <div class="comparison-col comparison-col-accent">
+                <span class="caption-3" style="color: var(--text-accent);">Мой подход</span>
+                <p class="body-6" style="color: var(--text-primary);">Строгая сетка токенов, компоненты в Figma и готовые правила поведения форм ускоряют передачу в код.</p>
+              </div>
+            </div>
           </div>
 
-          <div class="portfolio-counter">
-            Показано: <strong id="visible-count">8 из 8</strong>
+          <div class="bento-card bento-card-warm bento-span-5 reveal-init delay-1">
+            <div class="icon-badge" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="72" y="24" width="112" height="208" rx="16"></rect>
+                <line x1="112" y1="56" x2="144" y2="56"></line>
+              </svg>
+            </div>
+            <div class="bento-body">
+              <h3 class="heading-5">Проверка на смартфонах до верстки</h3>
+              <p class="body-3 bento-text">
+                Более 80% аудитории открывает сайты и маркетплейсы с телефона. Каждый экран проверяется на ширине 390 пикселей, чтобы текст читался на ходу, а кнопки не требовали прицеливания.
+              </p>
+            </div>
+          </div>
+
+          <div class="bento-card bento-span-5 reveal-init">
+            <div class="icon-badge" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="232 128 192 128 160 208 96 48 64 128 24 128"></polyline>
+              </svg>
+            </div>
+            <div class="bento-body">
+              <h3 class="heading-5">Быстрое считывание выгод</h3>
+              <p class="body-3 bento-text">
+                В карточках Wildberries и Ozon покупатель тратит доли секунды на выбор. Чистая иерархия, крупные цифры и спокойный фон выделяют товар без пестрых наклеек.
+              </p>
+            </div>
+          </div>
+
+          <div class="bento-card bento-span-7 reveal-init delay-1">
+            <div class="icon-badge" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="88 104 40 128 88 152"></polyline>
+                <polyline points="168 104 216 128 168 152"></polyline>
+                <line x1="144" y1="64" x2="112" y2="192"></line>
+              </svg>
+            </div>
+            <div class="bento-body">
+              <h3 class="heading-5">Общий язык с командой разработки</h3>
+              <p class="body-3 bento-text">
+                Образование по специальности «Информационные системы и программирование» помогает сразу учитывать ограничения браузеров, размеры шрифтовой шкалы и логику состояний данных.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <div class="divider-line" aria-hidden="true"></div>
+
+    <!-- 3. Selected Works Showcase -->
+    <section class="section" id="works">
+      <div class="container">
+
+        <div class="section-header reveal-init">
+          <h2 class="heading-2">Отобранные проекты последних лет</h2>
+          <p class="body-3 section-desc">
+            Восемь детальных кейсов: личные кабинеты, конфигураторы витрин, мобильные приложения и серии карточек для торговых площадок.
+          </p>
+        </div>
+
+        <div class="works-toolbar reveal-init delay-1">
+          <div class="filter-tablist" role="tablist" aria-label="Категории проектов">
+            <button type="button" class="filter-btn button-sm is-active" data-filter="all" role="tab" aria-selected="true">Все проекты</button>
+            <button type="button" class="filter-btn button-sm" data-filter="ui-ux" role="tab" aria-selected="false">Сайты и интерфейсы</button>
+            <button type="button" class="filter-btn button-sm" data-filter="infographics" role="tab" aria-selected="false">Карточки товаров</button>
+            <button type="button" class="filter-btn button-sm" data-filter="branding" role="tab" aria-selected="false">Бренд и системы</button>
+          </div>
+          <div class="works-counter caption-3">
+            Показано <strong id="visible-count">8 из 8</strong>
           </div>
         </div>
 
-        <!-- Cards Grid populated by JavaScript -->
-        <div class="works-grid reveal-init delay-2" id="works-container">
-          <!-- Populated from scripts/data.js -->
+        <div class="works-bento-grid reveal-init delay-2" id="works-container" aria-live="polite">
+          <!-- Populated by scripts/main.js -->
         </div>
 
       </div>
     </section>
 
-    <!-- 5. About & Background Section -->
-    <section class="section" id="about">
+    <div class="divider-line" aria-hidden="true"></div>
+
+    <!-- 4. Mandatory Tagline Reveal Section (B11: separate from hero, word-by-word rAF scroll reveal) -->
+    <section class="tagline-section" id="tagline">
       <div class="container">
-        
+        <div class="tagline-container" id="tagline-reveal">
+          <h2 class="heading-2 tagline-statement">
+            <span data-reveal-line>Хороший интерфейс убирает сомнения,</span><br>
+            <span data-reveal-line>экономит недели команды и повышает доверие</span>
+          </h2>
+          <p class="body-3 tagline-caption">
+            Ясный визуальный порядок работает одинаково хорошо и для покупателя на смартфоне, и для разработчика при сборке проекта.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider-line" aria-hidden="true"></div>
+
+    <!-- 5. How It Works & Real Background Proof -->
+    <section class="section" id="process">
+      <div class="container">
+
         <div class="section-header reveal-init">
-          <span class="section-tag">02 // Обо мне</span>
-          <h2 class="section-title">Немного о том, <span class="text-accent">кто я и как работаю</span></h2>
+          <h2 class="heading-2">Три понятных шага и опыт за ними</h2>
+          <p class="body-3 section-desc">
+            Прозрачный процесс без долгих согласований и с предсказуемым результатом в каждом проекте.
+          </p>
         </div>
 
-        <div class="about-grid">
-          
-          <div class="about-left-col reveal-init">
-            <p class="about-bio-text">
-              Привет! Я <strong>Саша Яровенко</strong>, мне 22 года. В дизайне я уже <strong>более 6 лет</strong> (с 2018 года). Окончил Сибирский политехнический техникум по специальности <strong>«Информационные системы и программирование»</strong>.
-            </p>
-            <p class="about-bio-text">
-              Техническая база очень помогает в деле: я знаю, как устроена верстка, сетки и адаптивность, поэтому не рисую оторванных от жизни вещей. Мои макеты не ломаются на смартфонах, а верстальщикам не приходится угадывать отступы и состояния кнопок.
-            </p>
+        <div class="process-split">
 
-            <div class="tech-edge-box">
-              <h4>Порядок в файлах Figma</h4>
-              <p>
-                Использую компоненты, автолейауты, понятные названия слоев и продуманные состояния (hover, active, disabled). Макет можно сразу передавать в разработку без долгих созвонов и вопросов.
+          <div class="steps-stack reveal-init">
+            <div class="step-card">
+              <div class="step-num-box title-4 mono-num">01</div>
+              <div class="step-copy">
+                <h3 class="heading-5">Разбор задачи и материалов</h3>
+                <p class="body-3 bento-text">
+                  Смотрим текущий сайт, товар или идею, определяем аудиторию, главное действие пользователя и ключевые аргументы.
+                </p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num-box title-4 mono-num">02</div>
+              <div class="step-copy">
+                <h3 class="heading-5">Структура и визуальное направление</h3>
+                <p class="body-3 bento-text">
+                  Готовим прототип с реальным текстом, согласуем шрифтовую и цветовую систему на первом экране до отрисовки остальных блоков.
+                </p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num-box title-4 mono-num">03</div>
+              <div class="step-copy">
+                <h3 class="heading-5">Чистовой макет и передача в код</h3>
+                <p class="body-3 bento-text">
+                  Проверяем адаптацию от 390 пикселей, наводим порядок в компонентах и передаем готовые исходники в Figma без скрытых слоев.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bio-card reveal-init delay-1">
+            <div style="display: flex; flex-direction: column; gap: var(--spacing-100);">
+              <h3 class="heading-5">Александр Яровенко, 22 года</h3>
+              <p class="body-3 bento-text">
+                Живу в Кемерове, работаю с командами удаленно по всей стране с 2018 года. Окончил Сибирский политехнический техникум по специальности «Информационные системы и программирование».
               </p>
             </div>
 
-            <!-- Skills Progress Bars -->
-            <div class="skills-wrapper">
-              <div class="skill-bar-item">
-                <div class="skill-info">
-                  <span>Figma & автолейауты</span>
-                  <span class="skill-pct">98%</span>
+            <div class="timeline-stack">
+              <div class="milestone-row">
+                <div class="milestone-head">
+                  <span class="title-4">Ведущий продуктовый дизайнер</span>
+                  <span class="caption-3 mono-num" style="color: var(--text-accent);">2025 по н.в.</span>
                 </div>
-                <div class="skill-track"><div class="skill-progress" style="width: 98%;"></div></div>
+                <p class="body-6 bento-text">Кабинеты управления финансами, облачные сервисы и библиотеки компонентов в Figma.</p>
               </div>
 
-              <div class="skill-bar-item">
-                <div class="skill-info">
-                  <span>Инфографика для Wildberries и Ozon</span>
-                  <span class="skill-pct">96%</span>
+              <div class="milestone-row">
+                <div class="milestone-head">
+                  <span class="title-4">Арт дирекшн товарных карточек</span>
+                  <span class="caption-3 mono-num" style="color: var(--text-accent);">2024</span>
                 </div>
-                <div class="skill-track"><div class="skill-progress" style="width: 96%;"></div></div>
+                <p class="body-6 bento-text">Серии слайдов и предметная графика с подтвержденным ростом кликабельности до 42%.</p>
               </div>
 
-              <div class="skill-bar-item">
-                <div class="skill-info">
-                  <span>Проектирование сайтов и UI/UX</span>
-                  <span class="skill-pct">94%</span>
+              <div class="milestone-row">
+                <div class="milestone-head">
+                  <span class="title-4">Системы компонентов и сайты под ключ</span>
+                  <span class="caption-3 mono-num" style="color: var(--text-accent);">2018 по 2023</span>
                 </div>
-                <div class="skill-track"><div class="skill-progress" style="width: 94%;"></div></div>
-              </div>
-
-              <div class="skill-bar-item">
-                <div class="skill-info">
-                  <span>Понимание верстки (HTML, CSS, JS)</span>
-                  <span class="skill-pct">88%</span>
-                </div>
-                <div class="skill-track"><div class="skill-progress" style="width: 88%;"></div></div>
+                <p class="body-6 bento-text">Более 200 сайтов, фирменных стилей, конфигураторов и адаптивной верстки.</p>
               </div>
             </div>
-          </div>
 
-          <div class="about-right-col reveal-init delay-1">
-            <h3 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">
-              Опыт и ключевые вехи в дизайне
-            </h3>
-
-            <div class="awards-timeline">
-              <div class="award-item">
-                <span class="award-year">2025–н.в.</span>
-                <div class="award-details">
-                  <h5>Ведущий Product &amp; UI/UX дизайнер</h5>
-                  <span>SaaS-интерфейсы, финтех-кабинеты и дизайн-системы для технологических стартапов</span>
-                </div>
-              </div>
-
-              <div class="award-item">
-                <span class="award-year">2024</span>
-                <div class="award-details">
-                  <h5>Арт-дирекшн E-commerce и упаковки</h5>
-                  <span>Флагманские карточки товаров с 3D-подачей и ростом CTR до +42%</span>
-                </div>
-              </div>
-
-              <div class="award-item">
-                <span class="award-year">2022–23</span>
-                <div class="award-details">
-                  <h5>Проектирование дизайн-систем в Figma</h5>
-                  <span>UI-киты на 180+ компонентов: автолейауты, токены, переменные и доступность</span>
-                </div>
-              </div>
-
-              <div class="award-item">
-                <span class="award-year">2020–22</span>
-                <div class="award-details">
-                  <h5>200+ коммерческих сайтов и карточек</h5>
-                  <span>Интерактивные конфигураторы, интернет-магазины и брендинг под ключ</span>
-                </div>
-              </div>
-
-              <div class="award-item">
-                <span class="award-year">2018–20</span>
-                <div class="award-details">
-                  <h5>Старт в коммерческом дизайне</h5>
-                  <span>Первые заказы: фирменные стили, полиграфия, логотипы и адаптивная верстка</span>
-                </div>
-              </div>
+            <div>
+              <a href="https://www.figma.com/design/bFgFPTC7WTq4bMZL28wpkm" target="_blank" rel="noopener noreferrer" class="btn btn-secondary button-sm" style="width: 100%;">
+                Смотреть исходники в Figma
+              </a>
             </div>
           </div>
 
@@ -313,357 +447,379 @@
       </div>
     </section>
 
-    <!-- 6. Design Principles Section -->
-    <section class="section" id="principles">
+    <div class="divider-line" aria-hidden="true"></div>
+
+    <!-- 6. Estimator + Validated Project Brief Form -->
+    <section class="section" id="brief">
       <div class="container">
-        
+
         <div class="section-header reveal-init">
-          <span class="section-tag">03 // Подход к работе</span>
-          <h2 class="section-title">5 простых правил <span class="text-accent">хорошего дизайна</span></h2>
-          <p class="section-subtitle">
-            Без заумных терминов — базовые вещи, которые делают сайт или карточку товара удобными, понятными и эффективными.
+          <h2 class="heading-2">Оценка проекта и короткий бриф</h2>
+          <p class="body-3 section-desc">
+            Соберите примерные параметры задачи и оставьте контакт. Сумма и сроки ориентировочные, точную смету уточним после обсуждения деталей.
           </p>
         </div>
 
-        <div class="principles-grid">
-          
-          <div class="principle-card reveal-init">
-            <span class="principle-num">01</span>
-            <h3 class="principle-title">Сначала польза, потом украшения</h3>
-            <p class="principle-desc">
-              Сайт или карточка должны сразу отвечать на вопрос: что это, сколько стоит и почему стоит выбрать вас. Графика должна помогать мысли, а не отвлекать от нее.
-            </p>
-          </div>
+        <div class="brief-grid">
 
-          <div class="principle-card reveal-init delay-1">
-            <span class="principle-num">02</span>
-            <h3 class="principle-title">Понятная иерархия</h3>
-            <p class="principle-desc">
-              Человек с первого взгляда должен видеть главное: заголовок, цену, выгоду и кнопку. Если всё на экране кричит одинаково громко — пользователь просто закроет страницу.
-            </p>
-          </div>
+          <!-- Interactive Scope Estimator -->
+          <div class="surface-panel reveal-init">
+            <h3 class="heading-5">Параметры оценки</h3>
+            <form id="estimator-form" style="display: flex; flex-direction: column; gap: var(--spacing-300);">
 
-          <div class="principle-card reveal-init delay-2">
-            <span class="principle-num">03</span>
-            <h3 class="principle-title">Уважение к верстке</h3>
-            <p class="principle-desc">
-              Поскольку я сам учился на программиста, я уважаю труд верстальщиков. Никаких случайных пикселей: только понятная сетка, аккуратные отступы и компоненты.
-            </p>
-          </div>
-
-          <div class="principle-card reveal-init">
-            <span class="principle-num">04</span>
-            <h3 class="principle-title">Упор на мобильные экраны</h3>
-            <p class="principle-desc">
-              Больше 80% людей смотрят сайты и маркетплейсы со смартфонов. Текст и кнопки должны легко считываться на ходу на обычном 6-дюймовом экране.
-            </p>
-          </div>
-
-          <div class="principle-card reveal-init delay-1">
-            <span class="principle-num">05</span>
-            <h3 class="principle-title">Внимание к мелочам</h3>
-            <p class="principle-desc">
-              Мягкие тени, аккуратная обтравка фото, приятные микроанимации и чистый контраст. Именно аккуратность создает ощущение надежного и приятного продукта.
-            </p>
-          </div>
-
-          <div class="principle-card cta-card reveal-init delay-2">
-            <span class="principle-num" style="color: var(--accent);">// CTA</span>
-            <h3 class="principle-title" style="color: var(--accent);">Нужен свежий макет?</h3>
-            <p class="principle-desc">
-              Расскажите о вашей задаче. Посмотрим текущие материалы, найдем слабые места и сделаем аккуратный, современный вариант.
-            </p>
-            <div style="margin-top: auto; padding-top: 1.5rem;">
-              <a href="#calculator" class="btn btn-primary" style="width: 100%;">Прикинуть смету →</a>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-
-    <!-- 7. Interactive Cost Calculator -->
-    <section class="section" id="calculator">
-      <div class="container">
-        
-        <div class="section-header reveal-init">
-          <span class="section-tag">04 // Калькулятор</span>
-          <h2 class="section-title">Прикинуть <span class="text-accent">стоимость и сроки</span></h2>
-          <p class="section-subtitle">
-            Выберите примерные параметры задачи. Цифры ориентировочные — точную смету мы согласуем после короткой переписки в Telegram.
-          </p>
-        </div>
-
-        <div class="calculator-card reveal-init delay-1">
-          <form id="project-calculator" onsubmit="event.preventDefault();">
-            <div class="calc-steps">
-              
-              <!-- Step 1: Service Type -->
-              <div class="calc-step">
-                <span class="calc-step-title">Шаг 1 // Что нужно сделать?</span>
-                <div class="calc-options-grid">
-                  <label class="calc-option-label">
-                    <input type="radio" name="service" value="landing" data-name="Лендинг (одностраничник)" data-price="25000" data-days="5" checked>
-                    <div class="calc-option-box">
-                      <span class="opt-name">Лендинг (одностраничник)</span>
-                      <span class="opt-desc">Понятная посадочная страница с адаптацией под телефоны</span>
-                    </div>
+              <div class="calc-group">
+                <span class="title-4">Формат задачи</span>
+                <div class="calc-options calc-options-2">
+                  <label class="calc-radio-label">
+                    <input type="radio" name="service" value="landing" data-name="Посадочная страница" data-price="25000" data-days="5" checked>
+                    <span class="calc-option-card">
+                      <span class="body-4">Посадочная страница</span>
+                      <span class="caption-2" style="color: var(--text-tertiary);">Одностраничный сайт с мобильной адаптацией</span>
+                    </span>
                   </label>
 
-                  <label class="calc-option-label">
-                    <input type="radio" name="service" value="service" data-name="Многостраничный сайт или сервис" data-price="55000" data-days="12">
-                    <div class="calc-option-box">
-                      <span class="opt-name">Многостраничный сайт / Сервис</span>
-                      <span class="opt-desc">Главная, каталог, карточки услуг, личный кабинет</span>
-                    </div>
+                  <label class="calc-radio-label">
+                    <input type="radio" name="service" value="service" data-name="Сервис или каталог" data-price="55000" data-days="12">
+                    <span class="calc-option-card">
+                      <span class="body-4">Сервис или каталог</span>
+                      <span class="caption-2" style="color: var(--text-tertiary);">Многостраничный проект и личный кабинет</span>
+                    </span>
                   </label>
 
-                  <label class="calc-option-label">
-                    <input type="radio" name="service" value="marketplace" data-name="Инфографика для маркетплейса" data-price="15000" data-days="3">
-                    <div class="calc-option-box">
-                      <span class="opt-name">Инфографика для маркетплейса</span>
-                      <span class="opt-desc">Набор карточек для Wildberries или Ozon (5–10 слайдов)</span>
-                    </div>
+                  <label class="calc-radio-label">
+                    <input type="radio" name="service" value="marketplace" data-name="Инфографика маркетплейсов" data-price="15000" data-days="3">
+                    <span class="calc-option-card">
+                      <span class="body-4">Инфографика маркетплейсов</span>
+                      <span class="caption-2" style="color: var(--text-tertiary);">Набор от 5 до 10 слайдов для Wildberries и Ozon</span>
+                    </span>
                   </label>
 
-                  <label class="calc-option-label">
-                    <input type="radio" name="service" value="branding" data-name="Логотип и фирменный стиль" data-price="35000" data-days="8">
-                    <div class="calc-option-box">
-                      <span class="opt-name">Логотип и стиль</span>
-                      <span class="opt-desc">Знак, цветовая палитра, шрифты и базовые шаблоны</span>
-                    </div>
+                  <label class="calc-radio-label">
+                    <input type="radio" name="service" value="branding" data-name="Логотип и стиль" data-price="35000" data-days="8">
+                    <span class="calc-option-card">
+                      <span class="body-4">Логотип и стиль</span>
+                      <span class="caption-2" style="color: var(--text-tertiary);">Знак, цветовая система, типографика и носители</span>
+                    </span>
                   </label>
                 </div>
               </div>
 
-              <!-- Step 2: Complexity / Scope -->
-              <div class="calc-step">
-                <span class="calc-step-title">Шаг 2 // Уровень проработки</span>
-                <div class="calc-options-grid">
-                  <label class="calc-option-label">
-                    <input type="radio" name="scope" value="standard" data-name="Базовый вариант" data-multiplier="1.0" data-days-mult="1.0" checked>
-                    <div class="calc-option-box">
-                      <span class="opt-name">Базовый</span>
-                      <span class="opt-desc">Быстрый запуск на основе понятной структуры и материалов</span>
-                    </div>
+              <div class="calc-group">
+                <span class="title-4">Глубина проработки</span>
+                <div class="calc-options">
+                  <label class="calc-radio-label">
+                    <input type="radio" name="scope" value="standard" data-name="Базовый объем" data-multiplier="1.0" data-days-mult="1.0" checked>
+                    <span class="calc-option-card">
+                      <span class="body-4">Базовый объем</span>
+                      <span class="caption-2" style="color: var(--text-tertiary);">Быстрый запуск по готовому смыслу и материалам</span>
+                    </span>
                   </label>
 
-                  <label class="calc-option-label">
-                    <input type="radio" name="scope" value="pro" data-name="Оптимальный (с анимациями и UI-китом)" data-multiplier="1.4" data-days-mult="1.3">
-                    <div class="calc-option-box">
-                      <span class="opt-name">Оптимальный</span>
-                      <span class="opt-desc">Проработка сценариев, мобильная адаптация, анимации</span>
-                    </div>
+                  <label class="calc-radio-label">
+                    <input type="radio" name="scope" value="pro" data-name="Оптимальный с библиотекой" data-multiplier="1.4" data-days-mult="1.3">
+                    <span class="calc-option-card">
+                      <span class="body-4">Оптимальный с библиотекой</span>
+                      <span class="caption-2" style="color: var(--text-tertiary);">Сценарии, состояния кнопок и полный адаптив</span>
+                    </span>
                   </label>
 
-                  <label class="calc-option-label">
-                    <input type="radio" name="scope" value="turnkey" data-name="Максимальный (под ключ с прототипом)" data-multiplier="1.9" data-days-mult="1.7">
-                    <div class="calc-option-box">
-                      <span class="opt-name">Максимальный</span>
-                      <span class="opt-desc">Глубокий анализ, дизайн-система и кликабельный прототип</span>
-                    </div>
+                  <label class="calc-radio-label">
+                    <input type="radio" name="scope" value="turnkey" data-name="Максимальный под ключ" data-multiplier="1.9" data-days-mult="1.7">
+                    <span class="calc-option-card">
+                      <span class="body-4">Максимальный под ключ</span>
+                      <span class="caption-2" style="color: var(--text-tertiary);">Глубокая структура, система компонентов и прототип</span>
+                    </span>
                   </label>
                 </div>
               </div>
 
-              <!-- Step 3: Urgency -->
-              <div class="calc-step">
-                <span class="calc-step-title">Шаг 3 // Сроки</span>
-                <div class="calc-options-grid">
-                  <label class="calc-option-label">
+              <div class="calc-group">
+                <span class="title-4">Темп работы</span>
+                <div class="calc-options calc-options-2">
+                  <label class="calc-radio-label">
                     <input type="radio" name="urgency" value="normal" data-name="Обычный темп" data-multiplier="1.0" data-days-urgency="1.0" checked>
-                    <div class="calc-option-box">
-                      <span class="opt-name">Обычный темп</span>
-                      <span class="opt-desc">Спокойная работа с поэтапным согласованием</span>
-                    </div>
+                    <span class="calc-option-card">
+                      <span class="body-4">Обычный темп</span>
+                      <span class="caption-2" style="color: var(--text-tertiary);">Спокойное поэтапное согласование</span>
+                    </span>
                   </label>
 
-                  <label class="calc-option-label">
-                    <input type="radio" name="urgency" value="urgent" data-name="Нужно срочно" data-multiplier="1.3" data-days-urgency="0.6">
-                    <div class="calc-option-box">
-                      <span class="opt-name">Нужно срочно</span>
-                      <span class="opt-desc">Срочный спринт с приоритетом в очереди</span>
-                    </div>
+                  <label class="calc-radio-label">
+                    <input type="radio" name="urgency" value="urgent" data-name="Ускоренный запуск" data-multiplier="1.3" data-days-urgency="0.6">
+                    <span class="calc-option-card">
+                      <span class="body-4">Ускоренный запуск</span>
+                      <span class="caption-2" style="color: var(--text-tertiary);">Выделенный спринт с приоритетом</span>
+                    </span>
                   </label>
                 </div>
               </div>
 
-            </div>
-
-            <div class="calc-summary-row">
-              <div class="calc-price-col">
-                <span class="calc-price-label">Примерный ориентир:</span>
-                <span class="calc-price-val" id="calc-price-output">от 25 000 ₽</span>
-                <span class="calc-time-val" id="calc-time-output">Ориентировочный срок: ~5 рабочих дней</span>
+              <div class="calc-estimate-bar">
+                <div style="display: flex; flex-direction: column; gap: var(--spacing-25);">
+                  <span class="caption-3" style="color: var(--text-tertiary);">Ориентир стоимости</span>
+                  <span class="heading-4 calc-estimate-value mono-num" id="calc-price-output">от 25 000 ₽</span>
+                </div>
+                <span class="body-6" id="calc-time-output" style="color: var(--text-secondary);">Ориентировочный срок: около 5 рабочих дней</span>
               </div>
 
-              <div class="calc-actions">
-                <a href="https://t.me/MrRebrik" target="_blank" rel="noopener noreferrer" class="btn btn-primary" id="calc-send-telegram">
-                  Обсудить проект в Telegram →
+            </form>
+          </div>
+
+          <!-- Client-Side Validated Brief Form (B10 & modern-web-guidance) -->
+          <div class="surface-panel reveal-init delay-1">
+            <h3 class="heading-5">Отправить задачу на разбор</h3>
+            <p class="body-6" style="color: var(--text-secondary);">
+              Проверка полей выполняется только после заполнения. Сформированный бриф можно сразу отправить в Telegram.
+            </p>
+
+            <form class="brief-form" id="brief-form" novalidate>
+              <div class="field">
+                <label for="brief-name" class="field-label title-4">Ваше имя</label>
+                <span id="brief-name-hint" class="field-hint caption-4">Минимум две буквы</span>
+                <input
+                  type="text"
+                  id="brief-name"
+                  name="name"
+                  class="field-input body-3"
+                  required
+                  minlength="2"
+                  autocomplete="name"
+                  placeholder="Например, Дмитрий"
+                  aria-describedby="brief-name-hint"
+                  data-error="brief-name-error"
+                >
+                <div id="brief-name-error" class="error-msg caption-4">
+                  <span role="img" aria-label="Ошибка">!</span>
+                  <span>Укажите имя длиной не менее двух символов.</span>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="brief-email" class="field-label title-4">Почта для ответа</label>
+                <span id="brief-email-hint" class="field-hint caption-4">Формат: name@domain.ru</span>
+                <input
+                  type="email"
+                  id="brief-email"
+                  name="email"
+                  class="field-input body-3"
+                  required
+                  autocomplete="email"
+                  placeholder="name@company.ru"
+                  aria-describedby="brief-email-hint"
+                  data-error="brief-email-error"
+                >
+                <div id="brief-email-error" class="error-msg caption-4">
+                  <span role="img" aria-label="Ошибка">!</span>
+                  <span>Введите корректный адрес почты в формате name@domain.ru.</span>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="brief-task" class="field-label title-4">Коротко о проекте</label>
+                <span id="brief-task-hint" class="field-hint caption-4">Опишите задачу или дайте ссылку на текущие материалы</span>
+                <textarea
+                  id="brief-task"
+                  name="task"
+                  class="field-textarea body-3"
+                  required
+                  minlength="10"
+                  placeholder="Нужен редизайн главной страницы и серии карточек для нового запуска..."
+                  aria-describedby="brief-task-hint"
+                  data-error="brief-task-error"
+                ></textarea>
+                <div id="brief-task-error" class="error-msg caption-4">
+                  <span role="img" aria-label="Ошибка">!</span>
+                  <span>Добавьте описание задачи длиной от десяти символов.</span>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary button-md" style="width: 100%;">
+                Сформировать бриф
+              </button>
+
+              <div class="form-status-box" id="brief-status-box" hidden>
+                <p class="body-5" id="brief-status-text"></p>
+                <a href="https://t.me/MrRebrik" target="_blank" rel="noopener noreferrer" class="btn btn-primary button-sm" id="brief-telegram-confirm" style="width: 100%;">
+                  Открыть сообщение в Telegram
                 </a>
               </div>
+            </form>
+
+            <div class="risk-reversal-note caption-2">
+              <svg width="18" height="18" viewBox="0 0 256 256" fill="none" stroke="var(--text-accent)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;" aria-hidden="true">
+                <path d="M128 224C128 224 208 184 208 112V48L128 24L48 48V112C48 184 128 224 128 224Z"></path>
+                <polyline points="96 128 120 152 168 104"></polyline>
+              </svg>
+              <span>Первичная оценка сметы и аудит ваших текущих экранов или карточек проводятся бесплатно до согласования старта работ.</span>
             </div>
-          </form>
+          </div>
+
         </div>
 
       </div>
     </section>
 
-    <!-- 8. Contact Section -->
-    <section class="section contact-section" id="contact">
+    <div class="divider-line" aria-hidden="true"></div>
+
+    <!-- 7. FAQ Section (A2, A7, modern-web-guidance accessible accordion) -->
+    <section class="section" id="faq">
       <div class="container">
-        
-        <div class="contact-card-hero reveal-init">
-          <span class="section-tag">05 // Контакты</span>
-          <h2 class="contact-hero-title">
-            Обсудим <span class="text-accent">ваш проект?</span>
-          </h2>
-          <p class="contact-hero-desc">
-            Напишите мне в Telegram — расскажите пару слов о задаче или покажите текущие материалы. Отвечаю быстро, обычно в течение пары часов.
+
+        <div class="section-header reveal-init">
+          <h2 class="heading-2">Частые вопросы перед стартом</h2>
+          <p class="body-3 section-desc">
+            Ответы на главные вопросы о сроках, исходниках в Figma и взаимодействии в процессе работы.
+          </p>
+        </div>
+
+        <div class="faq-list reveal-init delay-1" id="faq-list">
+          <!-- Populated cleanly by scripts/main.js -->
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider-line" aria-hidden="true"></div>
+
+    <!-- 8. Risk Reversal + Final CTA -->
+    <section class="section" id="cta-final">
+      <div class="container">
+        <div class="final-cta-card reveal-init">
+          <h2 class="heading-2">Понятный дизайн для сайта или продукта без затянутых сроков</h2>
+          <p class="title-2" style="color: var(--text-secondary); max-width: 680px;">
+            Сначала согласуем структуру и прототип, затем переходим к чистовой графике и передаче чистых слоев вашей команде разработки.
           </p>
 
-          <div class="contact-buttons-row">
-            <a href="https://t.me/MrRebrik" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="font-size: 1rem; padding: 1rem 2.2rem;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-              Написать в Telegram
-            </a>
-
-            <button type="button" class="copy-email-btn" id="copy-email-btn" data-email="jarovenkoaleksander@yandex.ru">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-              <span>Скопировать Email</span>
+          <div class="final-cta-actions">
+            <a href="#brief" class="btn btn-primary button-md">Обсудить задачу</a>
+            <button type="button" class="btn btn-secondary button-md" id="copy-email-btn" data-email="jarovenkoaleksander@yandex.ru">
+              Скопировать почту
             </button>
           </div>
 
-          <div class="social-links-row">
-            <a href="https://www.figma.com/design/bFgFPTC7WTq4bMZL28wpkm" target="_blank" rel="noopener noreferrer" class="social-link">
-              <span>Figma-исходники ↗</span>
+          <div class="social-row">
+            <a href="https://t.me/MrRebrik" target="_blank" rel="noopener noreferrer" class="social-link body-5">
+              <span>Telegram</span>
+              <svg width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="64" y1="192" x2="192" y2="64"></line>
+                <polyline points="88 64 192 64 192 168"></polyline>
+              </svg>
             </a>
-            <a href="https://t.me/MrRebrik" target="_blank" rel="noopener noreferrer" class="social-link">
-              <span>Telegram ↗</span>
+            <a href="https://www.figma.com/design/bFgFPTC7WTq4bMZL28wpkm" target="_blank" rel="noopener noreferrer" class="social-link body-5">
+              <span>Исходники в Figma</span>
+              <svg width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="64" y1="192" x2="192" y2="64"></line>
+                <polyline points="88 64 192 64 192 168"></polyline>
+              </svg>
             </a>
-            <a href="https://github.com/MrRebrik28" target="_blank" rel="noopener noreferrer" class="social-link">
-              <span>GitHub ↗</span>
+            <a href="https://github.com/MrRebrik28" target="_blank" rel="noopener noreferrer" class="social-link body-5">
+              <span>GitHub</span>
+              <svg width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="64" y1="192" x2="192" y2="64"></line>
+                <polyline points="88 64 192 64 192 168"></polyline>
+              </svg>
             </a>
           </div>
         </div>
-
       </div>
     </section>
 
-    <!-- 9. Site Footer -->
-    <footer class="site-footer">
-      <div class="container footer-container">
-        <div class="footer-copy">
-          © 2026 <strong>Александр Яровенко</strong>. Сделано аккуратно и с вниманием к деталям.
+  </main>
+
+  <!-- Site Footer (B10: Privacy, Terms, Live Time, Sound Setting) -->
+  <footer class="site-footer" id="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div style="display: flex; flex-direction: column; gap: var(--spacing-50);">
+          <span class="body-4">© 2026 Александр Яровенко</span>
+          <span class="caption-2 mono-num" id="live-time" style="color: var(--text-tertiary);">Кемерово (UTC+7)</span>
         </div>
-        <div class="footer-meta">
-          Кемерово, Сибирь • Акцентный цвет: <code style="color: var(--accent); background: rgba(179,247,125,0.08); padding: 2px 6px; border: 1px solid var(--accent-border); border-radius: 2px;">#B3F77D</code>
-        </div>
+
+        <nav class="footer-links caption-1" aria-label="Документы сайта">
+          <a href="privacy.html">Политика конфиденциальности</a>
+          <a href="terms.html">Условия работы</a>
+          <button type="button" class="btn btn-secondary button-xsm" id="sfx-toggle" aria-pressed="true">
+            <span class="sfx-state">Звук включен</span>
+          </button>
+        </nav>
       </div>
-    </footer>
+    </div>
+  </footer>
 
-  </div>
-
-  <!-- Modern Native Project Dialog Modal -->
+  <!-- Top-Layer Native <dialog> Modal Case Detail -->
   <dialog id="project-modal" aria-labelledby="modal-title" closedby="any">
-    <div class="modal-inner-scroll">
-      
-      <div class="modal-header-bar">
-        <div class="modal-badge-row">
-          <span class="section-tag" id="modal-category-badge" style="margin-bottom: 0;">Категория</span>
-          <span class="tag-pill" id="modal-year-badge">2024</span>
+    <div class="modal-scroll-inner">
+      <div class="modal-top-bar">
+        <div style="display: flex; align-items: center; gap: var(--spacing-75);">
+          <span class="meta-pill meta-pill-accent caption-4" id="modal-category-badge">Категория</span>
+          <span class="meta-pill caption-5 mono-num" id="modal-year-badge">2026</span>
         </div>
-        <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Закрыть окно">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
+        <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Закрыть окно проекта">
+          <svg width="20" height="20" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="200" y1="56" x2="56" y2="200"></line>
+            <line x1="200" y1="200" x2="56" y2="56"></line>
           </svg>
         </button>
       </div>
 
-      <div class="modal-hero-image">
-        <img id="modal-image" src="" alt="Изображение проекта" loading="eager">
+      <div class="modal-media-box">
+        <img id="modal-image" src="assets/projects/kinetix_pay.jpg" alt="Превью проекта" width="1376" height="768">
       </div>
 
-      <div class="modal-meta-grid">
-        <div class="meta-block">
-          <span class="meta-label">Для кого</span>
-          <span class="meta-val" id="modal-client">—</span>
+      <div class="modal-meta-row">
+        <div class="modal-meta-cell">
+          <span class="caption-4" style="color: var(--text-tertiary);">Заказчик</span>
+          <span class="body-4" id="modal-client">Платформа</span>
         </div>
-        <div class="meta-block">
-          <span class="meta-label">Роль в проекте</span>
-          <span class="meta-val" id="modal-role">Дизайнер</span>
+        <div class="modal-meta-cell">
+          <span class="caption-4" style="color: var(--text-tertiary);">Роль</span>
+          <span class="body-4" id="modal-role">Дизайнер</span>
         </div>
-        <div class="meta-block">
-          <span class="meta-label">Год</span>
-          <span class="meta-val" id="modal-year">2024</span>
+        <div class="modal-meta-cell">
+          <span class="caption-4" style="color: var(--text-tertiary);">Год</span>
+          <span class="body-4 mono-num" id="modal-year">2026</span>
         </div>
-        <div class="meta-block">
-          <span class="meta-label">Инструменты</span>
-          <span class="meta-val" id="modal-tools">Figma, Photoshop</span>
+        <div class="modal-meta-cell">
+          <span class="caption-4" style="color: var(--text-tertiary);">Фокус</span>
+          <span class="body-4" id="modal-tools">Интерфейс</span>
         </div>
       </div>
 
-      <div class="modal-content-grid">
-        <div class="modal-left-body">
-          <h3 class="modal-body-title" id="modal-title">Название проекта</h3>
-          <p class="modal-tagline" id="modal-tagline">Кратко о проекте</p>
-          <p class="modal-desc" id="modal-desc">Описание задачи и процесса...</p>
-
-          <div class="modal-highlights">
-            <h4>Что сделано по дизайну:</h4>
-            <ul class="highlights-list" id="modal-highlights-list">
-              <!-- Injected by JS -->
-            </ul>
+      <div class="modal-columns">
+        <div style="display: flex; flex-direction: column; gap: var(--spacing-200);">
+          <h2 class="heading-3" id="modal-title">Название проекта</h2>
+          <p class="title-2" id="modal-tagline" style="color: var(--text-accent);">Краткая суть</p>
+          <p class="body-3" id="modal-desc" style="color: var(--text-secondary);">Описание задачи</p>
+          <div style="display: flex; flex-direction: column; gap: var(--spacing-100); padding-top: var(--spacing-100);">
+            <h3 class="title-3">Решения по дизайну</h3>
+            <ul class="modal-highlights-list body-6" id="modal-highlights-list"></ul>
           </div>
         </div>
 
-        <div class="modal-right-body">
-          <div class="modal-results-card">
-            <h4>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                <polyline points="17 6 23 6 23 12"></polyline>
-              </svg>
-              Результаты
-            </h4>
-            <div id="modal-results-container">
-              <!-- Injected by JS -->
-            </div>
-          </div>
+        <div class="modal-results-box">
+          <h3 class="title-3">Итоги и показатели</h3>
+          <div id="modal-results-container" style="display: flex; flex-direction: column; gap: var(--spacing-75);"></div>
         </div>
       </div>
 
-      <div class="modal-footer-cta">
-        <button type="button" class="btn btn-secondary" id="modal-copy-link-btn">
-          Скопировать ссылку на кейс
-        </button>
-        <a href="https://t.me/MrRebrik" target="_blank" rel="noopener noreferrer" class="btn btn-primary" id="modal-discuss-btn">
-          Обсудить похожую задачу →
+      <div class="modal-footer-actions">
+        <button type="button" class="btn btn-secondary button-sm" id="modal-copy-link-btn">Скопировать ссылку</button>
+        <a href="https://t.me/MrRebrik" target="_blank" rel="noopener noreferrer" class="btn btn-primary button-sm" id="modal-discuss-btn">
+          Обсудить похожую задачу
         </a>
       </div>
-
     </div>
   </dialog>
 
-  <!-- Toast Notification Container -->
-  <div class="toast-notice" id="toast-notice" role="status" aria-live="polite">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="20 6 9 17 4 12"></polyline>
+  <!-- Polite Toast Notice -->
+  <div class="toast-notice body-5" id="toast-notice" role="status" aria-live="polite">
+    <svg width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="40 144 96 200 224 72"></polyline>
     </svg>
-    <span class="toast-msg">Email скопирован в буфер обмена</span>
+    <span class="toast-msg">Готово</span>
   </div>
 
-  <!-- JavaScript Modules -->
   <script src="scripts/data.js"></script>
-  <script src="scripts/canvas-bg.js"></script>
   <script src="scripts/sound-fx.js"></script>
   <script src="scripts/main.js"></script>
 </body>

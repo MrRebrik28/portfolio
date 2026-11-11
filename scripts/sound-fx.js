@@ -36,7 +36,7 @@ class SoundEffects {
     if (!btn) return;
     const textSpan = btn.querySelector('.sfx-state');
     if (textSpan) {
-      textSpan.textContent = this.enabled ? 'ЗВУК ВКЛ' : 'ЗВУК ВЫКЛ';
+      textSpan.textContent = this.enabled ? 'Звук включен' : 'Звук выключен';
     }
     btn.setAttribute('aria-pressed', this.enabled ? 'true' : 'false');
     btn.classList.toggle('active', this.enabled);
