@@ -1,20 +1,54 @@
 /* ==========================================================================
-   MOTION & ACCESSIBLE REVEAL SYSTEM (B7 & B11)
-   Base curve: cubic-bezier(0.22, 1, 0.36, 1)
-   Animates transform and opacity only.
+   ANIMATIONS & KEYFRAMES
    ========================================================================== */
 
-/* Scroll Reveals: 32px upward motion + fade over 700ms once */
-.reveal-init {
-  opacity: 0;
-  transition-property: opacity, transform;
-  transition-duration: 700ms;
-  transition-timing-function: var(--ease-curve);
+@keyframes pulse-dot {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(179, 247, 125, 0.7);
+  }
+  70% {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 10px rgba(179, 247, 125, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(179, 247, 125, 0);
+  }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .reveal-init {
-    transform: translateY(var(--spacing-400));
+@keyframes scroll-wheel {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  60% {
+    opacity: 0.1;
+    transform: translate(-50%, 14px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes marquee-slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Scroll reveal trigger styles */
+.reveal-init {
+  opacity: 0;
+  transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+  will-change: opacity, transform;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: translateY(32px);
   }
 }
 
@@ -23,53 +57,74 @@
   transform: translateY(0);
 }
 
-/* Stagger helpers */
-.delay-1 { transition-delay: 80ms; }
-.delay-2 { transition-delay: 160ms; }
-.delay-3 { transition-delay: 240ms; }
+/* Stagger delays */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+.delay-5 { transition-delay: 0.5s; }
 
-@media (prefers-reduced-motion: reduce) {
-  .reveal-init {
-    opacity: 1;
-    transform: none;
-    transition-duration: 200ms;
-  }
-  .delay-1,
-  .delay-2,
-  .delay-3 {
-    transition-delay: 0ms;
-  }
-}
-
-/* Word-by-word Tagline Reveal (B11) */
-.reveal-word {
-  color: var(--text-primary);
-  opacity: 0.28;
-  transition-property: opacity;
-  transition-duration: var(--duration-move);
-  transition-timing-function: var(--ease-curve);
+/* Subtle Glitch Text on Hover */
+.glitch-hover {
+  position: relative;
   display: inline-block;
 }
 
-.reveal-word.is-lit {
-  opacity: 1;
+.glitch-hover:hover::before,
+.glitch-hover:hover::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .reveal-word {
-    opacity: 1;
-    transition: none;
-  }
+.glitch-hover:hover::before {
+  left: 2px;
+  text-shadow: -1px 0 rgba(179, 247, 125, 0.7);
+  animation: glitch-anim-1 0.4s infinite linear alternate-reverse;
 }
 
-/* Skeleton Loader for Works Grid Filter State (B9) */
-@media (prefers-reduced-motion: no-preference) {
-  @keyframes skeleton-pulse {
-    0%, 100% { opacity: 0.45; }
-    50% { opacity: 0.85; }
-  }
+.glitch-hover:hover::after {
+  left: -2px;
+  text-shadow: 1px 0 rgba(255, 255, 255, 0.7);
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+  animation: glitch-anim-2 0.3s infinite linear alternate-reverse;
+}
 
-  .skeleton-pulse {
-    animation: skeleton-pulse 1200ms var(--ease-curve) infinite;
-  }
+@keyframes glitch-anim-1 {
+  0% { clip-path: inset(20% 0 50% 0); }
+  50% { clip-path: inset(10% 0 70% 0); }
+  100% { clip-path: inset(60% 0 10% 0); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { clip-path: inset(15% 0 65% 0); }
+  50% { clip-path: inset(50% 0 20% 0); }
+  100% { clip-path: inset(30% 0 40% 0); }
+}
+
+/* Card 3D Tilt Shimmer Effect */
+.work-card .card-media::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(179, 247, 125, 0.15) 50%,
+    transparent 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.75s ease-in-out;
+  pointer-events: none;
+}
+
+.work-card:hover .card-media::after {
+  left: 200%;
 }
