@@ -98,6 +98,14 @@ function initCustomCursor() {
 
   document.body.classList.add('has-custom-cursor');
 
+  // Top Layer elevation support via Popover API (so custom cursor stays above native dialogs)
+  if (typeof dot.showPopover === 'function') {
+    try {
+      if (!dot.matches(':popover-open')) dot.showPopover();
+      if (!outline.matches(':popover-open')) outline.showPopover();
+    } catch (_e) {}
+  }
+
   let mouseX = window.innerWidth / 2;
   let mouseY = window.innerHeight / 2;
   let outlineX = mouseX;
@@ -479,11 +487,32 @@ function openProjectModal(id) {
     </div>
   `).join('');
 
+  // Reset any lingering .view-project state from hovering the card
+  const outline = document.querySelector('.cursor-outline');
+  const dot = document.querySelector('.cursor-dot');
+  if (outline) {
+    outline.classList.remove('view-project');
+  }
+
   // Show native modal & sync URL hash
   if (history.replaceState) {
     history.replaceState(null, '', `#case-${item.id}`);
   }
   modal.showModal();
+
+  // Elevate custom cursor above modal in browser's Top Layer
+  if (dot && outline && typeof dot.showPopover === 'function') {
+    try {
+      if (outline.matches(':popover-open')) outline.hidePopover();
+      if (dot.matches(':popover-open')) dot.hidePopover();
+      outline.showPopover();
+      dot.showPopover();
+    } catch (_e) {}
+  } else {
+    // Fallback for older browsers: restore native cursor inside modal
+    document.body.classList.remove('has-custom-cursor');
+  }
+
   if (window.sfx) window.sfx.modalOpen();
 }
 
@@ -496,6 +525,17 @@ function closeProjectModal() {
     history.replaceState(null, '', window.location.pathname + window.location.search);
   }
   closeTopLayer(modal);
+
+  const outline = document.querySelector('.cursor-outline');
+  if (outline) {
+    outline.classList.remove('hover', 'view-project');
+  }
+
+  // Restore custom cursor class if disabled in fallback
+  if (!document.body.classList.contains('has-custom-cursor') && !window.matchMedia('(pointer: coarse)').matches) {
+    document.body.classList.add('has-custom-cursor');
+  }
+
   if (window.sfx) window.sfx.modalClose();
 }
 

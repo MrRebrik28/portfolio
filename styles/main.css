@@ -180,8 +180,24 @@ button {
 @media (pointer: fine) {
   body.has-custom-cursor,
   body.has-custom-cursor a,
-  body.has-custom-cursor button {
+  body.has-custom-cursor button,
+  body.has-custom-cursor input,
+  body.has-custom-cursor label,
+  body.has-custom-cursor select,
+  body.has-custom-cursor dialog,
+  body.has-custom-cursor dialog * {
     cursor: none !important;
+  }
+
+  /* Reset default user-agent popover styling when elevated to browser's Top Layer */
+  .cursor-dot[popover],
+  .cursor-outline[popover] {
+    margin: 0;
+    padding: 0;
+    inset: unset;
+    border: none;
+    background: transparent;
+    overflow: visible;
   }
 
   .cursor-dot {
@@ -193,7 +209,7 @@ button {
     background-color: var(--accent);
     border-radius: 0;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 2147483647;
     transform: translate(-50%, -50%);
     box-shadow: 0 0 8px var(--accent);
     transition: width 0.2s, height 0.2s, background-color 0.2s;
@@ -208,7 +224,7 @@ button {
     border: 1px solid rgba(179, 247, 125, 0.5);
     border-radius: 0;
     pointer-events: none;
-    z-index: 9998;
+    z-index: 2147483646;
     transform: translate(-50%, -50%);
     transition: width 0.25s ease-out, height 0.25s ease-out, border-color 0.25s ease-out, background-color 0.25s ease-out;
   }
