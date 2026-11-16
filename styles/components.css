@@ -1400,49 +1400,95 @@ dialog#project-modal::backdrop {
   line-height: 1.6;
 }
 
-.skills-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
+.about-col-title {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.01em;
 }
 
-.skill-bar-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
+.section-subheading {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
 }
 
-.skill-info {
+/* Skills & Tech Stack Grid */
+.skills-block {
+  margin-top: 2.5rem;
+}
+
+.skills-categories-grid {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.skill-cat-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 2px;
+  padding: 1.25rem 1.35rem;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.skill-cat-card:hover {
+  border-color: var(--accent-border);
+  background: var(--bg-tertiary);
+}
+
+.skill-cat-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+.skill-cat-badge {
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(179, 247, 125, 0.1);
+  border: 1px solid var(--accent-border);
+  padding: 0.15rem 0.45rem;
+  border-radius: 2px;
+}
+
+.skill-cat-title {
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  font-weight: 700;
   color: var(--text-primary);
 }
 
-.skill-pct {
-  color: var(--accent);
-  font-weight: 700;
+.skill-tags-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
 }
 
-.skill-track {
-  width: 100%;
-  height: 2px;
-  background: var(--border-subtle);
-  border-radius: 0;
-  overflow: hidden;
+.skill-tag-item {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  padding: 0.3rem 0.6rem;
+  border-radius: 2px;
+  transition: border-color var(--transition-fast), color var(--transition-fast);
 }
 
-.skill-progress {
-  height: 100%;
-  background: var(--accent);
-  border-radius: 0;
-  box-shadow: none;
-  transform-origin: left;
-  transition: transform 1.2s var(--ease-out-expo);
+.skill-cat-card:hover .skill-tag-item {
+  border-color: var(--border-medium);
+  color: var(--text-primary);
 }
 
-/* Milestones Hairline Table */
+/* Experience & Career Timeline */
 .awards-timeline {
   display: flex;
   flex-direction: column;
@@ -1452,9 +1498,9 @@ dialog#project-modal::backdrop {
 
 .award-item {
   display: grid;
-  grid-template-columns: 88px 1fr;
-  gap: 1.5rem;
-  padding: 1.35rem 1rem;
+  grid-template-columns: 110px 1fr;
+  gap: 1.25rem;
+  padding: 1.4rem 1rem;
   background: transparent;
   border: none;
   border-bottom: 1px solid var(--border-subtle);
@@ -1473,17 +1519,155 @@ dialog#project-modal::backdrop {
   font-size: 0.8125rem;
   font-weight: 700;
   color: var(--accent);
+  line-height: 1.4;
 }
 
 .award-details h5 {
-  font-size: 1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 0.25rem;
+  line-height: 1.3;
 }
 
-.award-details span {
-  font-size: 0.8125rem;
+.award-company {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.award-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Education & Certifications */
+.education-block {
+  margin-top: 1rem;
+}
+
+.edu-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-left: 2px solid var(--accent);
+  border-radius: 2px;
+  padding: 1.4rem 1.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.edu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.65rem;
+}
+
+.edu-years {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
   color: var(--text-muted);
+}
+
+.edu-badge {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(179, 247, 125, 0.1);
+  border: 1px solid var(--accent-border);
+  padding: 0.2rem 0.55rem;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.edu-institution {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+  line-height: 1.3;
+}
+
+.edu-specialty {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.35rem;
+}
+
+.edu-qualification {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.edu-qualification strong {
+  color: var(--accent);
+}
+
+.cert-heading {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.85rem;
+}
+
+.cert-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--border-subtle);
+  padding: 0;
+  margin: 0;
+}
+
+.cert-item {
+  display: grid;
+  grid-template-columns: 55px 1fr;
+  gap: 1rem;
+  padding: 0.85rem 0.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background-color var(--transition-fast);
+}
+
+.cert-item:hover {
+  background: rgba(179, 247, 125, 0.03);
+}
+
+.cert-year {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.cert-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.cert-content strong {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+.cert-content span {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.3;
 }
 
 /* --------------------------------------------------------------------------
@@ -1711,6 +1895,17 @@ dialog#project-modal::backdrop {
   margin-bottom: 3.5rem;
 }
 
+.contact-phone-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.05em;
+  padding: 0.85rem 1.6rem;
+  border-radius: 2px;
+}
+
 .copy-email-btn {
   display: inline-flex;
   align-items: center;
@@ -1861,6 +2056,14 @@ dialog#project-modal::backdrop {
   }
   .hero-stats-row {
     grid-template-columns: 1fr;
+  }
+  .award-item {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+  .cert-item {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
   }
   .calc-summary-row {
     flex-direction: column;

@@ -570,7 +570,7 @@ function initCopyEmail() {
   if (!btn) return;
 
   btn.addEventListener('click', async () => {
-    const email = btn.getAttribute('data-email') || 'jarovenkoaleksander@yandex.ru';
+    const email = btn.getAttribute('data-email') || 'Sanya.yarovenko.90@gmail.com';
     try {
       await navigator.clipboard.writeText(email);
       showToast(`Email скопирован: ${email}`);
