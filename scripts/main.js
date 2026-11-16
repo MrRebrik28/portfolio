@@ -188,18 +188,23 @@ function renderWorks(category = 'all') {
 
   const filtered = category === 'all' 
     ? portfolioData 
-    : portfolioData.filter(item => item.category === category);
+    : category === 'live'
+      ? portfolioData.filter(item => item.isLive)
+      : portfolioData.filter(item => item.category === category);
 
   if (countEl) {
     countEl.textContent = `${filtered.length} из ${portfolioData.length}`;
   }
 
   container.innerHTML = filtered.map(item => `
-    <article class="work-card" data-id="${item.id}" data-category="${item.category}" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Смотреть проект: ${item.title}">
+    <article class="work-card ${item.isLive ? 'is-live-card' : ''}" data-id="${item.id}" data-category="${item.category}" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Смотреть проект: ${item.title}">
       <div class="card-media">
-        <span class="card-overlay-badge">${item.categoryLabel}</span>
+        <span class="card-overlay-badge ${item.isLive ? 'live-badge' : ''}">${item.isLive ? '● LIVE В СЕТИ' : item.categoryLabel}</span>
         <div class="card-overlay-top-right">
-          <span class="card-overlay-type">${item.projectType || 'Концепт'}</span>
+          ${item.isLive 
+            ? `<span class="card-overlay-type live-status-badge"><span class="live-dot"></span>РАБОТАЕТ</span>`
+            : `<span class="card-overlay-type">${item.projectType || 'Концепт'}</span>`
+          }
           <span class="card-overlay-year">${item.year}</span>
         </div>
         <img src="${item.image}" alt="${item.title} — ${item.tagline}" loading="lazy" width="800" height="500">
@@ -216,10 +221,18 @@ function renderWorks(category = 'all') {
         </div>
         <p class="card-tagline">${item.tagline}</p>
         <div class="card-tags">
-          <span class="tag-pill tag-pill-type">✦ ${item.projectType || 'Концепт'}</span>
+          <span class="tag-pill tag-pill-type ${item.isLive ? 'live-pill' : ''}">✦ ${item.isLive ? 'Сайт в продакшене' : item.projectType}</span>
           ${item.tags.map(tag => `<span class="tag-pill">${tag}</span>`).join('')}
           ${item.results && item.results[0] ? `<span class="tag-pill metric">${item.results[0].label}: ${item.results[0].value}</span>` : ''}
         </div>
+        ${item.isLive ? `
+          <div class="card-live-action">
+            <a href="${item.liveUrl}" target="_blank" rel="noopener noreferrer" class="card-live-btn" onclick="event.stopPropagation();" aria-label="Открыть ${item.title} в новой вкладке">
+              Открыть сайт ↗
+            </a>
+            <span class="card-live-hint">Подробнее о стеке →</span>
+          </div>
+        ` : ''}
       </div>
     </article>
   `).join('');
@@ -394,6 +407,35 @@ function openProjectModal(id) {
 
   document.getElementById('modal-tagline').textContent = item.tagline;
   document.getElementById('modal-desc').textContent = item.description;
+
+  // Live vs Concept banners
+  const liveBanner = document.getElementById('modal-live-banner');
+  const conceptBanner = document.getElementById('modal-concept-banner');
+  const liveDirectBtn = document.getElementById('modal-live-direct-btn');
+
+  if (item.isLive) {
+    if (liveBanner) {
+      liveBanner.style.display = 'flex';
+      const liveLinkEl = document.getElementById('modal-live-link');
+      if (liveLinkEl) {
+        liveLinkEl.href = item.liveUrl;
+        liveLinkEl.textContent = `${item.liveUrl} ↗`;
+      }
+      const liveLaunchBtn = document.getElementById('modal-live-launch-btn');
+      if (liveLaunchBtn) {
+        liveLaunchBtn.href = item.liveUrl;
+      }
+    }
+    if (conceptBanner) conceptBanner.style.display = 'none';
+    if (liveDirectBtn) {
+      liveDirectBtn.style.display = 'inline-flex';
+      liveDirectBtn.href = item.liveUrl;
+    }
+  } else {
+    if (liveBanner) liveBanner.style.display = 'none';
+    if (conceptBanner) conceptBanner.style.display = 'flex';
+    if (liveDirectBtn) liveDirectBtn.style.display = 'none';
+  }
 
   const discussBtn = document.getElementById('modal-discuss-btn');
   if (discussBtn) {
