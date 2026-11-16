@@ -819,6 +819,38 @@
   box-shadow: 0 4px 14px rgba(179, 247, 125, 0.28);
 }
 
+.card-github-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-medium);
+  padding: 0.4rem 0.85rem;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.card-github-btn:hover {
+  background: var(--border-medium);
+  color: var(--accent);
+  border-color: var(--accent-border);
+  transform: translateY(-1px);
+}
+
+.modal-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
 .card-live-hint {
   font-family: var(--font-mono);
   font-size: 0.6875rem;

@@ -14,12 +14,13 @@ const portfolioData = [
     formatLabel: "Рабочий сайт в сети // Digital-студия",
     isLive: true,
     liveUrl: "https://local-web.ru/",
+    githubUrl: "https://github.com/MrRebrik28/turboweb-",
     image: "assets/projects/local_web_live.png",
-    tags: ["Live Web", "Tailwind CSS", "Telegram API", "Google Sheets", "Cloudflare"],
+    tags: ["Live Web", "Tailwind CSS", "Telegram API", "Google Sheets", "Cloudflare", "Open Source"],
     year: "2026",
     client: "Собственный продакшен // LocalWeb",
     role: "Основатель, UI/UX & Frontend-разработчик",
-    description: "Действующий сайт студии быстрой веб-разработки под ключ с уникальным позиционированием («Сайт для дела за 24 часа без предоплаты»). Спроектировал чистый конверсионный лендинг, интерактивный бриф для заказчиков (brief.html), веб-презентацию услуг (presentation.html), партнерский раздел (partners.html) и мгновенную отправку заявок через Telegram-бота в Google Таблицы.",
+    description: "Действующий сайт студии быстрой веб-разработки под ключ с уникальным позиционированием («Сайт для дела за 24 часа без предоплаты»). Спроектировал чистый конверсионный лендинг, интерактивный бриф для заказчиков (brief.html), веб-презентацию услуг (presentation.html), партнерский раздел (partners.html), 5 нишевых демо-сайтов и мгновенную отправку заявок через Telegram-бота в Google Таблицы.",
     designHighlights: [
       "Продуманное УТП и воронка первого экрана с наглядным отображением сайта прямо на смартфоне",
       "Интерактивный бриф и калькулятор, рассчитывающий точную смету без скрытых платежей",
@@ -29,7 +30,7 @@ const portfolioData = [
     results: [
       { label: "Статус проекта", value: "● LIVE в сети" },
       { label: "Срок сдачи черновика", value: "до 24 часов" },
-      { label: "Сайт студии", value: "local-web.ru" }
+      { label: "Код на GitHub", value: "Открыт" }
     ]
   },
   {
@@ -67,25 +68,86 @@ const portfolioData = [
     category: "ui-ux",
     categoryLabel: "Сайты & UI/UX",
     projectType: "Живой продакшен",
-    formatLabel: "Действующий SaaS-сервис // Next.js",
+    formatLabel: "Действующий SaaS-сервис // Next.js & NestJS",
     isLive: true,
     liveUrl: "https://vse-zachetno-mrrebrik.msk1.amvera.tech/",
+    githubUrl: "https://github.com/MrRebrik28/vse-zachetno",
     image: "assets/projects/vse_zachetno_live.jpg",
-    tags: ["Live Web", "Next.js", "React", "TypeScript", "Калькулятор цен"],
+    tags: ["Live SaaS", "Next.js 16", "NestJS", "TypeScript", "Prisma", "PostgreSQL", "Docker"],
     year: "2026",
     client: "Образовательный EdTech-сервис",
     role: "Full-stack дизайнер & фронтенд-разработчик",
-    description: "Запущенный веб-сервис для студентов и исследователей. Разработал архитектуру пользовательских сценариев, адаптивный интерфейс на Next.js и React, калькулятор стоимости в реальном времени с учетом сроков и процента оригинальности (Антиплагиат.ВУЗ), систему авторизации и каталог направлений.",
+    description: "Запущенный веб-сервис для студентов и исследователей. Спроектировал архитектуру пользовательских сценариев, адаптивный фронтенд на Next.js 16 (App Router) и NestJS 12 API с Prisma ORM и PostgreSQL на Neon. Реализовал калькулятор стоимости в реальном времени с учетом сроков и процента оригинальности (Антиплагиат.ВУЗ), систему ролей (Клиент, Менеджер, Владелец), биржу заказов и деплой через Docker на облако Amvera.",
     designHighlights: [
       "Интерактивный калькулятор стоимости в реальном времени с выбором типа работы, объема и дедлайна",
       "Строгая контрастная типографика с академическим характером и чистой сеткой",
-      "Полноценный каталог дисциплин, блок гарантий (30 дней) и разбор этапов сдачи",
-      "Архитектура на Next.js / React / TypeScript с серверным рендерингом и деплоем на Amvera Cloud"
+      "Полноценный каталог из 20 услуг, блок гарантий (30 дней) и личный кабинет клиента",
+      "Архитектура Next.js + NestJS + Prisma ORM + PostgreSQL с прозрачным проксированием /api-proxy/ и защитой от CORS"
     ],
     results: [
       { label: "Статус проекта", value: "● LIVE в сети" },
-      { label: "Стек разработки", value: "Next.js + TypeScript" },
-      { label: "Гарантийный период", value: "30 дней по договору" }
+      { label: "Стек разработки", value: "Next.js + NestJS + Postgres" },
+      { label: "Код на GitHub", value: "Открыт" }
+    ]
+  },
+  {
+    id: "zazozh",
+    title: "Моё восстановление (zazozh)",
+    tagline: "Бережный PWA-трекер привычек, динамики сна и реабилитации",
+    category: "ui-ux",
+    categoryLabel: "Сайты & UI/UX",
+    projectType: "Живой продакшен",
+    formatLabel: "Действующий PWA & Telegram Mini App",
+    isLive: true,
+    liveUrl: "https://mrrebrik28.github.io/zazozh/",
+    githubUrl: "https://github.com/MrRebrik28/zazozh",
+    image: "assets/projects/zazozh_live.jpg",
+    tags: ["Live PWA", "TypeScript", "Vite", "IndexedDB", "HTML5 Canvas", "Telegram Mini App", "CI/CD"],
+    year: "2026",
+    client: "Персональный Health-Tech продукт",
+    role: "Frontend & PWA разработчик / UI-дизайнер",
+    description: "Автономное веб-приложение для ежедневного отслеживания самочувствия, сна, уровня боли, веса и водного баланса. Работает как PWA на смартфонах и как Telegram Mini App. Все данные хранятся локально в IndexedDB браузера (100% приватность без сторонних серверов). Разработал кастомный высокоточный движок графиков на HTML5 Canvas с поддержкой Retina-экранов, интерактивную сетку календаря с цветными маркерами и экспорт/импорт резервных копий в JSON.",
+    designHighlights: [
+      "100% автономная оффлайн-работа через Service Worker и локальное хранилище IndexedDB с LocalStorage-фоллбеком",
+      "Кастомный высокоточный Retina-движок графиков на чистом Canvas для отображения динамики веса, сна и шкалы боли",
+      "Интерактивная сетка календаря за месяц с цветными маркерами активности и редактированием прошедших дней",
+      "Поддержка тактильного отклика (Haptic Feedback) в Telegram и на мобильных устройствах, мягкая пудровая и тёмная темы",
+      "Автоматизированный CI/CD пайплайн сборки и деплоя на GitHub Pages с прогоном юнит-тестов (tsx --test)"
+    ],
+    results: [
+      { label: "Статус проекта", value: "● LIVE в сети" },
+      { label: "Автономность (оффлайн)", value: "100% PWA" },
+      { label: "Код на GitHub", value: "Открыт" }
+    ]
+  },
+  {
+    id: "softskills-resume",
+    title: "Конструктор резюме Soft Skills",
+    tagline: "Интерактивный конструктор резюме с живым превью А4 и экспортом в Ultra-HD JPG",
+    category: "ui-ux",
+    categoryLabel: "Сайты & UI/UX",
+    projectType: "Живой продакшен",
+    formatLabel: "Действующий EdTech-сервис // Образование",
+    isLive: true,
+    liveUrl: "https://mrrebrik28.github.io/softskills-resume/",
+    githubUrl: "https://github.com/MrRebrik28/softskills-resume",
+    image: "assets/projects/softskills_resume_live.png",
+    tags: ["Live Web", "JavaScript", "HTML5 & CSS Grid", "html2canvas 2.5x", "EdTech", "Web Share API"],
+    year: "2026",
+    client: "Студенты и слушатели курсов",
+    role: "Full-cycle разработчик & Автор методики",
+    description: "Образовательный веб-инструмент, разработанный для студентов техникума по дисциплине «Надпрофессиональные компетенции современного специалиста». Позволяет быстро собрать резюме с готовыми библиотеками гибких (Soft) и жестких (Hard) навыков по 8 профессиональным направлениям (IT, юристы, ЧС, электрики, механики), переключать 4 дизайнерские темы оформления и в один клик скачивать готовый лист А4 в ультравысоком разрешении (масштаб 2.5x через html2canvas).",
+    designHighlights: [
+      "Реактивный двухколоночный интерфейс: форма ввода параметров слева и моментальный предпросмотр листа A4 справа",
+      "Встроенная база гибких навыков (Soft Skills) и жестких компетенций по 8 профессиональным направлениям",
+      "4 сбалансированные цветовые темы оформления: Executive Navy, Emerald Leader, Warm Editorial, Nordic Minimal",
+      "Экспорт в ультрачеткий JPG формата А4 с масштабированием 2.5x для идеальной читаемости шрифтов при отправке в Telegram и почту",
+      "Адаптация под мобильные устройства и iOS с сохранением в Галерею через Web Share API"
+    ],
+    results: [
+      { label: "Статус проекта", value: "● LIVE в сети" },
+      { label: "Разрешение экспорта", value: "2.5x HD JPG" },
+      { label: "Код на GitHub", value: "Открыт" }
     ]
   },
   {

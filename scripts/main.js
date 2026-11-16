@@ -230,7 +230,12 @@ function renderWorks(category = 'all') {
             <a href="${item.liveUrl}" target="_blank" rel="noopener noreferrer" class="card-live-btn" onclick="event.stopPropagation();" aria-label="Открыть ${item.title} в новой вкладке">
               Открыть сайт ↗
             </a>
-            <span class="card-live-hint">Подробнее о стеке →</span>
+            ${item.githubUrl ? `
+              <a href="${item.githubUrl}" target="_blank" rel="noopener noreferrer" class="card-github-btn" onclick="event.stopPropagation();" aria-label="Открыть репозиторий ${item.title} на GitHub" title="Репозиторий проекта на GitHub">
+                GitHub ↗
+              </a>
+            ` : ''}
+            <span class="card-live-hint">Подробнее о кейсе →</span>
           </div>
         ` : ''}
       </div>
@@ -435,6 +440,24 @@ function openProjectModal(id) {
     if (liveBanner) liveBanner.style.display = 'none';
     if (conceptBanner) conceptBanner.style.display = 'flex';
     if (liveDirectBtn) liveDirectBtn.style.display = 'none';
+  }
+
+  // GitHub repo link
+  const githubBannerBtn = document.getElementById('modal-github-banner-btn');
+  const githubFooterBtn = document.getElementById('modal-github-footer-btn');
+
+  if (item.githubUrl) {
+    if (githubBannerBtn) {
+      githubBannerBtn.style.display = 'inline-flex';
+      githubBannerBtn.href = item.githubUrl;
+    }
+    if (githubFooterBtn) {
+      githubFooterBtn.style.display = 'inline-flex';
+      githubFooterBtn.href = item.githubUrl;
+    }
+  } else {
+    if (githubBannerBtn) githubBannerBtn.style.display = 'none';
+    if (githubFooterBtn) githubFooterBtn.style.display = 'none';
   }
 
   const discussBtn = document.getElementById('modal-discuss-btn');

@@ -188,7 +188,7 @@
           </div>
 
           <div class="portfolio-counter">
-            Показано: <strong id="visible-count">11 из 11</strong>
+            Показано: <strong id="visible-count">13 из 13</strong>
           </div>
         </div>
 
@@ -246,7 +246,17 @@
                 </li>
                 <li>
                   <a href="https://vse-zachetno-mrrebrik.msk1.amvera.tech/" target="_blank" rel="noopener noreferrer">
-                    <strong>«Всё зачётно» ↗</strong> — образовательный веб-сервис под ключ (Next.js, онлайн-калькулятор, ЛК)
+                    <strong>«Всё зачётно» ↗</strong> — образовательный SaaS под ключ (Next.js 16, NestJS, PostgreSQL, Amvera)
+                  </a>
+                </li>
+                <li>
+                  <a href="https://mrrebrik28.github.io/zazozh/" target="_blank" rel="noopener noreferrer">
+                    <strong>«Моё восстановление» (zazozh) ↗</strong> — автономный PWA-трекер привычек и динамики реабилитации (TypeScript, IndexedDB, Canvas Retina)
+                  </a>
+                </li>
+                <li>
+                  <a href="https://mrrebrik28.github.io/softskills-resume/" target="_blank" rel="noopener noreferrer">
+                    <strong>Конструктор резюме Soft Skills ↗</strong> — веб-сервис для студентов с живым превью A4 и экспортом в Ultra-HD JPG (html2canvas 2.5x)
                   </a>
                 </li>
               </ul>
@@ -660,6 +670,12 @@
             <a href="https://vse-zachetno-mrrebrik.msk1.amvera.tech/" target="_blank" rel="noopener noreferrer" class="social-link" title="Академический сервис Всё зачётно">
               <span>Всё зачётно ↗</span>
             </a>
+            <a href="https://mrrebrik28.github.io/zazozh/" target="_blank" rel="noopener noreferrer" class="social-link" title="PWA-трекер Моё восстановление">
+              <span>zazozh PWA ↗</span>
+            </a>
+            <a href="https://mrrebrik28.github.io/softskills-resume/" target="_blank" rel="noopener noreferrer" class="social-link" title="Конструктор резюме Soft Skills">
+              <span>Конструктор резюме ↗</span>
+            </a>
             <a href="https://www.figma.com/design/bFgFPTC7WTq4bMZL28wpkm" target="_blank" rel="noopener noreferrer" class="social-link">
               <span>Figma-исходники ↗</span>
             </a>
@@ -741,9 +757,17 @@
                 <a id="modal-live-link" href="#" target="_blank" rel="noopener noreferrer" class="live-url-link">https://... ↗</a>
               </div>
             </div>
-            <a id="modal-live-launch-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
-              Открыть сайт ↗
-            </a>
+            <div class="modal-banner-actions">
+              <a id="modal-live-launch-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+                Открыть сайт ↗
+              </a>
+              <a id="modal-github-banner-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: none;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                </svg>
+                GitHub ↗
+              </a>
+            </div>
           </div>
 
           <!-- Concept Notice Banner -->
@@ -784,6 +808,12 @@
       <div class="modal-footer-cta">
         <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-accent-outline" id="modal-live-direct-btn" style="display: none;">
           Открыть сайт в новой вкладке ↗
+        </a>
+        <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" id="modal-github-footer-btn" style="display: none;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+          </svg>
+          Код на GitHub ↗
         </a>
         <button type="button" class="btn btn-secondary" id="modal-copy-link-btn">
           Скопировать ссылку на кейс
