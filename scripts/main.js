@@ -198,7 +198,10 @@ function renderWorks(category = 'all') {
     <article class="work-card" data-id="${item.id}" data-category="${item.category}" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Смотреть проект: ${item.title}">
       <div class="card-media">
         <span class="card-overlay-badge">${item.categoryLabel}</span>
-        <span class="card-overlay-year">${item.year}</span>
+        <div class="card-overlay-top-right">
+          <span class="card-overlay-type">${item.projectType || 'Концепт'}</span>
+          <span class="card-overlay-year">${item.year}</span>
+        </div>
         <img src="${item.image}" alt="${item.title} — ${item.tagline}" loading="lazy" width="800" height="500">
       </div>
       <div class="card-content">
@@ -213,6 +216,7 @@ function renderWorks(category = 'all') {
         </div>
         <p class="card-tagline">${item.tagline}</p>
         <div class="card-tags">
+          <span class="tag-pill tag-pill-type">✦ ${item.projectType || 'Концепт'}</span>
           ${item.tags.map(tag => `<span class="tag-pill">${tag}</span>`).join('')}
           ${item.results && item.results[0] ? `<span class="tag-pill metric">${item.results[0].label}: ${item.results[0].value}</span>` : ''}
         </div>
@@ -373,13 +377,17 @@ function openProjectModal(id) {
   // Populate Modal Fields
   document.getElementById('modal-title').textContent = item.title;
   document.getElementById('modal-category-badge').textContent = item.categoryLabel;
+  const typeBadge = document.getElementById('modal-type-badge');
+  if (typeBadge) {
+    typeBadge.textContent = item.projectType || 'Концепт';
+  }
   document.getElementById('modal-year-badge').textContent = item.year;
   
   const heroImg = document.getElementById('modal-image');
   heroImg.src = item.image;
   heroImg.alt = item.title;
 
-  document.getElementById('modal-client').textContent = item.client || 'Концепт / Заказчик';
+  document.getElementById('modal-client').textContent = item.formatLabel || item.client || 'Авторский концепт';
   document.getElementById('modal-role').textContent = item.role;
   document.getElementById('modal-year').textContent = item.year;
   document.getElementById('modal-tools').textContent = item.tags.slice(0, 3).join(', ');
