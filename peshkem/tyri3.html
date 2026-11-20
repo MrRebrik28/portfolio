@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Индустриальный Кузбасс & Красная Горка — Пешеходный гид ПешКем</title>
+  <meta name="description" content="Авторский пешеходный гид по правому берегу реки Томь: Музей-заповедник Красная Горка, Горелая гора Михайлы Волкова, дома голландского архитектора ван Лохема и монумент Эрнста Неизвестного.">
+  <meta name="theme-color" content="#F8FAFC">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Индустриальный Кузбасс & Красная Горка — ПешКем">
+  <meta property="og:description" content="Интерактивный маршрут с голосовым аудиогидом и картой. 4 знаковые локации, 4.2 км, 2.5 часа.">
+  <meta property="og:image" content="assets/peshkem/tur3.png">
+
+  <!-- Favicon & App Icons -->
+  <link rel="icon" type="image/svg+xml" href="assets/peshkem/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/peshkem/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/peshkem/icons/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/peshkem/icons/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="shortcut icon" href="favicon.ico">
+
+  <!-- Fonts (Oldtimer via CDN, Montserrat & Oswald via Google Fonts, plus local @font-face) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Oswald:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/oldtimer">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="assets/peshkem/vendor/leaflet/leaflet.css">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles/peshkem.css">
+</head>
+<body>
+
+  <!-- Sticky Top Header & Progress Navigation Bar -->
+  <header class="tour-sticky-header">
+    <div class="tour-page-header-row">
+      <div class="container tour-header-container">
+        <nav class="tour-breadcrumbs" aria-label="Хлебные крошки">
+          <a href="index.html">&larr; На главную</a>
+          <span class="tour-breadcrumbs-sep">/</span>
+          <a href="index.html#routes-section">Маршруты</a>
+          <span class="tour-breadcrumbs-sep">/</span>
+          <span style="color: var(--text-main); font-weight: 600;">Красная Горка</span>
+        </nav>
+
+        <div class="tour-header-actions">
+          <span id="tour-progress-stat" class="tour-progress-stat-pill" style="color: #818CF8; background: var(--color-indigo-light);">
+            Пройдено 0 из 4 (0%)
+          </span>
+          <a href="index.html" class="btn-cta-primary" style="padding: 0.45rem 1rem; font-size: var(--fs-xs);">
+            Все маршруты
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Anchor Nav Track -->
+    <nav class="tour-quick-nav" aria-label="Быстрый переход к остановкам">
+      <div class="container">
+        <div class="tour-quick-nav-track" id="tour-quick-nav-track">
+          <a href="#stop-card-kg-stop-1-museum" class="quick-nav-pill active">1. Музей «Красная Горка»</a>
+          <a href="#stop-card-kg-stop-2-gorela-gora" class="quick-nav-pill">2. Горелая гора (1721 г.)</a>
+          <a href="#stop-card-kg-stop-3-van-loghem-houses" class="quick-nav-pill">3. Дома ван Лохема</a>
+          <a href="#stop-card-kg-stop-4-neizvestny-monument" class="quick-nav-pill">4. Монумент Эрнста Неизвестного</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Visual Progress Line -->
+    <div class="tour-progress-track" aria-hidden="true">
+      <div class="tour-progress-fill" id="tour-progress-line" style="width: 0%; background: linear-gradient(90deg, #818CF8 0%, var(--color-primary) 100%);"></div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1. Tour Hero Section -->
+    <section class="tour-hero">
+      <div class="tour-hero-scrim"></div>
+      <div class="container tour-hero-grid">
+        <div class="tour-hero-content">
+          <div class="tour-badge" style="background: rgba(99, 102, 241, 0.2); color: #818CF8;">
+            Маршрут №3 • Индустриальный & Архитектурный
+          </div>
+
+          <h1 class="tour-hero-title">Индустриальный Кузбасс & Красная Горка</h1>
+          <p class="tour-hero-subtitle">
+            Уникальный маршрут по правому берегу реки Томь, где в 1721 году рудознатец Михайло Волков открыл угольный пласт «Горелая гора», давший рождение всему Кузбасскому угольному бассейну. Вы увидите дома интернациональной колонии АИК «Кузбасс», построенные выдающимся голландским архитектором Йоханнесом ван Лохемом, и грандиозный монумент «Память шахтерам Кузбасса» работы Эрнста Неизвестного.
+          </p>
+
+          <div class="tour-metrics-pills">
+            <span class="tour-metric-pill">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Время: <strong>2.5 часа</strong>
+            </span>
+            <span class="tour-metric-pill">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M10 22v-5l-2-2V9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6l-2 2v5"/></svg> Длина: <strong>4.2 км</strong>
+            </span>
+            <span class="tour-metric-pill">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Остановки: <strong>4 локации</strong>
+            </span>
+            <span class="tour-metric-pill">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg> Сложность: <strong>Средний</strong>
+            </span>
+            <span class="tour-metric-pill">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg> Аудиогид: <strong>Включен</strong>
+            </span>
+          </div>
+
+          <div class="tour-actions-group">
+            <button type="button" class="btn-cta-primary" id="btn-hero-listen-tour" style="background: var(--color-indigo);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Слушать весь аудиогид</span>
+            </button>
+            <a href="#tour-map-wrap" class="btn-route-action btn-route-detail" style="border-radius: var(--radius-full); padding: 0.65rem 1.4rem;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="12 8 8 12 12 16 12 8"/></svg>
+              <span>Интерактивная карта</span>
+            </a>
+            <button type="button" class="btn-icon-pill" id="btn-hero-fav" aria-label="В избранное" title="Сохранить в избранное">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </button>
+            <button type="button" class="btn-icon-pill" id="btn-hero-share" aria-label="Поделиться" title="Поделиться маршрутом">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="tour-hero-media">
+          <img class="tour-hero-cover-img" src="assets/peshkem/stops/tour3_stop4_neizvestny_monument.jpg" alt="Монумент Память шахтерам Кузбасса на Красной Горке" fetchpriority="high">
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Tour Map Wrap -->
+    <div class="container" id="tour-map-wrap" style="padding-top: 3rem;">
+      <div style="margin-bottom: 1rem;">
+        <h2 style="font-size: var(--fs-xl); font-weight: 700;">Карта и объекты Красной Горки</h2>
+        <span style="font-size: var(--fs-xs); color: var(--text-muted);">Нажимайте на метки для перехода к деталям и аудиогиду</span>
+      </div>
+
+      <div class="map-container-wrapper" style="height: 440px;">
+        <div id="tour-dedicated-map" style="width: 100%; height: 100%;"></div>
+      </div>
+    </div>
+
+    <!-- 3. Stops Detailed Feed -->
+    <div class="container">
+      <div class="tour-stops-feed">
+
+        <!-- Stop 1 -->
+        <article class="tour-stop-card" id="stop-card-kg-stop-1-museum">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge" style="background: var(--color-indigo);">01</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">Старт • 35 минут на осмотр</span>
+                  <h3 class="stop-title-text">Музей-заповедник «Красная Горка»</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="kg-stop-1-museum">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Музей-заповедник «Красная Горка» создан на месте Кемеровского рудника. Главное историческое здание — каменный дом управляющего рудником, построенный в 1916 году акционерным обществом «Копикуз».</p>
+              <p>С высокого скалистого мыса открывается потрясающая круговая панорама всего левобережного Кемерово, реки Томь и мостов. В музее действует настоящая интерактивная учебная штольня, экспозиция горноспасателей и выставка под открытым небом.</p>
+            </div>
+
+            <div class="stop-tip-box" style="border-left-color: var(--color-indigo);">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Рекомендуем зайти в музейный зал АИК «Кузбасс» и осмотреть смотровую площадку над обрывом Томи.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="0" style="background: var(--color-indigo);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="kg-stop-1-museum">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3725,86.0895" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour3_stop1_krasnaya_gorka_museum.jpg" alt="Музей Красная Горка" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 2 -->
+        <article class="tour-stop-card" id="stop-card-kg-stop-2-gorela-gora">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge" style="background: var(--color-indigo);">02</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+40 минут в пути • 20 минут</span>
+                  <h3 class="stop-title-text">Горелая гора (открытие угля 1721 г.)</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="kg-stop-2-gorela-gora">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Летом 1721 года сибирский казачий сын и рудознатец Михайло Волков сплавлялся на лодке по Томи и обнаружил на правом берегу горящий угольный пласт — Горелую гору.</p>
+              <p>Это эпохальное открытие легло в основу официального доклада в Берг-коллегию Петра I и положило начало открытию и развитию богатейшего Кузнецкого каменноугольного бассейна.</p>
+            </div>
+
+            <div class="stop-tip-box" style="border-left-color: var(--color-indigo);">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Подойдите к памятному обелиску Михайлы Волкова на смотровой террасе.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="1" style="background: var(--color-indigo);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="kg-stop-2-gorela-gora">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3740,86.0870" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour3_stop2_gorela_gora.jpg" alt="Горелая гора" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 3 -->
+        <article class="tour-stop-card" id="stop-card-kg-stop-3-van-loghem-houses">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge" style="background: var(--color-indigo);">03</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+65 минут в пути • 25 минут</span>
+                  <h3 class="stop-title-text">Дома АИК «Кузбасс» (архитектор ван Лохем)</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="kg-stop-3-van-loghem-houses">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>В 1920-е годы в Кемерове развернулся уникальный международный эксперимент: действовала Автономная индустриальная колония АИК «Кузбасс», куда приехали сотни инженеров и рабочих из США, Голландии и других стран мира.</p>
+              <p>Выдающийся нидерландский архитектор Йоханнес ван Лохем спроектировал здесь жилой поселок в традициях европейского функционализма и модернизма. Каменные дома из дикого песчаника, ленточные окна и рациональные планировки стали признанным мировым памятником архитектурного авангарда.</p>
+            </div>
+
+            <div class="stop-tip-box" style="border-left-color: var(--color-indigo);">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Обратите внимание на водонапорную башню ван Лохема — один из самых необычных памятников Сибири.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="2" style="background: var(--color-indigo);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="kg-stop-3-van-loghem-houses">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3710,86.0920" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour3_stop3_van_loghem.jpg" alt="Дома ван Лохема" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 4 -->
+        <article class="tour-stop-card" id="stop-card-kg-stop-4-neizvestny-monument">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge" style="background: var(--color-indigo);">04</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">Финал маршрута • 30 минут</span>
+                  <h3 class="stop-title-text">Монумент «Память шахтерам Кузбасса»</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="kg-stop-4-neizvestny-monument">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Монумент открыт 28 августа 2003 года на самой высокой точке Красной Горки. Всемирно известный скульптор Эрнст Неизвестный создал грандиозный образ бронзового титана-шахтера, держащего в ладонях пылающее горящее сердце — символ самоотверженного труда горняков и цены угля.</p>
+              <p>В основании монумента заложена музейная экспозиция и горит негасимый огонь памяти. Отсюда открывается вид на индустриальное величие и широкие просторы Сибири.</p>
+            </div>
+
+            <div class="stop-tip-box" style="border-left-color: var(--color-indigo);">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Монумент признан одним из главных художественных символов всего Кузбасса.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="3" style="background: var(--color-indigo);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="kg-stop-4-neizvestny-monument">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3735,86.0935" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour3_stop4_neizvestny_monument.jpg" alt="Монумент Эрнста Неизвестного" loading="lazy">
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Bottom Pagination -->
+      <nav class="tour-pagination-grid" aria-label="Переключение маршрутов">
+        <a href="tyri2.html" class="tour-page-card">
+          <span class="page-card-sub">← Предыдущий гид</span>
+          <span class="page-card-title">Кемеровский Арбат & Памятные места</span>
+        </a>
+        <a href="tyri.html" class="tour-page-card" style="text-align: right;">
+          <span class="page-card-sub">Следующий гид →</span>
+          <span class="page-card-title">По набережной Томи и городским легендам</span>
+        </a>
+      </nav>
+
+    </div>
+  </main>
+
+    <!-- Site Footer -->
+  <footer class="site-footer" style="margin-top: 5rem;">
+    <div class="container">
+      <div class="footer-main-grid">
+        
+        <div class="footer-brand-info">
+          <a href="index.html" aria-label="ПешКем главная">
+            <img class="footer-logo-svg" src="assets/peshkem/logofooter.svg" alt="ПешКем логотип в подвале" width="140" height="36">
+          </a>
+          <p class="footer-brand-desc">
+            Бесплатные авторские пешеходные маршруты и аудиогиды по городу Кемерово. Открываем сибирскую историю, архитектуру и уютные парки с 2022 года.
+          </p>
+          <div class="footer-socials">
+            <a href="https://vk.com/public214129984" target="_blank" rel="noopener noreferrer" class="btn-social" aria-label="Мы ВКонтакте">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.78 17.5c-5.32 0-8.36-3.65-8.49-9.73h2.67c.09 4.46 2.06 6.35 3.61 6.74V7.77h2.52v3.85c1.54-.17 3.16-1.92 3.71-3.85h2.52a6.9 6.9 0 0 1-3.23 4.88 7.3 7.3 0 0 1 3.79 4.85h-2.77c-.82-2.56-2.88-4.54-4.53-4.7v4.7z"/></svg>
+            </a>
+            <a href="https://t.me/" target="_blank" rel="noopener noreferrer" class="btn-social" aria-label="Наш Telegram-канал">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h4>Маршруты</h4>
+          <ul class="footer-links">
+            <li><a href="tyri.html">По набережной Томи</a></li>
+            <li><a href="tyri2.html">Кемеровский Арбат</a></li>
+            <li><a href="tyri3.html">Красная Горка</a></li>
+            <li><a href="index.html#map-section">Смотреть на карте</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>О проекте</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Главная страница</a></li>
+            <li><a href="index.html#features-section">Преимущества</a></li>
+            <li><a href="index.html#faq-section">Частые вопросы</a></li>
+            <li><a href="index.html#reviews-section">Отзывы туристов</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>Создано с душой</h4>
+          <p style="font-size: var(--fs-xs); color: var(--text-muted); line-height: 1.6; margin-bottom: 0.75rem;">
+            Проект «ПешКем» задуман как культурная инициатива для популяризации сибирской истории и комфортных пеших прогулок по Кемерово.
+          </p>
+          <p style="font-size: var(--fs-xs); color: var(--text-muted);">
+            Автор концепта &amp; дизайна: <br>
+            <strong style="color: var(--text-main);">Александр Сергеевич Яровенко</strong>
+          </p>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom-bar">
+        <span>© 2022–2026 «ПешКем» • Пешеходные гиды по Кемерово</span>
+        <span>Разработано по стандартам современного UX/UI &amp; Web APIs</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Audio Player Dock -->
+  <aside id="peshkem-audio-dock" aria-label="Плеер аудиогида">
+    <div class="audio-progress-track">
+      <div class="audio-progress-bar"></div>
+    </div>
+    <div class="audio-dock-container">
+      <div class="audio-dock-meta">
+        <div class="audio-waveform" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <div class="audio-dock-text">
+          <div class="audio-dock-route-title">Индустриальный Кузбасс & Красная Горка</div>
+          <div class="audio-dock-stop-title">Точка экскурсии</div>
+        </div>
+      </div>
+      <div class="audio-dock-controls">
+        <button type="button" class="btn-audio-ctrl btn-audio-prev" aria-label="Предыдущая точка">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+        </button>
+        <button type="button" class="btn-audio-ctrl btn-audio-playpause" aria-label="Воспроизвести / Пауза">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </button>
+        <button type="button" class="btn-audio-ctrl btn-audio-next" aria-label="Следующая точка">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+        </button>
+        <button type="button" class="btn-audio-rate" aria-label="Скорость">1.0x</button>
+        <button type="button" class="btn-audio-ctrl btn-audio-close" aria-label="Закрыть плеер">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Route ID for this page -->
+  <script>
+    window.CURRENT_ROUTE_ID = 'krasnaya-gorka';
+  </script>
+
+  <!-- JavaScript Modules -->
+  <script src="assets/peshkem/vendor/leaflet/leaflet.js"></script>
+  <script src="scripts/peshkem-data.js"></script>
+  <script src="scripts/peshkem-audio.js"></script>
+  <script src="scripts/peshkem-tour-page.js"></script>
+</body>
+</html>

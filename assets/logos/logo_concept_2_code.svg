@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Concept 2: Code Bracket & Stem -->
+  <!-- Right Stem (Guide / Pipeline) -->
+  <rect x="66" y="18" width="12" height="64" rx="2" fill="#B3F77D"/>
+  <!-- Top Terminal Indicator -->
+  <circle cx="72" cy="11" r="3.5" fill="#B3F77D"/>
+  <!-- Upper Bowl (Formed with Code Syntax) -->
+  <path d="M66 18H38a16 16 0 0 0 0 32h28v-10H38a6 6 0 0 1 0-12h28V18z" fill="#B3F77D"/>
+  <!-- Terminal Chevron Leg (<) -->
+  <path d="M48 50h14L28 82H14l28-32h6z" fill="#B3F77D"/>
+  <!-- Accent Code Prompt Dot -->
+  <rect x="18" y="22" width="5" height="5" fill="#B3F77D" opacity="0.6"/>
+</svg>

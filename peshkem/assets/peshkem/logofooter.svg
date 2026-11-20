@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320" width="100%" height="100%" fill="none">
+  <!-- Top track bar -->
+  <rect x="35" y="48" width="730" height="10" rx="5" fill="#FFFFFF"/>
+  <rect x="695" y="48" width="70" height="10" rx="5" fill="#10B981"/>
+
+  <!-- Brand Typography: П Е Ш К Е М -->
+  <g fill="#FFFFFF" font-family="'Montserrat', 'Oswald', -apple-system, sans-serif" font-weight="800" font-size="124" letter-spacing="42" text-anchor="middle">
+    <text x="420" y="196">ПЕШКЕМ</text>
+  </g>
+
+  <!-- Bottom track bar with Emerald waypoint accent -->
+  <rect x="35" y="262" width="730" height="10" rx="5" fill="#FFFFFF"/>
+  <rect x="35" y="262" width="70" height="10" rx="5" fill="#10B981"/>
+</svg>

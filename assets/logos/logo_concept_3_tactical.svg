@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Concept 3: Tactical Reticle HUD Badge -->
+  <!-- Background Shield -->
+  <rect x="4" y="4" width="92" height="92" rx="20" fill="#0D111A" stroke="rgba(179,247,125,0.2)" stroke-width="1.5"/>
+  <!-- Corner Reticle HUD Marks -->
+  <path d="M12 24v-10a4 4 0 0 1 4-4h10" stroke="#B3F77D" stroke-width="2" stroke-linecap="round"/>
+  <path d="M74 10h10a4 4 0 0 1 4 4v10" stroke="#B3F77D" stroke-width="2" stroke-linecap="round"/>
+  <path d="M88 76v10a4 4 0 0 1-4 4H74" stroke="#B3F77D" stroke-width="2" stroke-linecap="round"/>
+  <path d="M26 90H16a4 4 0 0 1-4-4V76" stroke="#B3F77D" stroke-width="2" stroke-linecap="round"/>
+  <!-- Bold Modern Monogram Я -->
+  <path fill="#B3F77D" fill-rule="evenodd" clip-rule="evenodd" d="M58 24h18v52H62V54H48l-15 22H19l18-26A16 16 0 0 1 24 38c0-7.732 6.268-14 14-14H58zm-14 10a4 4 0 0 0 0 8h18V34H44z"/>
+  <!-- Pulse Dot -->
+  <circle cx="67" cy="18" r="2.5" fill="#B3F77D"/>
+</svg>

@@ -1,0 +1,370 @@
+/**
+ * ПешКем — Движок голосового аудиогида (Web Speech API)
+ * Настоящая озвучка текста остановок на русском языке, управление плеером и визуализатор
+ */
+
+(function () {
+  'use strict';
+
+  class PeshkemAudio {
+    constructor() {
+      this.synth = window.speechSynthesis || null;
+      this.currentUtterance = null;
+      this.voices = [];
+      this.selectedVoice = null;
+
+      // Audio element for pre-rendered FreeTTS / Actor MP3 files
+      this.audioElement = new Audio();
+      this.isMp3Mode = false;
+
+      this.currentRoute = null;
+      this.currentStopIndex = 0;
+      this.isPlaying = false;
+      this.isPaused = false;
+      this.playbackRate = 1.0;
+
+      this.dockElement = null;
+      this.progressBar = null;
+      this.playPauseBtn = null;
+      this.rateBtn = null;
+      this.titleEl = null;
+      this.stopEl = null;
+      this.waveformEl = null;
+
+      this.progressInterval = null;
+      this.startTime = 0;
+      this.estimatedDuration = 60; // seconds
+
+      this.setupAudioElement();
+    }
+
+    setupAudioElement() {
+      if (!this.audioElement) return;
+
+      this.audioElement.addEventListener('timeupdate', () => {
+        if (!this.isMp3Mode || !this.audioElement.duration) return;
+        const pct = Math.min(100, (this.audioElement.currentTime / this.audioElement.duration) * 100);
+        if (this.progressBar) {
+          this.progressBar.style.width = `${pct}%`;
+        }
+      });
+
+      this.audioElement.addEventListener('ended', () => {
+        if (!this.isMp3Mode) return;
+        this.onStopPlaybackEnded();
+      });
+
+      this.audioElement.addEventListener('error', () => {
+        if (this.isMp3Mode) {
+          console.warn('MP3 playback failed, falling back to Web Speech Synthesis');
+          this.isMp3Mode = false;
+          this.speakViaSynth(this.currentRoute?.stops[this.currentStopIndex]);
+        }
+      });
+    }
+
+    init() {
+      this.dockElement = document.getElementById('peshkem-audio-dock');
+      if (!this.dockElement) return;
+
+      this.progressBar = this.dockElement.querySelector('.audio-progress-bar');
+      this.playPauseBtn = this.dockElement.querySelector('.btn-audio-playpause');
+      this.rateBtn = this.dockElement.querySelector('.btn-audio-rate');
+      this.titleEl = this.dockElement.querySelector('.audio-dock-route-title');
+      this.stopEl = this.dockElement.querySelector('.audio-dock-stop-title');
+      this.waveformEl = this.dockElement.querySelector('.audio-waveform');
+
+      // Initialize Voices
+      this.loadVoices();
+      if (this.synth && this.synth.onvoiceschanged !== undefined) {
+        this.synth.onvoiceschanged = () => this.loadVoices();
+      }
+
+      this.bindEvents();
+    }
+
+    loadVoices() {
+      if (!this.synth) return;
+      this.voices = this.synth.getVoices();
+      // Look for Russian voice
+      this.selectedVoice = this.voices.find(v => v.lang.startsWith('ru') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Yuri') || v.name.includes('Pavel')))
+        || this.voices.find(v => v.lang.startsWith('ru'))
+        || null;
+    }
+
+    bindEvents() {
+      if (!this.dockElement) return;
+
+      // Play/Pause
+      this.playPauseBtn?.addEventListener('click', () => {
+        if (this.isPlaying) {
+          this.pause();
+        } else if (this.isPaused) {
+          this.resume();
+        } else if (this.currentRoute) {
+          this.playStop(this.currentRoute.id, this.currentStopIndex);
+        }
+      });
+
+      // Prev Stop
+      this.dockElement.querySelector('.btn-audio-prev')?.addEventListener('click', () => {
+        this.prevStop();
+      });
+
+      // Next Stop
+      this.dockElement.querySelector('.btn-audio-next')?.addEventListener('click', () => {
+        this.nextStop();
+      });
+
+      // Rate Toggle (1x -> 1.25x -> 1.5x)
+      this.rateBtn?.addEventListener('click', () => {
+        if (this.playbackRate === 1.0) this.playbackRate = 1.25;
+        else if (this.playbackRate === 1.25) this.playbackRate = 1.5;
+        else this.playbackRate = 1.0;
+
+        if (this.rateBtn) this.rateBtn.textContent = `${this.playbackRate}x`;
+
+        // If currently playing, restart utterance with new rate
+        if (this.isPlaying && this.currentRoute) {
+          const wasPlaying = true;
+          this.playStop(this.currentRoute.id, this.currentStopIndex, false);
+        }
+      });
+
+      // Close Player
+      this.dockElement.querySelector('.btn-audio-close')?.addEventListener('click', () => {
+        this.stop();
+        this.dockElement.classList.remove('active');
+        document.body.classList.remove('has-audio-dock');
+      });
+    }
+
+    startRoute(routeId, stopIndex = 0) {
+      const route = window.PESHKEM_DATA.routes.find(r => r.id === routeId);
+      if (!route) return;
+
+      this.currentRoute = route;
+      this.currentStopIndex = stopIndex;
+      this.playStop(routeId, stopIndex);
+    }
+
+    playStop(routeId, stopIndex, announceToast = true) {
+      const route = window.PESHKEM_DATA.routes.find(r => r.id === routeId);
+      if (!route || !route.stops[stopIndex]) return;
+
+      this.currentRoute = route;
+      this.currentStopIndex = stopIndex;
+      const stop = route.stops[stopIndex];
+
+      // Stop any existing playback
+      this.stop();
+
+      // Update UI dock
+      if (this.dockElement) {
+        this.dockElement.classList.add('active');
+        document.body.classList.add('has-audio-dock');
+        if (this.titleEl) this.titleEl.textContent = route.title;
+        if (this.stopEl) this.stopEl.textContent = `Точка ${stop.order} из ${route.stops.length}: ${stop.title}`;
+        if (this.playPauseBtn) {
+          this.playPauseBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
+          this.playPauseBtn.setAttribute('aria-label', 'Пауза');
+        }
+        this.waveformEl?.classList.add('playing');
+      }
+
+      // Check for pre-rendered MP3 file (from FreeTTS Audio Agent)
+      const mp3Url = stop.audio || `assets/peshkem/audio/${stop.id}.mp3`;
+      
+      // Try playing MP3 first
+      if (this.audioElement) {
+        this.isMp3Mode = true;
+        this.audioElement.src = mp3Url;
+        this.audioElement.playbackRate = this.playbackRate;
+
+        this.audioElement.play()
+          .then(() => {
+            this.isPlaying = true;
+            this.isPaused = false;
+            window.PeshkemMap?.focusStop(route.id, stop.id);
+            if (announceToast) {
+              window.PESHKEM_APP?.showToast(`Слушаем (MP3): ${stop.title}`, 'info');
+            }
+          })
+          .catch((err) => {
+            // File not found or autoplay policy, fallback to Web Speech Synthesis
+            console.info('Pre-recorded audio not found, using Web Speech Synthesis fallback.');
+            this.isMp3Mode = false;
+            this.speakViaSynth(stop, announceToast);
+          });
+      } else {
+        this.speakViaSynth(stop, announceToast);
+      }
+    }
+
+    speakViaSynth(stop, announceToast = true) {
+      if (!this.synth) {
+        window.PESHKEM_APP?.showToast('Голосовой синтез речи не поддерживается в этом браузере', 'warning');
+        return;
+      }
+
+      const textToRead = stop.audioText || stop.fullText;
+      this.estimatedDuration = Math.max(10, Math.round(textToRead.length / (15 * this.playbackRate)));
+
+      this.currentUtterance = new SpeechSynthesisUtterance(textToRead);
+      this.currentUtterance.rate = this.playbackRate;
+      this.currentUtterance.pitch = 1.0;
+      if (this.selectedVoice) {
+        this.currentUtterance.voice = this.selectedVoice;
+      }
+
+      this.startTime = Date.now();
+      this.isPlaying = true;
+      this.isPaused = false;
+      this.startProgress();
+
+      this.currentUtterance.onend = () => {
+        this.onStopPlaybackEnded();
+      };
+
+      this.currentUtterance.onerror = (e) => {
+        console.warn('SpeechSynthesis error:', e);
+        this.isPlaying = false;
+        this.isPaused = false;
+        this.stopProgress();
+        this.waveformEl?.classList.remove('playing');
+      };
+
+      this.synth.speak(this.currentUtterance);
+      window.PeshkemMap?.focusStop(this.currentRoute.id, stop.id);
+
+      if (announceToast) {
+        window.PESHKEM_APP?.showToast(`Слушаем: ${stop.title}`, 'info');
+      }
+    }
+
+    onStopPlaybackEnded() {
+      this.isPlaying = false;
+      this.isPaused = false;
+      this.stopProgress();
+      this.waveformEl?.classList.remove('playing');
+
+      if (this.playPauseBtn) {
+        this.playPauseBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+        this.playPauseBtn.setAttribute('aria-label', 'Воспроизвести');
+      }
+
+      if (this.progressBar) this.progressBar.style.width = '100%';
+
+      const stop = this.currentRoute?.stops[this.currentStopIndex];
+      if (this.currentRoute && this.currentStopIndex < this.currentRoute.stops.length - 1) {
+        window.PESHKEM_APP?.showToast(`Точка «${stop?.title || ''}» завершена. Переходим к следующей...`, 'info');
+        setTimeout(() => {
+          this.nextStop();
+        }, 1800);
+      } else if (this.currentRoute) {
+        window.PESHKEM_APP?.showToast(`Маршрут «${this.currentRoute.title}» успешно завершен!`, 'success');
+      }
+    }
+
+    pause() {
+      if (this.isMp3Mode && this.audioElement && this.isPlaying) {
+        this.audioElement.pause();
+        this.isPlaying = false;
+        this.isPaused = true;
+      } else if (this.synth && this.isPlaying) {
+        this.synth.pause();
+        this.isPlaying = false;
+        this.isPaused = true;
+        clearInterval(this.progressInterval);
+      }
+
+      this.waveformEl?.classList.remove('playing');
+      if (this.playPauseBtn) {
+        this.playPauseBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+        this.playPauseBtn.setAttribute('aria-label', 'Продолжить');
+      }
+    }
+
+    resume() {
+      if (this.isMp3Mode && this.audioElement && this.isPaused) {
+        this.audioElement.play();
+        this.isPlaying = true;
+        this.isPaused = false;
+      } else if (this.synth && this.isPaused) {
+        this.synth.resume();
+        this.isPlaying = true;
+        this.isPaused = false;
+        this.startProgress();
+      }
+
+      this.waveformEl?.classList.add('playing');
+      if (this.playPauseBtn) {
+        this.playPauseBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
+        this.playPauseBtn.setAttribute('aria-label', 'Пауза');
+      }
+    }
+
+    stop() {
+      if (this.isMp3Mode && this.audioElement) {
+        this.audioElement.pause();
+        this.audioElement.currentTime = 0;
+      }
+      if (this.synth) {
+        this.synth.cancel();
+      }
+      this.isPlaying = false;
+      this.isPaused = false;
+      this.stopProgress();
+      this.waveformEl?.classList.remove('playing');
+      if (this.playPauseBtn) {
+        this.playPauseBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+        this.playPauseBtn.setAttribute('aria-label', 'Воспроизвести');
+      }
+      if (this.progressBar) this.progressBar.style.width = '0%';
+    }
+      this.isPaused = false;
+      this.stopProgress();
+      this.waveformEl?.classList.remove('playing');
+      if (this.playPauseBtn) {
+        this.playPauseBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+      }
+      if (this.progressBar) this.progressBar.style.width = '0%';
+    }
+
+    nextStop() {
+      if (!this.currentRoute) return;
+      if (this.currentStopIndex < this.currentRoute.stops.length - 1) {
+        this.playStop(this.currentRoute.id, this.currentStopIndex + 1);
+      } else {
+        window.PESHKEM_APP?.showToast('Это последняя точка данного маршрута', 'info');
+      }
+    }
+
+    prevStop() {
+      if (!this.currentRoute) return;
+      if (this.currentStopIndex > 0) {
+        this.playStop(this.currentRoute.id, this.currentStopIndex - 1);
+      } else {
+        window.PESHKEM_APP?.showToast('Это начальная точка маршрута', 'info');
+      }
+    }
+
+    startProgress() {
+      clearInterval(this.progressInterval);
+      this.progressInterval = setInterval(() => {
+        if (!this.isPlaying) return;
+        const elapsedSec = (Date.now() - this.startTime) / 1000;
+        const pct = Math.min(98, (elapsedSec / this.estimatedDuration) * 100);
+        if (this.progressBar) {
+          this.progressBar.style.width = `${pct}%`;
+        }
+      }, 500);
+    }
+
+    stopProgress() {
+      clearInterval(this.progressInterval);
+    }
+  }
+
+  window.PeshkemAudio = new PeshkemAudio();
+})();

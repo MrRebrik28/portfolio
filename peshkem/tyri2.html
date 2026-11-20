@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Кемеровский Арбат & Памятные места — Пешеходный гид ПешКем</title>
+  <meta name="description" content="Авторский пешеходный гид по улице Весенней в Кемерово: липовый бульвар, скульптура Радужное детство, Лицей №62, Земля Кузнецкая, часы В 6 вечера после войны, Театр драмы, бюст Леонова и Вечный огонь.">
+  <meta name="theme-color" content="#F8FAFC">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Кемеровский Арбат & Памятные места — ПешКем">
+  <meta property="og:description" content="Интерактивный маршрут с голосовым аудиогидом и картой. 10 остановок, 2.4 км, 1.5 часа прогулки.">
+  <meta property="og:image" content="assets/peshkem/tur.png">
+
+  <!-- Favicon & App Icons -->
+  <link rel="icon" type="image/svg+xml" href="assets/peshkem/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/peshkem/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/peshkem/icons/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/peshkem/icons/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="shortcut icon" href="favicon.ico">
+
+  <!-- Fonts (Oldtimer via CDN, Montserrat & Oswald via Google Fonts, plus local @font-face) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Oswald:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/oldtimer">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="assets/peshkem/vendor/leaflet/leaflet.css">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles/peshkem.css">
+</head>
+<body>
+
+  <!-- Sticky Top Header & Progress Navigation Bar -->
+  <header class="tour-sticky-header">
+    <div class="tour-page-header-row">
+      <div class="container tour-header-container">
+        <nav class="tour-breadcrumbs" aria-label="Хлебные крошки">
+          <a href="index.html">&larr; На главную</a>
+          <span class="tour-breadcrumbs-sep">/</span>
+          <a href="index.html#routes-section">Маршруты</a>
+          <span class="tour-breadcrumbs-sep">/</span>
+          <span style="color: var(--text-main); font-weight: 600;">Кемеровский Арбат</span>
+        </nav>
+
+        <div class="tour-header-actions">
+          <span id="tour-progress-stat" class="tour-progress-stat-pill" style="color: var(--color-amber); background: var(--color-amber-light);">
+            Пройдено 0 из 10 (0%)
+          </span>
+          <a href="index.html" class="btn-cta-primary" style="padding: 0.45rem 1rem; font-size: var(--fs-xs);">
+            Все маршруты
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Anchor Nav Track -->
+    <nav class="tour-quick-nav" aria-label="Быстрый переход к остановкам">
+      <div class="container">
+        <div class="tour-quick-nav-track" id="tour-quick-nav-track">
+          <a href="#stop-card-v-stop-1-arbat-start" class="quick-nav-pill active">1. Ул. Весенняя</a>
+          <a href="#stop-card-v-stop-2-childhood" class="quick-nav-pill">2. Радужное детство</a>
+          <a href="#stop-card-v-stop-3-lyceum-62" class="quick-nav-pill">3. Лицей №62</a>
+          <a href="#stop-card-v-stop-4-kuznetsk-land" class="quick-nav-pill">4. Земля Кузнецкая</a>
+          <a href="#stop-card-v-stop-5-peoples-friendship" class="quick-nav-pill">5. Дружба народов</a>
+          <a href="#stop-card-v-stop-6-clock-memorial" class="quick-nav-pill">6. В 6 вечера после войны</a>
+          <a href="#stop-card-v-stop-7-drama-theater" class="quick-nav-pill">7. Театр драмы</a>
+          <a href="#stop-card-v-stop-8-leonov-bust" class="quick-nav-pill">8. Бюст Леонова</a>
+          <a href="#stop-card-v-stop-9-cradle-statue" class="quick-nav-pill">9. Колыбель</a>
+          <a href="#stop-card-v-stop-10-eternal-flame" class="quick-nav-pill">10. Вечный огонь</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Visual Progress Line -->
+    <div class="tour-progress-track" aria-hidden="true">
+      <div class="tour-progress-fill" id="tour-progress-line" style="width: 0%; background: linear-gradient(90deg, var(--color-amber) 0%, var(--color-rose) 100%);"></div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1. Tour Hero Section -->
+    <section class="tour-hero">
+      <div class="tour-hero-scrim"></div>
+      <div class="container tour-hero-grid">
+        <div class="tour-hero-content">
+          <div class="tour-badge" style="background: rgba(245, 158, 11, 0.2); color: #F59E0B;">
+            Маршрут №2 • Культурный & Мемориальный
+          </div>
+
+          <h1 class="tour-hero-title">Кемеровский Арбат & Памятные места</h1>
+          <p class="tour-hero-subtitle">
+            Данный маршрут познакомит вас с историей и достопримечательностями улицы Весенняя города Кемерово. Вас ждет увлекательный рассказ об истории создания улицы, ее переименованиях от Больничной до Весенней, а также знакомство с мемориальными и архитектурными объектами, театром драмы, памятником Леонову и Вечным огнем.
+          </p>
+
+          <div class="tour-metrics-pills">
+            <span class="tour-metric-pill">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Время: <strong>1.5 часа</strong>
+            </span>
+            <span class="tour-metric-pill">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M10 22v-5l-2-2V9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6l-2 2v5"/></svg> Длина: <strong>2.4 км</strong>
+            </span>
+            <span class="tour-metric-pill">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Остановки: <strong>10 локаций</strong>
+            </span>
+            <span class="tour-metric-pill">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg> Сложность: <strong>Очень легкий</strong>
+            </span>
+            <span class="tour-metric-pill">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg> Аудиогид: <strong>Включен</strong>
+            </span>
+          </div>
+
+          <div class="tour-actions-group">
+            <button type="button" class="btn-cta-primary" id="btn-hero-listen-tour" style="background: var(--color-amber);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Слушать весь аудиогид</span>
+            </button>
+            <a href="#tour-map-wrap" class="btn-route-action btn-route-detail" style="border-radius: var(--radius-full); padding: 0.65rem 1.4rem;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="12 8 8 12 12 16 12 8"/></svg>
+              <span>Интерактивная карта</span>
+            </a>
+            <button type="button" class="btn-icon-pill" id="btn-hero-fav" aria-label="В избранное" title="Сохранить в избранное">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </button>
+            <button type="button" class="btn-icon-pill" id="btn-hero-share" aria-label="Поделиться" title="Поделиться маршрутом">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="tour-hero-media">
+          <img class="tour-hero-cover-img" src="assets/peshkem/stops/tour2_stop1_vesennaya_arbat.jpg" alt="Пешеходная аллея улицы Весенней в Кемерово" fetchpriority="high">
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Tour Map Wrap -->
+    <div class="container" id="tour-map-wrap" style="padding-top: 3rem;">
+      <div style="margin-bottom: 1rem;">
+        <h2 style="font-size: var(--fs-xl); font-weight: 700;">Карта и остановки Арбата</h2>
+        <span style="font-size: var(--fs-xs); color: var(--text-muted);">Нажимайте на метки для перехода к деталям и аудиогиду</span>
+      </div>
+
+      <div class="map-container-wrapper" style="height: 440px;">
+        <div id="tour-dedicated-map" style="width: 100%; height: 100%;"></div>
+      </div>
+    </div>
+
+    <!-- 3. Stops Detailed Feed -->
+    <div class="container">
+      <div class="tour-stops-feed">
+
+        <!-- Stop 1 -->
+        <article class="tour-stop-card" id="stop-card-v-stop-1-arbat-start">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge" style="background: var(--color-amber);">01</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">Старт • 8 минут на осмотр</span>
+                  <h3 class="stop-title-text">Улица Весенняя (Кемеровский Арбат)</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="v-stop-1-arbat-start">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Мы с вами находимся на улице Весенняя. Улице, которая выросла на месте болот и крестьянских огородов. Первое название улицы — Больничная. В 1952 году ее переименовали в Ленинградскую, а в конце 50-х годов улица получила свое нынешнее поэтичное название — Весенняя.</p>
+              <p>Сегодня это излюбленный пешеходный бульвар горожан с вековыми тенистыми липами, уютными летними верандами кофеен и интересными городскими скульптурами.</p>
+            </div>
+
+            <div class="stop-tip-box" style="border-left-color: var(--color-amber);">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Начните прогулку со стаканчика ароматного кофе с кедровым грильяжем в одной из кофеен бульвара.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="0" style="background: var(--color-amber);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="v-stop-1-arbat-start">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3512,86.0842" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour2_stop1_vesennaya_arbat.jpg" alt="Улица Весенняя" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 2 -->
+        <article class="tour-stop-card" id="stop-card-v-stop-2-childhood">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge" style="background: var(--color-amber);">02</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+10 минут в пути • 8 минут</span>
+                  <h3 class="stop-title-text">Скульптура «Радужное детство»</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="v-stop-2-childhood">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Первая композиция, с которой мы познакомимся, называется «Радужное детство». Она стала подарком жителям города ко Дню шахтёра 28 июля 2016 года. Автором работы стал Константин Зинич, член Союза художников Российской Федерации.</p>
+              <p>По замыслу автора, образ бегущей под теплым дождем девочки олицетворяет счастливое детство, мир и надежное будущее. Символично, что композиция расположена рядом с Лицеем №62.</p>
+            </div>
+
+            <div class="stop-tip-box" style="border-left-color: var(--color-amber);">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Потрите нос бронзовой собачке рядом с детьми — добрая городская примета на удачу!</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="1" style="background: var(--color-amber);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="v-stop-2-childhood">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3524,86.0850" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour2_stop2_childhood.jpg" alt="Скульптура Радужное детство" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 3 -->
+        <article class="tour-stop-card" id="stop-card-v-stop-3-lyceum-62">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge" style="background: var(--color-amber);">03</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+20 минут в пути • 8 минут</span>
+                  <h3 class="stop-title-text">Здание «Лицей № 62» (Школа-дворец)</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="v-stop-3-lyceum-62">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Школа №62 построена в 1958 году. В Кемеровской области таких школ одновременно сдали всего две — в Прокопьевске и в Кемерове. В газете «Кузбасс» от сентября 1958 года писали: «На Ленинградской улице выросло светлое пятиэтажное здание — новая средняя школа №62».</p>
+              <p>Лицей строился как образец настоящей «школы-дворца»: на фронтоне мы видим раскрытую книгу, центральный вход украшают торжественные колонны, а верхние этажи украшены лепниной и витражными окнами.</p>
+            </div>
+
+            <div class="stop-tip-box" style="border-left-color: var(--color-amber);">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Весной перед парадным фасадом лицея пышно цветут яблони и сирень.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="2" style="background: var(--color-amber);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="v-stop-3-lyceum-62">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3536,86.0858" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour2_stop3_lyceum_62.jpg" alt="Лицей 62" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 4 -->
+        <article class="tour-stop-card" id="stop-card-v-stop-4-kuznetsk-land">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge" style="background: var(--color-amber);">04</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+30 минут в пути • 8 минут</span>
+                  <h3 class="stop-title-text">Монумент «Земля Кузнецкая»</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="v-stop-4-kuznetsk-land">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Монумент «Земля Кузнецкая» подарен городу Кемерово скульптором Алексеем Хмелевским после масштабной выставки «Сибирь социалистическая» в 1985 году.</p>
+              <p>Она, как и наша Кузнецкая земля, полна тайн и загадок. В разных источниках ее поэтично называют «Красавица-Томь» или «Муза», отдавая дань уважения красоте сибирской женщины и природы.</p>
+            </div>
+
+            <div class="stop-tip-box" style="border-left-color: var(--color-amber);">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Рядом расположены удобные скамейки в тени липовой аллеи.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="3" style="background: var(--color-amber);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="v-stop-4-kuznetsk-land">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3545,86.0865" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour2_stop4_kuznetsk_land.jpg" alt="Земля Кузнецкая" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 5 -->
+        <article class="tour-stop-card" id="stop-card-v-stop-5-peoples-friendship">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge" style="background: var(--color-amber);">05</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+38 минут в пути • 8 минут</span>
+                  <h3 class="stop-title-text">Памятник «Дружба народов»</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="v-stop-5-peoples-friendship">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Памятник «Дружба народов» создан в честь дружбы городов-побратимов Кемерово и Шалготарьян (Венгрия, Ноградская область) и открыт 5 ноября 1980 года.</p>
+              <p>Скульптура двусторонняя: на север, к театру драмы, обращены две женские фигуры в национальных одеждах, а на юг обращена мощная фигура шахтера. Силуэт памятника напоминает античную лиру и распускающийся бутон цветка.</p>
+            </div>
+
+            <div class="stop-tip-box" style="border-left-color: var(--color-amber);">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Именно в честь венгерского города-побратима названа примыкающая улица Ноградская.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="4" style="background: var(--color-amber);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="v-stop-5-peoples-friendship">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3550,86.0868" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour2_stop5_friendship.jpg" alt="Дружба народов" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 6 -->
+        <article class="tour-stop-card" id="stop-card-v-stop-6-clock-memorial">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge" style="background: var(--color-amber);">06</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+46 минут в пути • 10 минут</span>
+                  <h3 class="stop-title-text">Композиция «В 6 часов вечера после войны»</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="v-stop-6-clock-memorial">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Скульптурная композиция посвящена послевоенному времени и первым дням долгожданного мира. Важным элементом являются уличные часы на фонарном столбе: время на них символично застыло на отметке шести часов вечера.</p>
+              <p>Скульптура установлена в 2010 году к 65-летию Великой Победы скульптором Виктором Атучиным по мотивам кинофильма Ивана Пырьева 1944 года о фронтовиках, договорившихся встретиться в шесть вечера после Победы.</p>
+            </div>
+
+            <div class="stop-tip-box" style="border-left-color: var(--color-amber);">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Вечером, когда зажигается старинный фонарь над часами, композиция выглядит особенно трогательно.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="5" style="background: var(--color-amber);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="v-stop-6-clock-memorial">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3554,86.0871" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour2_stop6_clock_memorial.jpg" alt="В 6 часов вечера после войны" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 7 -->
+        <article class="tour-stop-card" id="stop-card-v-stop-7-drama-theater">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge" style="background: var(--color-amber);">07</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+56 минут в пути • 12 минут</span>
+                  <h3 class="stop-title-text">Театр драмы им. А.В. Луначарского</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="v-stop-7-drama-theater">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Перед театром нас встречает Театральная площадь с фонтаном в центре. Похожий на античную вазу фонтан был отлит в Москве в 1961 году. Позже он стал свето-музыкальным.</p>
+              <p>По бокам площади выстроены два симметричных жилых дома со знаменитыми арками архитекторов Фильварова и Геращенко. С окончанием строительства театра в 1960 году гармоничный ансамбль Театральной площади был полностью завершен.</p>
+            </div>
+
+            <div class="stop-tip-box" style="border-left-color: var(--color-amber);">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Летом у фонтана часто играют уличные музыканты и проводятся городские фестивали.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="6" style="background: var(--color-amber);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="v-stop-7-drama-theater">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3560,86.0878" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour2_stop7_drama_theater.jpg" alt="Театр драмы" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 8 -->
+        <article class="tour-stop-card" id="stop-card-v-stop-8-leonov-bust">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge" style="background: var(--color-amber);">08</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+70 минут в пути • 8 минут</span>
+                  <h3 class="stop-title-text">Бюст космонавта Алексея Леонова</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="v-stop-8-leonov-bust">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Алексей Архипович Леонов — дважды Герой Советского Союза и первый человек, шагнувший в открытый космос, родился в селе Листвянка Кемеровской области.</p>
+              <p>В День космонавтики 12 апреля 2003 года состоялось торжественное открытие бюста на улице Весенняя. Космонавт лично выбрал автора — великого скульптора Льва Кербеля. На открытии Леонов тепло произнес: «Меня упрекают, что я редко приезжаю на родину. Теперь я остаюсь здесь, с вами!».</p>
+            </div>
+
+            <div class="stop-tip-box" style="border-left-color: var(--color-amber);">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Именем Алексея Леонова назван международный аэропорт Кемерово, а в терминале открыт музей космонавтики.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="7" style="background: var(--color-amber);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="v-stop-8-leonov-bust">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3568,86.0884" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour2_stop8_leonov_bust.jpg" alt="Бюст Леонова" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 9 -->
+        <article class="tour-stop-card" id="stop-card-v-stop-9-cradle-statue">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge" style="background: var(--color-amber);">09</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+78 минут в пути • 6 минут</span>
+                  <h3 class="stop-title-text">Скульптура «Колыбель»</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="v-stop-9-cradle-statue">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Скульптурная композиция «Колыбель» выполнена в виде нежной раскрытой ладони, усыпанной цветами, на которой беззаботно спит маленькая девочка.</p>
+              <p>Ладонь символизирует одновременно любящую мать и сибирскую природу, оберегающую новую жизнь. Скульптура создана кемеровскими мастерами Юрием Черносовым и Павлом Барковым в 2006 году.</p>
+            </div>
+
+            <div class="stop-tip-box" style="border-left-color: var(--color-amber);">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Один из самых душевных и умиротворяющих памятников на бульваре.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="8" style="background: var(--color-amber);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="v-stop-9-cradle-statue">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3575,86.0889" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour2_stop9_cradle.jpg" alt="Скульптура Колыбель" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 10 -->
+        <article class="tour-stop-card" id="stop-card-v-stop-10-eternal-flame">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge" style="background: var(--color-amber);">10</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">Финал маршрута • 10 минут</span>
+                  <h3 class="stop-title-text">Мемориал Славы кузбассовцев & Вечный огонь</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="v-stop-10-eternal-flame">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Центральное место в начале улицы Весенней, у берега Томи, занимает Мемориал Славы воинов-кузбассовцев, павших в годы Великой Отечественной войны. 18-метровый обелиск из крымского известняка и серый гранит ступеней созданы скульптором Александром Щербаковым и архитектором Николаем Ковальчуком в 1970 году.</p>
+              <p>Рядом на набережной расположен памятный знак из розового гранита «Памяти жертв фашизма» со строками «Реквиема» Роберта Рождественского. Здесь горит негасимый Вечный огонь города.</p>
+            </div>
+
+            <div class="stop-tip-box" style="border-left-color: var(--color-amber);">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Маршрут завершен! Спасибо за прогулку по кемеровскому Арбату. Отсюда открывается спуск на набережную реки Томь.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="9" style="background: var(--color-amber);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="v-stop-10-eternal-flame">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3590,86.0901" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour2_stop10_eternal_flame.jpg" alt="Вечный огонь" loading="lazy">
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Bottom Pagination -->
+      <nav class="tour-pagination-grid" aria-label="Переключение маршрутов">
+        <a href="tyri.html" class="tour-page-card">
+          <span class="page-card-sub">← Предыдущий гид</span>
+          <span class="page-card-title">По набережной Томи и городским легендам</span>
+        </a>
+        <a href="tyri3.html" class="tour-page-card" style="text-align: right;">
+          <span class="page-card-sub">Следующий гид →</span>
+          <span class="page-card-title">Индустриальный Кузбасс & Красная Горка</span>
+        </a>
+      </nav>
+
+    </div>
+  </main>
+
+    <!-- Site Footer -->
+  <footer class="site-footer" style="margin-top: 5rem;">
+    <div class="container">
+      <div class="footer-main-grid">
+        
+        <div class="footer-brand-info">
+          <a href="index.html" aria-label="ПешКем главная">
+            <img class="footer-logo-svg" src="assets/peshkem/logofooter.svg" alt="ПешКем логотип в подвале" width="140" height="36">
+          </a>
+          <p class="footer-brand-desc">
+            Бесплатные авторские пешеходные маршруты и аудиогиды по городу Кемерово. Открываем сибирскую историю, архитектуру и уютные парки с 2022 года.
+          </p>
+          <div class="footer-socials">
+            <a href="https://vk.com/public214129984" target="_blank" rel="noopener noreferrer" class="btn-social" aria-label="Мы ВКонтакте">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.78 17.5c-5.32 0-8.36-3.65-8.49-9.73h2.67c.09 4.46 2.06 6.35 3.61 6.74V7.77h2.52v3.85c1.54-.17 3.16-1.92 3.71-3.85h2.52a6.9 6.9 0 0 1-3.23 4.88 7.3 7.3 0 0 1 3.79 4.85h-2.77c-.82-2.56-2.88-4.54-4.53-4.7v4.7z"/></svg>
+            </a>
+            <a href="https://t.me/" target="_blank" rel="noopener noreferrer" class="btn-social" aria-label="Наш Telegram-канал">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h4>Маршруты</h4>
+          <ul class="footer-links">
+            <li><a href="tyri.html">По набережной Томи</a></li>
+            <li><a href="tyri2.html">Кемеровский Арбат</a></li>
+            <li><a href="tyri3.html">Красная Горка</a></li>
+            <li><a href="index.html#map-section">Смотреть на карте</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>О проекте</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Главная страница</a></li>
+            <li><a href="index.html#features-section">Преимущества</a></li>
+            <li><a href="index.html#faq-section">Частые вопросы</a></li>
+            <li><a href="index.html#reviews-section">Отзывы туристов</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>Создано с душой</h4>
+          <p style="font-size: var(--fs-xs); color: var(--text-muted); line-height: 1.6; margin-bottom: 0.75rem;">
+            Проект «ПешКем» задуман как культурная инициатива для популяризации сибирской истории и комфортных пеших прогулок по Кемерово.
+          </p>
+          <p style="font-size: var(--fs-xs); color: var(--text-muted);">
+            Автор концепта &amp; дизайна: <br>
+            <strong style="color: var(--text-main);">Александр Сергеевич Яровенко</strong>
+          </p>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom-bar">
+        <span>© 2022–2026 «ПешКем» • Пешеходные гиды по Кемерово</span>
+        <span>Разработано по стандартам современного UX/UI &amp; Web APIs</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Audio Player Dock -->
+  <aside id="peshkem-audio-dock" aria-label="Плеер аудиогида">
+    <div class="audio-progress-track">
+      <div class="audio-progress-bar"></div>
+    </div>
+    <div class="audio-dock-container">
+      <div class="audio-dock-meta">
+        <div class="audio-waveform" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <div class="audio-dock-text">
+          <div class="audio-dock-route-title">Кемеровский Арбат & Памятные места</div>
+          <div class="audio-dock-stop-title">Точка экскурсии</div>
+        </div>
+      </div>
+      <div class="audio-dock-controls">
+        <button type="button" class="btn-audio-ctrl btn-audio-prev" aria-label="Предыдущая точка">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+        </button>
+        <button type="button" class="btn-audio-ctrl btn-audio-playpause" aria-label="Воспроизвести / Пауза">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </button>
+        <button type="button" class="btn-audio-ctrl btn-audio-next" aria-label="Следующая точка">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+        </button>
+        <button type="button" class="btn-audio-rate" aria-label="Скорость">1.0x</button>
+        <button type="button" class="btn-audio-ctrl btn-audio-close" aria-label="Закрыть плеер">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Route ID for this page -->
+  <script>
+    window.CURRENT_ROUTE_ID = 'vesennaya-arbat';
+  </script>
+
+  <!-- JavaScript Modules -->
+  <script src="assets/peshkem/vendor/leaflet/leaflet.js"></script>
+  <script src="scripts/peshkem-data.js"></script>
+  <script src="scripts/peshkem-audio.js"></script>
+  <script src="scripts/peshkem-tour-page.js"></script>
+</body>
+</html>

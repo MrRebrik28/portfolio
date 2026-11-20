@@ -3,7 +3,15 @@
    Dark luxury cyber-aesthetic with electric neon lime accent (#B3F77D)
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&family=Unbounded:wght@400;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap');
+
+@font-face {
+  font-family: 'Furore';
+  src: url('../assets/fonts/Furore.otf') format('opentype');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   /* Core Color Palette */
@@ -35,10 +43,10 @@
   --border-active: rgba(179, 247, 125, 0.48);
 
   /* Typography Stacks */
-  --font-display: 'Unbounded', sans-serif;
-  --font-heading: 'Syne', sans-serif;
-  --font-body: 'Plus Jakarta Sans', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Furore', sans-serif;
+  --font-heading: 'Furore', sans-serif;
+  --font-body: 'Montserrat', sans-serif;
+  --font-mono: 'Montserrat', sans-serif;
 
   /* Shadows */
   --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.4);
@@ -348,8 +356,8 @@ button {
   font-family: var(--font-display);
   font-size: clamp(2rem, 5vw, 3.75rem);
   font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
   color: var(--text-primary);
   max-width: 850px;
 }

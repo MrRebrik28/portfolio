@@ -4,30 +4,30 @@
 Специализация: **UI/UX Дизайн, Веб-разработка (Frontend & Full-stack), PWA и дизайн-системы в Figma**.  
 Квалификация: **Программист (диплом с отличием СПТ)** • Преподаватель IT-дисциплин.
 
-🌐 **Сайт портфолио:** [mrrebrik28.github.io/portfolio](https://mrrebrik28.github.io/portfolio/)  
-💬 **Связь в Telegram:** [@MrRebrik](https://t.me/MrRebrik)  
-📞 **Телефон:** +7 (951) 609-43-64 • **Email:** Sanya.yarovenko.90@gmail.com
+ **Сайт портфолио:** [mrrebrik28.github.io/portfolio](https://mrrebrik28.github.io/portfolio/)  
+ **Связь в Telegram:** [@MrRebrik](https://t.me/MrRebrik)  
+ **Телефон:** +7 (951) 609-43-64 • **Email:** Sanya.yarovenko.90@gmail.com
 
 ---
 
-## 🚀 Действующие проекты в продакшене (Live & Open Source)
+##  Действующие проекты в продакшене (Live & Open Source)
 
 | Проект | Стек и технологии | Ссылка на сайт | Репозиторий на GitHub |
 |---|---|---|---|
-| 🎓 **«Всё зачётно»** | Next.js 16 (App Router), NestJS 12, TypeScript, PostgreSQL (Neon), Prisma ORM, Docker, Amvera | [vse-zachetno...amvera.tech ↗](https://vse-zachetno-mrrebrik.msk1.amvera.tech/) | [MrRebrik28/vse-zachetno ↗](https://github.com/MrRebrik28/vse-zachetno) |
-| 🌸 **«Моё восстановление» (zazozh)** | Vite, TypeScript, PWA, Service Worker, IndexedDB, HTML5 Canvas Retina Charts, Telegram Mini App | [mrrebrik28.github.io/zazozh ↗](https://mrrebrik28.github.io/zazozh/) | [MrRebrik28/zazozh ↗](https://github.com/MrRebrik28/zazozh) |
-| 📄 **Конструктор резюме Soft Skills** | Modern HTML5/CSS Grid, Vanilla JS, html2canvas (масштаб 2.5x HD), Web Share API | [mrrebrik28.github.io/softskills-resume ↗](https://mrrebrik28.github.io/softskills-resume/) | [MrRebrik28/softskills-resume ↗](https://github.com/MrRebrik28/softskills-resume) |
-| ⚡ **LocalWeb.ru** | Tailwind CSS, Vanilla JS, Telegram API, Google Sheets Funnel, Cloudflare CDN | [local-web.ru ↗](https://local-web.ru/) | [MrRebrik28/turboweb- ↗](https://github.com/MrRebrik28/turboweb-) |
-| 🚲 **TIMETRY BIKES RUSSIA** | E-Commerce, каталог 106 SKU, корзина (LocalStorage), чекаут в мессенджеры | [local-web.ru/timetry ↗](https://local-web.ru/timetry/index.html) | — |
-| ⚡ **Интерактивное портфолио** | Vanilla JS, Modern Web Components / Dialog, Web Audio API SFX, Canvas, 3D tilt | [mrrebrik28.github.io/portfolio ↗](https://mrrebrik28.github.io/portfolio/) | [MrRebrik28/portfolio ↗](https://github.com/MrRebrik28/portfolio) |
+|  **«Всё зачётно»** | Next.js 16 (App Router), NestJS 12, TypeScript, PostgreSQL (Neon), Prisma ORM, Docker, Amvera | [vse-zachetno...amvera.tech ↗](https://vse-zachetno-mrrebrik.msk1.amvera.tech/) | [MrRebrik28/vse-zachetno ↗](https://github.com/MrRebrik28/vse-zachetno) |
+|  **«Моё восстановление» (zazozh)** | Vite, TypeScript, PWA, Service Worker, IndexedDB, HTML5 Canvas Retina Charts, Telegram Mini App | [mrrebrik28.github.io/zazozh ↗](https://mrrebrik28.github.io/zazozh/) | [MrRebrik28/zazozh ↗](https://github.com/MrRebrik28/zazozh) |
+|  **Конструктор резюме Soft Skills** | Modern HTML5/CSS Grid, Vanilla JS, html2canvas (масштаб 2.5x HD), Web Share API | [mrrebrik28.github.io/softskills-resume ↗](https://mrrebrik28.github.io/softskills-resume/) | [MrRebrik28/softskills-resume ↗](https://github.com/MrRebrik28/softskills-resume) |
+|  **LocalWeb.ru** | Tailwind CSS, Vanilla JS, Telegram API, Google Sheets Funnel, Cloudflare CDN | [local-web.ru ↗](https://local-web.ru/) | [MrRebrik28/turboweb- ↗](https://github.com/MrRebrik28/turboweb-) |
+|  **TIMETRY BIKES RUSSIA** | E-Commerce, каталог 106 SKU, корзина (LocalStorage), чекаут в мессенджеры | [local-web.ru/timetry ↗](https://local-web.ru/timetry/index.html) | — |
+|  **Интерактивное портфолио** | Vanilla JS, Modern Web Components / Dialog, Web Audio API SFX, Canvas, 3D tilt | [mrrebrik28.github.io/portfolio ↗](https://mrrebrik28.github.io/portfolio/) | [MrRebrik28/portfolio ↗](https://github.com/MrRebrik28/portfolio) |
 
 ---
 
-## 🛠️ Технологический стек и компетенции
+## ️ Технологический стек и компетенции
 
 ### 1. Проектирование и дизайн интерфейсов
 - **Figma (более 5 лет практики):** глубокое владение Auto Layout 5.0, переменными (Variables), интерактивными компонентами, дизайн-токенами и методологией Atomic Design.
-- **Инфографика для маркетплейсов:** сотни коммерческих карточек для Wildberries и Ozon с оптимизацией CTR, адаптацией под мобильные экраны и 3D-подачей.
+- **E-commerce & Дизайн сервисов:** проектирование интернет-магазинов, каталогов со сложной номенклатурой и фильтрацией, адаптацией под мобильные экраны и 3D-подачей.
 - **UI/UX & Прототипирование:** построение понятных пользовательских путей (CJM), микроанимации, модульные сетки (8pt grid) и соблюдение контрастности (WCAG AAA).
 
 ### 2. Фронтенд-разработка (Frontend)
@@ -44,7 +44,7 @@
 
 ---
 
-## 🎓 Образование и преподавательская деятельность
+##  Образование и преподавательская деятельность
 
 - **ГПОУ «Сибирский политехнический техникум» (2020–2024, очно):**
   - Специальность: «Информационные системы и программирование».
@@ -61,7 +61,7 @@
 
 ---
 
-## ⚡ Особенности архитектуры самого сайта-портфолио
+##  Особенности архитектуры самого сайта-портфолио
 
 - **Fluid Custom Cursor:** Плавный двухкомпонентный курсор с физикой преследования (Lerp), магнитным притяжением и состоянием `СМОТРЕТЬ` при наведении на кейсы.
 - **Interactive Background Canvas:** Живая сеть частиц и неоновой сетки с отталкиванием от курсора мыши и энергосберегающим pause-режимом.
@@ -74,7 +74,7 @@
 
 ---
 
-## 🚀 Локальный запуск
+##  Локальный запуск
 
 ```bash
 # Клонирование репозитория

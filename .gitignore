@@ -9,4 +9,5 @@ Thumbs.db
 *secret*
 *credentials*
 *.vault
+vault/
 .obsidian/

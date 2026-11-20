@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>По набережной Томи и городским легендам — Пешеходный гид ПешКем</title>
+  <meta name="description" content="Полный авторский пешеходный гид по Притомской набережной Кемерово: Старый цирк Юрия Никулина, старейший дом партизан Губкиных, Парк чудес, дикая тайга Рудничного бора и старая мостовая.">
+  <meta name="theme-color" content="#F8FAFC">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="По набережной Томи и городским легендам — ПешКем">
+  <meta property="og:description" content="Интерактивный маршрут с голосовым аудиогидом и картой. 12 остановок, 3.8 км, 2 часа прогулки.">
+  <meta property="og:image" content="assets/peshkem/tur2.png">
+
+  <!-- Favicon & App Icons -->
+  <link rel="icon" type="image/svg+xml" href="assets/peshkem/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/peshkem/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/peshkem/icons/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/peshkem/icons/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="shortcut icon" href="favicon.ico">
+
+  <!-- Fonts (Oldtimer via CDN, Montserrat & Oswald via Google Fonts, plus local @font-face) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Oswald:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/oldtimer">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="assets/peshkem/vendor/leaflet/leaflet.css">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles/peshkem.css">
+</head>
+<body>
+
+  <!-- Sticky Top Header & Progress Navigation Bar -->
+  <header class="tour-sticky-header">
+    <div class="tour-page-header-row">
+      <div class="container tour-header-container">
+        <nav class="tour-breadcrumbs" aria-label="Хлебные крошки">
+          <a href="index.html">&larr; На главную</a>
+          <span class="tour-breadcrumbs-sep">/</span>
+          <a href="index.html#routes-section">Маршруты</a>
+          <span class="tour-breadcrumbs-sep">/</span>
+          <span style="color: var(--text-main); font-weight: 600;">По набережной Томи</span>
+        </nav>
+
+        <div class="tour-header-actions">
+          <span id="tour-progress-stat" class="tour-progress-stat-pill">
+            Пройдено 0 из 12 (0%)
+          </span>
+          <a href="index.html" class="btn-cta-primary" style="padding: 0.45rem 1rem; font-size: var(--fs-xs);">
+            Все маршруты
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Anchor Nav Track -->
+    <nav class="tour-quick-nav" aria-label="Быстрый переход к остановкам">
+      <div class="container">
+        <div class="tour-quick-nav-track" id="tour-quick-nav-track">
+          <a href="#stop-card-stop-1-circus" class="quick-nav-pill active">1. Старый цирк</a>
+          <a href="#stop-card-stop-2-gubkin-house" class="quick-nav-pill">2. Дом Губкиных</a>
+          <a href="#stop-card-stop-3-park-chudes" class="quick-nav-pill">3. Парк чудес</a>
+          <a href="#stop-card-stop-4-embankment-promenade" class="quick-nav-pill">4. Набережная</a>
+          <a href="#stop-card-stop-5-island-kemerovsky" class="quick-nav-pill">5. Остров</a>
+          <a href="#stop-card-stop-6-gold-diggers" class="quick-nav-pill">6. Золотоискатели</a>
+          <a href="#stop-card-stop-7-rudnichny-bor" class="quick-nav-pill">7. Рудничный бор</a>
+          <a href="#stop-card-stop-8-first-hotel" class="quick-nav-pill">8. Первая гостиница</a>
+          <a href="#stop-card-stop-9-pushkin-square" class="quick-nav-pill">9. Площадь Пушкина</a>
+          <a href="#stop-card-stop-10-pushkin-statue" class="quick-nav-pill">10. Памятник поэту</a>
+          <a href="#stop-card-stop-11-zhilkombinat" class="quick-nav-pill">11. Жилкомбинат</a>
+          <a href="#stop-card-stop-12-old-pavement" class="quick-nav-pill">12. Мостовая</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Visual Progress Line -->
+    <div class="tour-progress-track" aria-hidden="true">
+      <div class="tour-progress-fill" id="tour-progress-line" style="width: 0%;"></div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1. Tour Hero Section -->
+    <section class="tour-hero">
+      <div class="tour-hero-scrim"></div>
+      <div class="container tour-hero-grid">
+        <div class="tour-hero-content">
+          <div class="tour-badge" style="background: rgba(16, 185, 129, 0.2); color: #10B981;">
+            Маршрут №1 • Исторический & Видовой
+          </div>
+
+          <h1 class="tour-hero-title">По набережной Томи и городским легендам</h1>
+          <p class="tour-hero-subtitle">
+            Маршрут проведет вас по значимым улицам города, вы сможете познакомиться с его историей и прогуляетесь по красивым паркам и скверам. Вы отыщете самый старый дом в Кемерове, узнаете, что определяло зажиточность человека у коренных сибиряков, пройдетесь по Притомской набережной с удивительными видами на остров Кемеровский и Рудничный бор.
+          </p>
+
+          <div class="tour-metrics-pills">
+            <span class="tour-metric-pill">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Время: <strong>2 часа</strong>
+            </span>
+            <span class="tour-metric-pill">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M10 22v-5l-2-2V9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6l-2 2v5"/></svg> Длина: <strong>3.8 км</strong>
+            </span>
+            <span class="tour-metric-pill">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Остановки: <strong>12 локаций</strong>
+            </span>
+            <span class="tour-metric-pill">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg> Сложность: <strong>Легкий</strong>
+            </span>
+            <span class="tour-metric-pill">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg> Аудиогид: <strong>Включен</strong>
+            </span>
+          </div>
+
+          <div class="tour-actions-group">
+            <button type="button" class="btn-cta-primary" id="btn-hero-listen-tour">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Слушать весь аудиогид</span>
+            </button>
+            <a href="#tour-map-wrap" class="btn-route-action btn-route-detail" style="border-radius: var(--radius-full); padding: 0.65rem 1.4rem;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="12 8 8 12 12 16 12 8"/></svg>
+              <span>Интерактивная карта</span>
+            </a>
+            <button type="button" class="btn-icon-pill" id="btn-hero-fav" aria-label="В избранное" title="Сохранить в избранное">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </button>
+            <button type="button" class="btn-icon-pill" id="btn-hero-share" aria-label="Поделиться" title="Поделиться маршрутом">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="tour-hero-media">
+          <img class="tour-hero-cover-img" src="assets/peshkem/stops/tour1_stop4_embankment.jpg" alt="Панорама Притомской набережной Кемерово" fetchpriority="high">
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Tour Map Wrap -->
+    <div class="container" id="tour-map-wrap" style="padding-top: 3rem;">
+      <div style="margin-bottom: 1rem;">
+        <h2 style="font-size: var(--fs-xl); font-weight: 700;">Карта и нитка маршрута</h2>
+        <span style="font-size: var(--fs-xs); color: var(--text-muted);">Нажимайте на номера остановок для перехода и запуска аудиорассказа</span>
+      </div>
+
+      <div class="map-container-wrapper" style="height: 440px;">
+        <div id="tour-dedicated-map" style="width: 100%; height: 100%;"></div>
+      </div>
+    </div>
+
+    <!-- 3. Stops Detailed Feed -->
+    <div class="container">
+      <div class="tour-stops-feed">
+
+        <!-- Stop 1 -->
+        <article class="tour-stop-card" id="stop-card-stop-1-circus">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge">01</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">Старт маршрута • 10 минут на осмотр</span>
+                  <h3 class="stop-title-text">Старый цирк</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="stop-1-circus">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Здание построено в конце 1940-х годов руками немецких военнопленных, которых в то время в Кемерове насчитывалось около 20 тысяч человек.</p>
+              <p>Еще это место известно тем, что здесь когда-то располагался Старый цирк. Деревянное здание было построено в 1932 году и стало первым крупным культурным учреждением города. Здесь всегда был аншлаг. Выступали абсолютно все звезды советского цирка. На его арене начинал свой путь знаменитый артист, клоун <strong>Юрий Никулин</strong>.</p>
+              <p>К концу 60-х годов здание состарилось и пришло в негодность. Цирк закрыли. Городские власти пытались продать постройку на дрова, но желающих не нашлось. Денег на снос здания в казне тоже не имелось. И вот 2 марта 1971 года в 10 часов утра Старый цирк вспыхнул как факел и сгорел дотла. Виновных в пожаре так и не нашли.</p>
+            </div>
+
+            <div class="stop-tip-box">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Обратите внимание на сталинскую архитектуру соседних домов с лепниной и эркерами.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="0">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="stop-1-circus">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3562,86.0825" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour1_stop1_circus.jpg" alt="Старый цирк Кемерово" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 2 -->
+        <article class="tour-stop-card" id="stop-card-stop-2-gubkin-house">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge">02</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+12 минут в пути • 10 минут на осмотр</span>
+                  <h3 class="stop-title-text">Дом партизан Губкиных</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="stop-2-gubkin-house">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Дом партизан Губкиных — самый старый дом в Кемерове. Он был построен во второй половине XIX века и считается официальным памятником архитектуры. На самом деле, это деревянное здание никаким шедевром сибирского зодчества не является: просто дом чудом уцелел и потому стал памятником, а другие, ему подобные — нет.</p>
+              <p>Эту историческую постройку местные власти тоже хотели снести. Весной 1979 года возле Дома Губкиных появились трактор, экскаватор, рабочие. Но обитатели соседних зданий выбежали на улицу и встали стеной!</p>
+              <p>Чтобы уберечь старинный дом от дальнейших посягательств, одна кемеровчанка выяснила, что в роду Губкиных был борец за Советскую власть, красный партизан Павел Губкин. Этого оказалось достаточно, чтобы сохранить жизнь старинному дому.</p>
+            </div>
+
+            <div class="stop-tip-box">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Отличный ракурс для фото с колоритной фактурой вековых деревянных бревен лиственницы.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="1">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="stop-2-gubkin-house">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3575,86.0808" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour1_stop2_gubkin.jpg" alt="Дом партизан Губкиных" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 3 -->
+        <article class="tour-stop-card" id="stop-card-stop-3-park-chudes">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge">03</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+25 минут в пути • 15 минут на отдых</span>
+                  <h3 class="stop-title-text">Парк чудес (исторический Горсад)</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="stop-3-park-chudes">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Когда-то этот зеленый оазис назывался Горсадом, а сегодня — это Парк чудес с набережной и аттракционами. Горсад появился в Кемерове в 1926 году на месте мусорной свалки. Комсомольцы проложили аллеи, посадили деревья и огородили территорию.</p>
+              <p>Пока деревья были маленькими, горожане шутливо звали сад «Горкустиком», ведь фонарных столбов было больше деревьев! Но спустя 15 лет здесь шумела густая тенистая роща.</p>
+              <p>Одна из городских легенд гласит, что здесь было стойбище мамонтов! Поводом стала находка кемеровского школьника Гусева: летом 1938 года он случайно нашел на берегу Томи огромный бивень мамонта.</p>
+            </div>
+
+            <div class="stop-tip-box">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Здесь можно взять сибирский чай с брусникой и прокатиться на колесе обозрения.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="stop-3-park-chudes">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3548,86.0792" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour1_stop3_park_chudes.jpg" alt="Парк чудес" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 4 -->
+        <article class="tour-stop-card" id="stop-card-stop-4-embankment-promenade">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge">04</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+40 минут в пути • 12 минут на осмотр</span>
+                  <h3 class="stop-title-text">Притомская набережная & Паводок 1940 г.</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="stop-4-embankment-promenade">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Притомская набережная — самая красивая улица города по мнению кемеровчан. В эпоху советской индустриализации жители задумали сделать из обрывистого берега Томи великолепный променад.</p>
+              <p>Но река каждую весну безжалостно подмывала берег. В мае 1940 года случился небывалый паводок: в одночасье Томь размыла горсадовский берег на 300 метров в длину и 15 метров в ширину! В бурные воды реки рухнули многие аттракционы и знаменитый деревянный ресторан «Весна».</p>
+              <p>После этого наводнения такие катастрофические паводки прекратились, а набережную одели в прочный гранит.</p>
+            </div>
+
+            <div class="stop-tip-box">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Идеальное место для неспешного вечернего шага под шум речной волны.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="3">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="stop-4-embankment-promenade">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3560,86.0830" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour1_stop4_embankment.jpg" alt="Притомская набережная" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 5 -->
+        <article class="tour-stop-card" id="stop-card-stop-5-island-kemerovsky">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge">05</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+55 минут в пути • 10 минут</span>
+                  <h3 class="stop-title-text">Остров Кемеровский</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="stop-5-island-kemerovsky">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Остров Кемеровский — самый крупный в черте города. В конце прошлого века здесь находился главный городской пляж, но после отмены переправы остров одичал и превратился в таинственную зеленую чащу.</p>
+              <p>В неофициальной истории остров фигурирует как «пляж советских нудистов». В 1926 году американский журнал <em>Masses</em> опубликовал статью, в которой корреспондент с восхищением описал, как сибиряки в жару купаются на острове абсолютно нагишом — и сам охотно искупался в Томи без одежды!</p>
+            </div>
+
+            <div class="stop-tip-box">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Остров отлично виден с верхнего яруса набережной напротив памятника шахтерам.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="4">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="stop-5-island-kemerovsky">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3570,86.0840" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour1_stop5_island.jpg" alt="Остров Кемеровский" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 6 -->
+        <article class="tour-stop-card" id="stop-card-stop-6-gold-diggers">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge">06</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+65 минут в пути • 10 минут</span>
+                  <h3 class="stop-title-text">Золотоискатели реки Томь</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="stop-6-gold-diggers">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>На речных косах и отмелях Томи горожане издавна мыли золото! По воскресеньям на берегу можно было встретить серьезных мужчин с железными бутарами и лотками для промывки песка.</p>
+              <p>За пару дней старатели намывали 10–20 граммов чешуйчатого косового золота. В начале 30-х годов в городе работал валютный Торгсин: там драгоценный металл меняли на ботинки, костюмы и дефицитные продукты.</p>
+            </div>
+
+            <div class="stop-tip-box">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Река Томь берет начало в высокогорьях Абаканского хребта, богатого рудными жилами.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="stop-6-gold-diggers">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3578,86.0850" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour1_stop6_gold_diggers.jpg" alt="Золотоискатели реки Томь" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 7 -->
+        <article class="tour-stop-card" id="stop-card-stop-7-rudnichny-bor">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge">07</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+75 минут в пути • 12 минут</span>
+                  <h3 class="stop-title-text">Рудничный бор (Городская тайга)</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="stop-7-rudnichny-bor">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Кемеровский бор — это настоящая дикая сибирская тайга прямо напротив центра города на правом берегу Томи. Площадь массива — 405 гектаров: он больше Центрального парка в Нью-Йорке и Гайд-парка в Лондоне!</p>
+              <p>Здесь растут 350 видов сибирских растений, живут белки, лисы и совы. Кемерово — единственный город на планете, где до вековой тайги можно доехать на городском трамвае!</p>
+            </div>
+
+            <div class="stop-tip-box">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>На закате сосны Рудничного бора сияют теплым медным светом. Лучшая точка для панорамных кадров.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="6">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="stop-7-rudnichny-bor">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3588,86.0845" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour1_stop7_rudnichny_bor.jpg" alt="Рудничный бор" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 8 -->
+        <article class="tour-stop-card" id="stop-card-stop-8-first-hotel">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge">08</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+90 минут в пути • 10 минут</span>
+                  <h3 class="stop-title-text">Первая гостиница и первый ресторан</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="stop-8-first-hotel">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Первая каменная гостиница Кемерово открылась в 1933 году. Это четырехэтажное здание было одним из самых высоких и комфортабельных в городе, заменив временные бараки «Дома заезжих».</p>
+              <p>В первый городской ресторан при гостинице пускали исключительно начальство и иностранных инженеров по спецпропускам, а у парадного входа дежурил красноармеец с винтовкой. Сегодня исторический фасад бережно сохранен в составе отеля «Томь Ривер Плаза».</p>
+            </div>
+
+            <div class="stop-tip-box">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Рядом расположен спуск к реке и уютные столики летней террасы.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="7">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="stop-8-first-hotel">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3569,86.0862" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour1_stop8_hotel_tom.jpg" alt="Первая гостиница Кемерово" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 9 -->
+        <article class="tour-stop-card" id="stop-card-stop-9-pushkin-square">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge">09</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+102 минуты в пути • 10 минут</span>
+                  <h3 class="stop-title-text">Площадь Пушкина</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="stop-9-pushkin-square">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>До революции здесь шумел ромашковый луг зажиточного сибирского села Щеглово. Молодежь собиралась тут на вечерки и праздники.</p>
+              <p>В 1949 году, к 150-летию со дня рождения поэта, городские власти создали парадную площадь Пушкина. Долгое время она служила главным местом демонстраций, праздников и митингов трудящихся.</p>
+            </div>
+
+            <div class="stop-tip-box">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Классические фасады с пилястрами и лепниной создают гармоничный архитектурный ансамбль.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="8">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="stop-9-pushkin-square">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3533,86.0869" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour1_stop9_pushkin_sq.jpg" alt="Площадь Пушкина" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 10 -->
+        <article class="tour-stop-card" id="stop-card-stop-10-pushkin-statue">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge">10</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+110 минут в пути • 8 минут</span>
+                  <h3 class="stop-title-text">Памятник Пушкину в натуральный рост</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="stop-10-pushkin-statue">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Статуя классика изначально отливалась скульптором Матвеем Манизером для интерьера библиотеки, поэтому была небольшой. Местные власти решили не ждать годы изготовления исполинского монумента и торжественно водрузили интерьерную статуэтку на площади!</p>
+              <p>На недоуменные вопросы горожан власти с гордостью отвечали: «Размеры статуи полностью соответствуют натуральной величине: рост Александра Сергеевича Пушкина был ровно 160 сантиметров!». Так камерная скульптура стала любимицей кемеровчан.</p>
+            </div>
+
+            <div class="stop-tip-box">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Бросьте монетку на постамент — добрая примета на вдохновение в учебе и работе.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="9">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="stop-10-pushkin-statue">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3535,86.0872" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour1_stop10_pushkin_statue.jpg" alt="Памятник Пушкину" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 11 -->
+        <article class="tour-stop-card" id="stop-card-stop-11-zhilkombinat">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge">11</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">+115 минут в пути • 10 минут</span>
+                  <h3 class="stop-title-text">Кемеровский жилкомбинат & ул. Арочная</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="stop-11-zhilkombinat">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Жилкомбинат — архитектурный символ индустриализации и советского авангарда 1930-х годов. Здесь воплощалась идея комплексного дома-коммуны с общественными столовыми, детскими садами и клубами.</p>
+              <p>В 1950-е годы к торцам корпусов пристроили монументальные арки, давшие имя улице Арочной. А во дворе между домами до сих пор скрывается редкий памятник эпохи — аутентичная скульптура «Рабочий».</p>
+            </div>
+
+            <div class="stop-tip-box">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Обязательно пройдите сквозь арочный портал во внутренний двор с палисадниками.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="10">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="stop-11-zhilkombinat">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3541,86.0895" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour1_stop11_zhilkombinat.jpg" alt="Кемеровский жилкомбинат" loading="lazy">
+          </div>
+        </article>
+
+        <!-- Stop 12 -->
+        <article class="tour-stop-card" id="stop-card-stop-12-old-pavement">
+          <div>
+            <div class="tour-stop-header">
+              <div class="stop-number-wrap">
+                <span class="stop-big-badge">12</span>
+                <div class="stop-meta-text">
+                  <span class="stop-time-tag">Финал маршрута • 8 минут</span>
+                  <h3 class="stop-title-text">Фрагмент старой каменной мостовой</h3>
+                </div>
+              </div>
+              <label class="stop-checkbox-wrap">
+                <input type="checkbox" class="stop-visited-checkbox" data-stop-id="stop-12-old-pavement">
+                <span>Пройдено</span>
+              </label>
+            </div>
+
+            <div class="stop-narrative-text">
+              <p>Фрагмент старой мостовой из дикого неотесанного камня — подлинная история под ногами. В 2017 году при замене асфальта ковш экскаватора случайно откопал старинную каменную кладку 1938 года!</p>
+              <p>Здесь располагалась стоянка для автомобилей партийного руководства Кузбасса. Кладку бережно музеефицировали. Пройдитесь по этим камням: именно по ним шагали первостроители Кемерово.</p>
+            </div>
+
+            <div class="stop-tip-box">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <span>Поздравляем с прохождением маршрута! Отсюда легко спуститься к реке или продолжить путь на улицу Весеннюю.</span>
+            </div>
+
+            <div class="stop-actions-bar">
+              <button type="button" class="btn-stop-audio" data-index="11">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Слушать аудиогид</span>
+              </button>
+              <button type="button" class="btn-stop-map" data-stop-id="stop-12-old-pavement">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>На карте</span>
+              </button>
+              <a href="https://yandex.ru/maps/?rtext=~55.3552,86.0838" target="_blank" rel="noopener noreferrer" class="btn-stop-nav">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Навигатор</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tour-stop-media">
+            <img class="stop-photo-img" src="assets/peshkem/stops/tour1_stop12_old_pavement.jpg" alt="Старая каменная мостовая" loading="lazy">
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Bottom Next / Prev Tour Pagination -->
+      <nav class="tour-pagination-grid" aria-label="Переключение маршрутов">
+        <a href="index.html#routes-section" class="tour-page-card">
+          <span class="page-card-sub">← Назад в каталог</span>
+          <span class="page-card-title">Все пешеходные гиды Кемерово</span>
+        </a>
+        <a href="tyri2.html" class="tour-page-card" style="text-align: right;">
+          <span class="page-card-sub">Следующий гид →</span>
+          <span class="page-card-title">Кемеровский Арбат & Памятные места</span>
+        </a>
+      </nav>
+
+    </div>
+  </main>
+
+    <!-- Site Footer -->
+  <footer class="site-footer" style="margin-top: 5rem;">
+    <div class="container">
+      <div class="footer-main-grid">
+        
+        <div class="footer-brand-info">
+          <a href="index.html" aria-label="ПешКем главная">
+            <img class="footer-logo-svg" src="assets/peshkem/logofooter.svg" alt="ПешКем логотип в подвале" width="140" height="36">
+          </a>
+          <p class="footer-brand-desc">
+            Бесплатные авторские пешеходные маршруты и аудиогиды по городу Кемерово. Открываем сибирскую историю, архитектуру и уютные парки с 2022 года.
+          </p>
+          <div class="footer-socials">
+            <a href="https://vk.com/public214129984" target="_blank" rel="noopener noreferrer" class="btn-social" aria-label="Мы ВКонтакте">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.78 17.5c-5.32 0-8.36-3.65-8.49-9.73h2.67c.09 4.46 2.06 6.35 3.61 6.74V7.77h2.52v3.85c1.54-.17 3.16-1.92 3.71-3.85h2.52a6.9 6.9 0 0 1-3.23 4.88 7.3 7.3 0 0 1 3.79 4.85h-2.77c-.82-2.56-2.88-4.54-4.53-4.7v4.7z"/></svg>
+            </a>
+            <a href="https://t.me/" target="_blank" rel="noopener noreferrer" class="btn-social" aria-label="Наш Telegram-канал">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h4>Маршруты</h4>
+          <ul class="footer-links">
+            <li><a href="tyri.html">По набережной Томи</a></li>
+            <li><a href="tyri2.html">Кемеровский Арбат</a></li>
+            <li><a href="tyri3.html">Красная Горка</a></li>
+            <li><a href="index.html#map-section">Смотреть на карте</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>О проекте</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Главная страница</a></li>
+            <li><a href="index.html#features-section">Преимущества</a></li>
+            <li><a href="index.html#faq-section">Частые вопросы</a></li>
+            <li><a href="index.html#reviews-section">Отзывы туристов</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>Создано с душой</h4>
+          <p style="font-size: var(--fs-xs); color: var(--text-muted); line-height: 1.6; margin-bottom: 0.75rem;">
+            Проект «ПешКем» задуман как культурная инициатива для популяризации сибирской истории и комфортных пеших прогулок по Кемерово.
+          </p>
+          <p style="font-size: var(--fs-xs); color: var(--text-muted);">
+            Автор концепта &amp; дизайна: <br>
+            <strong style="color: var(--text-main);">Александр Сергеевич Яровенко</strong>
+          </p>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom-bar">
+        <span>© 2022–2026 «ПешКем» • Пешеходные гиды по Кемерово</span>
+        <span>Разработано по стандартам современного UX/UI &amp; Web APIs</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Audio Player Dock -->
+  <aside id="peshkem-audio-dock" aria-label="Плеер аудиогида">
+    <div class="audio-progress-track">
+      <div class="audio-progress-bar"></div>
+    </div>
+    <div class="audio-dock-container">
+      <div class="audio-dock-meta">
+        <div class="audio-waveform" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <div class="audio-dock-text">
+          <div class="audio-dock-route-title">По набережной Томи и городским легендам</div>
+          <div class="audio-dock-stop-title">Точка экскурсии</div>
+        </div>
+      </div>
+      <div class="audio-dock-controls">
+        <button type="button" class="btn-audio-ctrl btn-audio-prev" aria-label="Предыдущая точка">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+        </button>
+        <button type="button" class="btn-audio-ctrl btn-audio-playpause" aria-label="Воспроизвести / Пауза">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </button>
+        <button type="button" class="btn-audio-ctrl btn-audio-next" aria-label="Следующая точка">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+        </button>
+        <button type="button" class="btn-audio-rate" aria-label="Скорость">1.0x</button>
+        <button type="button" class="btn-audio-ctrl btn-audio-close" aria-label="Закрыть плеер">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Route ID for this page -->
+  <script>
+    window.CURRENT_ROUTE_ID = 'embankment-legends';
+  </script>
+
+  <!-- JavaScript Modules -->
+  <script src="assets/peshkem/vendor/leaflet/leaflet.js"></script>
+  <script src="scripts/peshkem-data.js"></script>
+  <script src="scripts/peshkem-audio.js"></script>
+  <script src="scripts/peshkem-tour-page.js"></script>
+</body>
+</html>

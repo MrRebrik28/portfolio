@@ -229,9 +229,8 @@ function renderWorks(category = 'all') {
         </div>
         <p class="card-tagline">${item.tagline}</p>
         <div class="card-tags">
-          <span class="tag-pill tag-pill-type ${item.isLive ? 'live-pill' : ''}">✦ ${item.isLive ? 'Сайт в продакшене' : item.projectType}</span>
+          <span class="tag-pill tag-pill-type ${item.isLive ? 'live-pill' : ''}"> ${item.isLive ? 'Сайт в продакшене' : item.projectType}</span>
           ${item.tags.map(tag => `<span class="tag-pill">${tag}</span>`).join('')}
-          ${item.results && item.results[0] ? `<span class="tag-pill metric">${item.results[0].label}: ${item.results[0].value}</span>` : ''}
         </div>
         ${item.isLive ? `
           <div class="card-live-action">
@@ -446,7 +445,17 @@ function openProjectModal(id) {
     }
   } else {
     if (liveBanner) liveBanner.style.display = 'none';
-    if (conceptBanner) conceptBanner.style.display = 'flex';
+    if (conceptBanner) {
+      conceptBanner.style.display = 'flex';
+      const conceptTextEl = conceptBanner.querySelector('.concept-text');
+      if (conceptTextEl) {
+        if (item.projectType === 'Конкурсный проект') {
+          conceptTextEl.innerHTML = `<strong>Конкурсный проект Всероссийского молодежного форума «Шерегеш-2023» (Команда №9).</strong> Проектирование информационной архитектуры, сквозного поиска и системы умных фильтров регионального туристического портала.`;
+        } else {
+          conceptTextEl.innerHTML = `<strong>Авторский дизайн-проект.</strong> Проектирование комплексной информационной структуры, компонентов интерфейса в Figma и адаптивного UX.`;
+        }
+      }
+    }
     if (liveDirectBtn) liveDirectBtn.style.display = 'none';
   }
 
@@ -478,14 +487,23 @@ function openProjectModal(id) {
   const highlightsList = document.getElementById('modal-highlights-list');
   highlightsList.innerHTML = item.designHighlights.map(h => `<li>${h}</li>`).join('');
 
-  // Results
-  const resultsContainer = document.getElementById('modal-results-container');
-  resultsContainer.innerHTML = item.results.map(r => `
-    <div class="results-metric-box">
-      <span class="res-metric-lbl">${r.label}</span>
-      <span class="res-metric-val">${r.value}</span>
-    </div>
-  `).join('');
+  // Additional Gallery Screens
+  const gallerySection = document.getElementById('modal-gallery');
+  const galleryGrid = document.getElementById('modal-gallery-grid');
+  if (gallerySection && galleryGrid) {
+    if (item.gallery && item.gallery.length > 0) {
+      gallerySection.style.display = 'block';
+      galleryGrid.innerHTML = item.gallery.map((imgSrc, idx) => `
+        <figure class="modal-gallery-item">
+          <img src="${imgSrc}" alt="${item.title} — экран ${idx + 1}" loading="lazy">
+          <figcaption class="modal-gallery-caption">${item.galleryCaptions && item.galleryCaptions[idx] ? item.galleryCaptions[idx] : `Экран ${idx + 1}`}</figcaption>
+        </figure>
+      `).join('');
+    } else {
+      gallerySection.style.display = 'none';
+      galleryGrid.innerHTML = '';
+    }
+  }
 
   // Reset any lingering .view-project state from hovering the card
   const outline = document.querySelector('.cursor-outline');

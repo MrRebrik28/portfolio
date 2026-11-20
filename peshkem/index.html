@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ПешКем — Интерактивные пешеходные гиды и аудиоэкскурсии по Кемерово</title>
+  <meta name="description" content="Авторские пешеходные маршруты по Кемерово: городские легенды, Притомская набережная, старый цирк, конструктивизм и Красная Горка. Интерактивная карта, голосовой аудиогид и проверенные пешие прогулки прямо в браузере.">
+  <meta name="keywords" content="ПешКем, Кемерово, пешеходные гиды, аудиогид Кемерово, набережная Томи, улица Весенняя, Красная горка, экскурсии Кузбасс, туризм">
+  <meta name="theme-color" content="#F8FAFC">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="ПешКем — Пешеходные гиды по Кемерово">
+  <meta property="og:description" content="Открой Кемерово шаг за шагом. Бесплатные авторские прогулки с интерактивной картой и голосовым аудиогидом.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/peshkem/glavimg.png">
+
+  <!-- Favicon & App Icons -->
+  <link rel="icon" type="image/svg+xml" href="assets/peshkem/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/peshkem/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/peshkem/icons/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/peshkem/icons/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="shortcut icon" href="favicon.ico">
+
+  <!-- Fonts (Oldtimer via CDN, Montserrat & Oswald via Google Fonts, plus local @font-face) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Oswald:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/oldtimer">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="assets/peshkem/vendor/leaflet/leaflet.css">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles/peshkem.css">
+</head>
+<body>
+
+  <!-- 1. Sticky Navigation Header -->
+  <header class="header-nav" id="site-header">
+    <div class="container header-nav-container">
+      
+      <!-- Brand Logo -->
+      <a href="index.html" class="brand-logo-wrap" aria-label="ПешКем — на главную">
+        <img class="brand-logo-img" src="assets/peshkem/logo.svg" alt="ПешКем" width="120" height="34">
+        <span class="brand-tagline">Пешеходные гиды по Кемерово</span>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="nav-desktop-wrap" aria-label="Основная навигация">
+        <ul class="nav-desktop-links">
+          <li><a href="#routes-section">Маршруты</a></li>
+          <li><a href="#map-section">Интерактивная карта</a></li>
+          <li><a href="#features-section">О сервисе</a></li>
+          <li><a href="#faq-section">FAQ</a></li>
+          <li><a href="#reviews-section">Отзывы</a></li>
+        </ul>
+      </nav>
+
+      <!-- Nav Actions (Favorites, Theme Toggle, CTA) -->
+      <div class="nav-actions-group">
+        <!-- Favorites Button -->
+        <button type="button" class="btn-icon-pill" id="btn-header-favs" aria-label="Избранные маршруты" title="Избранное">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span class="badge-counter" id="favorites-counter" style="display: none;">0</span>
+        </button>
+
+        <!-- Start Walk CTA -->
+        <button type="button" class="btn-cta-primary" id="btn-header-start">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+          <span>Начать прогулку</span>
+        </button>
+
+        <!-- Mobile Burger -->
+        <button type="button" class="btn-mobile-burger" id="btn-open-drawer" aria-label="Открыть меню навигации" aria-expanded="false" aria-controls="nav-drawer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Dialog (Modern Web Guidance Pattern) -->
+  <dialog class="Drawer" id="nav-drawer" aria-label="Навигационное меню">
+    <div class="drawer-sheet">
+      <div class="drawer-header">
+        <a href="index.html" class="brand-logo-wrap" aria-label="ПешКем — на главную">
+          <img class="brand-logo-img" src="assets/peshkem/logo.svg" alt="ПешКем" width="110" height="32">
+          <span class="brand-tagline">Пешеходные гиды по Кемерово</span>
+        </a>
+        <button type="button" class="btn-modal-close" id="btn-close-drawer" aria-label="Закрыть меню">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <ul class="drawer-links">
+        <li><a href="#routes-section">Маршруты</a></li>
+        <li><a href="#map-section">Интерактивная карта</a></li>
+        <li><a href="#features-section">О сервисе</a></li>
+        <li><a href="#faq-section">FAQ</a></li>
+        <li><a href="#reviews-section">Отзывы</a></li>
+      </ul>
+    </div>
+  </dialog>
+
+  <main id="main-content">
+
+    <!-- 2. Hero Section -->
+    <section class="hero-section" aria-label="Приветствие">
+      <div class="hero-background-wrap">
+        <!-- MANDATORY fetchpriority="high" for LCP optimization -->
+        <img class="hero-bg-img" src="assets/peshkem/glavimg.png" alt="Панорама Притомской набережной Кемерово" fetchpriority="high" width="1920" height="1080">
+        <div class="hero-overlay-scrim"></div>
+      </div>
+
+      <div class="container hero-content">
+        <h1 class="hero-title">
+          Открой Кемерово <br>
+          <span class="hero-title-accent">шаг за шагом</span>
+        </h1>
+
+        <p class="hero-description">
+          С нашими пешеходными гидами вы не будете блуждать по городу в поисках интересных мест. История деревянного цирка, самый старый дом Кемерова, вековые липы Весенней и панорамы Томи — оживают прямо в вашем смартфоне с живым аудиогидом!
+        </p>
+
+        <div class="hero-actions" style="margin-top: 2rem;">
+          <a href="#routes-section" class="btn-cta-primary" style="text-decoration: none; display: inline-flex; font-size: var(--fs-base); padding: 0.85rem 2rem;">
+            <span>Выбрать маршрут</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Routes Catalog Section -->
+    <section class="section" id="routes-section" aria-labelledby="routes-heading">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Каталог экскурсий</span>
+          <h2 class="section-title" id="routes-heading">Популярные пешеходные гиды</h2>
+          <p class="section-subtitle">
+            Каждый маршрут бережно составлен местными краеведами: оптимальный километраж, удобные пешеходные дорожки и увлекательные аудиоистории.
+          </p>
+        </div>
+
+        <!-- Cards Grid -->
+        <div class="routes-grid" id="routes-cards-container">
+          
+          <!-- Route 1: Embankment -->
+          <article class="route-card" data-route-id="embankment-legends">
+            <a href="tyri.html" class="route-card-image-wrap" aria-label="Открыть страницу гида По набережной Томи">
+              <img class="route-card-img" src="assets/peshkem/stops/tour1_stop4_embankment.jpg" alt="Маршрут по набережной Томи" loading="lazy" width="400" height="220">
+              <span class="route-card-badge">Топ выбор</span>
+              <button type="button" class="btn-card-fav" data-route-id="embankment-legends" aria-label="Добавить в избранное" title="В избранное" onclick="event.preventDefault(); event.stopPropagation();">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+              </button>
+            </a>
+            <div class="route-card-content">
+              <div class="route-card-meta-row">
+                <span class="meta-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  2 часа
+                </span>
+                <span class="meta-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                  3.8 км
+                </span>
+                <span class="meta-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  12 локаций
+                </span>
+              </div>
+              <h3 class="route-card-title">
+                <a href="tyri.html">По набережной Томи и городским легендам</a>
+              </h3>
+              <p class="route-card-desc">
+                Старый деревянный цирк, где выступал Юрий Никулин, самый старый дом Кемерова, живописная Притомская набережная, золотые косы Томи и реликтовый Рудничный бор.
+              </p>
+              <div class="route-card-tags">
+                <span class="tag-badge">Набережная</span>
+                <span class="tag-badge">Аудиогид</span>
+                <span class="tag-badge">С детьми</span>
+                <span class="tag-badge">Панорамы</span>
+              </div>
+              <div class="route-card-footer">
+                <a href="tyri.html" class="btn-route-action btn-route-detail" data-route-id="embankment-legends">
+                  <span>Открыть гид →</span>
+                </a>
+                <button type="button" class="btn-route-action btn-route-audio" data-route-id="embankment-legends">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  Аудиогид
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Route 2: Vesennaya Arbat -->
+          <article class="route-card" data-route-id="vesennaya-arbat">
+            <a href="tyri2.html" class="route-card-image-wrap" aria-label="Открыть страницу гида Кемеровский Арбат">
+              <img class="route-card-img" src="assets/peshkem/stops/tour2_stop1_vesennaya_arbat.jpg" alt="Маршрут Кемеровский Арбат" loading="lazy" width="400" height="220">
+              <span class="route-card-badge">Вечерний хит</span>
+              <button type="button" class="btn-card-fav" data-route-id="vesennaya-arbat" aria-label="Добавить в избранное" title="В избранное" onclick="event.preventDefault(); event.stopPropagation();">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+              </button>
+            </a>
+            <div class="route-card-content">
+              <div class="route-card-meta-row">
+                <span class="meta-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  1.5 часа
+                </span>
+                <span class="meta-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                  2.4 км
+                </span>
+                <span class="meta-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  10 локаций
+                </span>
+              </div>
+              <h3 class="route-card-title">
+                <a href="tyri2.html">Кемеровский Арбат & Памятные места</a>
+              </h3>
+              <p class="route-card-desc">
+                Прогулка по улице Весенней: липовый бульвар, скульптура «Радужное детство», часы «В 6 часов вечера после войны», Театр драмы, бюст Леонова и Вечный огонь.
+              </p>
+              <div class="route-card-tags">
+                <span class="tag-badge">Бульвар</span>
+                <span class="tag-badge">Скульптуры</span>
+                <span class="tag-badge">Театр</span>
+                <span class="tag-badge">Романтика</span>
+              </div>
+              <div class="route-card-footer">
+                <a href="tyri2.html" class="btn-route-action btn-route-detail" data-route-id="vesennaya-arbat">
+                  <span>Открыть гид →</span>
+                </a>
+                <button type="button" class="btn-route-action btn-route-audio" data-route-id="vesennaya-arbat">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  Аудиогид
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Route 3: Krasnaya Gorka -->
+          <article class="route-card" data-route-id="krasnaya-gorka">
+            <a href="tyri3.html" class="route-card-image-wrap" aria-label="Открыть страницу гида Красная Горка">
+              <img class="route-card-img" src="assets/peshkem/stops/tour3_stop4_neizvestny_monument.jpg" alt="Маршрут Красная Горка" loading="lazy" width="400" height="220">
+              <span class="route-card-badge">Индустриальный эпос</span>
+              <button type="button" class="btn-card-fav" data-route-id="krasnaya-gorka" aria-label="Добавить в избранное" title="В избранное" onclick="event.preventDefault(); event.stopPropagation();">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+              </button>
+            </a>
+            <div class="route-card-content">
+              <div class="route-card-meta-row">
+                <span class="meta-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  2.5 часа
+                </span>
+                <span class="meta-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                  4.2 км
+                </span>
+                <span class="meta-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  4 локации
+                </span>
+              </div>
+              <h3 class="route-card-title">
+                <a href="tyri3.html">Индустриальный Кузбасс & Красная Горка</a>
+              </h3>
+              <p class="route-card-desc">
+                Колыбель угольного бассейна, Горелая гора Михайлы Волкова, голландский конструктивизм ван Лохема и грандиозный монумент Эрнста Неизвестного шахтерам.
+              </p>
+              <div class="route-card-tags">
+                <span class="tag-badge">Красная Горка</span>
+                <span class="tag-badge">Ван Лохем</span>
+                <span class="tag-badge">Эрнст Неизвестный</span>
+                <span class="tag-badge">Музей</span>
+              </div>
+              <div class="route-card-footer">
+                <a href="tyri3.html" class="btn-route-action btn-route-detail" data-route-id="krasnaya-gorka">
+                  <span>Открыть гид →</span>
+                </a>
+                <button type="button" class="btn-route-action btn-route-audio" data-route-id="krasnaya-gorka">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  Аудиогид
+                </button>
+              </div>
+            </div>
+          </article>
+            </div>
+          </article>
+
+        </div>
+
+        <div id="routes-empty-state" style="display: none; text-align: center; padding: 4rem 1rem;">
+          <p style="font-size: var(--fs-lg); font-weight: 600; margin-bottom: 0.5rem;">Маршруты не найдены</p>
+          <p style="color: var(--text-muted);">Попробуйте изменить поисковый запрос или выбрать другой фильтр.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive Map Section (Leaflet.js) -->
+    <section class="section map-section" id="map-section" aria-labelledby="map-heading">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Интерактивный навигатор</span>
+          <h2 class="section-title" id="map-heading">Карта прогулок по городу</h2>
+          <p class="section-subtitle">
+            Переключайтесь между маршрутами, нажимайте на метки для изучения остановок и запускайте аудиоэкскурсию прямо с карты.
+          </p>
+        </div>
+
+        <!-- Map Tabs -->
+        <div class="map-control-panel">
+          <div class="map-tabs-list" role="tablist" aria-label="Выбор маршрута на карте">
+            <button type="button" class="map-route-tab active" data-route-id="embankment-legends">
+              <span class="tab-dot" style="background: #10B981;"></span>
+              1. По набережной Томи (2 ч • 8 точек)
+            </button>
+            <button type="button" class="map-route-tab" data-route-id="vesennaya-arbat">
+              <span class="tab-dot" style="background: #F59E0B;"></span>
+              2. Кемеровский Арбат (1.5 ч • 10 точек)
+            </button>
+            <button type="button" class="map-route-tab" data-route-id="krasnaya-gorka">
+              <span class="tab-dot" style="background: #6366F1;"></span>
+              3. Красная Горка (2.5 ч • 4 точки)
+            </button>
+          </div>
+        </div>
+
+        <!-- Map Container -->
+        <div class="map-container-wrapper">
+          <div id="peshkem-map" aria-label="Интерактивная карта Кемерово с маршрутами"></div>
+          
+          <div class="map-floating-actions">
+            <button type="button" class="btn-map-control" id="btn-map-locate" aria-label="Определить мое местоположение" title="Где я на маршруте?">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><point cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Features Section (Преимущества сервиса) -->
+    <section class="section" id="features-section" aria-labelledby="features-heading">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Преимущества сервиса</span>
+          <h2 class="section-title" id="features-heading">Почему жители и гости выбирают ПешКем</h2>
+          <p class="section-subtitle">
+            Мы объединили исторические исследования, городскую романтику и современные веб-технологии, чтобы ваши прогулки были комфортными и познавательными.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          
+          <!-- Benefit 1 -->
+          <div class="feature-card">
+            <div class="feature-icon-wrap">
+              <!-- Replaces shit.png shield -->
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3 class="feature-title">Безопасность и комфорт</h3>
+            <p class="feature-desc">
+              Все пешеходные маршруты проверены на практике: хорошее вечернее уличное освещение, благоустроенные тротуары, отсутствие опасных переходов и доступность для всех возрастов.
+            </p>
+          </div>
+
+          <!-- Benefit 2 -->
+          <div class="feature-card">
+            <div class="feature-icon-wrap">
+              <!-- Replaces reco1.png tips -->
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+            </div>
+            <h3 class="feature-title">Полезные советы & кофейни</h3>
+            <p class="feature-desc">
+              Подскажем, где варят лучший сибирский раф с кедровым грильяжем, где расположены видовые скамейки на реку Томь и в каких точках получаются эффектные кадры для соцсетей.
+            </p>
+          </div>
+
+          <!-- Benefit 3 -->
+          <div class="feature-card">
+            <div class="feature-icon-wrap">
+              <!-- Replaces reco3.png convenience -->
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <h3 class="feature-title">Свобода в вашем темпе</h3>
+            <p class="feature-desc">
+              Начинайте маршрут с любого перекрестка, ставьте аудиогид на паузу, заходите в картинную галерею или театр и возвращайтесь к прогулке в любой другой день.
+            </p>
+          </div>
+
+          <!-- Benefit 4 -->
+          <div class="feature-card">
+            <div class="feature-icon-wrap">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            </div>
+            <h3 class="feature-title">Без скачивания приложений</h3>
+            <p class="feature-desc">
+              Никаких тяжелых установок из App Store или Google Play. Сервис работает прямо в мобильном браузере с мгновенным откликом и поддержкой работы без интернета.
+            </p>
+          </div>
+
+          <!-- Spotlight Card -->
+          <div class="feature-card feature-spotlight">
+            <div>
+              <span class="section-tag" style="background: rgba(16, 185, 129, 0.2); color: #34D399;">Сердце Кузбасса</span>
+              <h3 style="font-size: var(--fs-2xl); font-weight: 800; margin-bottom: 1rem; line-height: 1.2;">Город, в который влюбляешься на прогулке</h3>
+              <p style="color: var(--text-muted); font-size: var(--fs-base); line-height: 1.6; margin-bottom: 1.5rem;">
+                Кемерово — это не просто промышленный центр Сибири. Это широкая и могучая река Томь, запах соснового бора на набережной, уютные бульвары с теплыми фонарями и богатейшая летопись сибирского характера.
+              </p>
+              <button type="button" class="btn-cta-primary" onclick="document.getElementById('routes-section').scrollIntoView({behavior: 'smooth'})">
+                Выбрать маршрут для прогулки
+              </button>
+            </div>
+            <div class="spotlight-img-wrap">
+              <img class="spotlight-img" src="assets/peshkem/recoimg.png" alt="Памятники и набережная Кемерово" loading="lazy" width="600" height="320">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. FAQ Accordion (Compliant with Modern Web Guidance) -->
+    <section class="section" id="faq-section" aria-labelledby="faq-heading">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Вопросы и ответы</span>
+          <h2 class="section-title" id="faq-heading">Часто задаваемые вопросы</h2>
+          <p class="section-subtitle">
+            Все, что нужно знать перед тем, как надеть удобную обувь и отправиться на прогулку по городу.
+          </p>
+        </div>
+
+        <div class="faq-wrap">
+          <div class="faq-top-actions">
+            <!-- Expand all / Collapse all button with aria-expanded -->
+            <button type="button" class="btn-expand-all" id="btn-faq-toggle-all" aria-expanded="false">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 11l5 5 5-5M7 7l5 5 5-5"/></svg>
+              <span class="btn-text">Развернуть все</span>
+            </button>
+          </div>
+
+          <div class="faq-list">
+            
+            <details class="faq-item" name="faq-group">
+              <summary class="faq-summary">
+                <span>Это действительно бесплатно?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-answer">
+                Да, абсолютно все пешеходные гиды, исторические справки, интерактивная карта и голосовой аудиогид на платформе «ПешКем» бесплатны для всех жителей и гостей города без скрытых платежей и платных подписок.
+              </div>
+            </details>
+
+            <details class="faq-item" name="faq-group">
+              <summary class="faq-summary">
+                <span>Нужно ли устанавливать отдельное мобильное приложение?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-answer">
+                Нет! Сайт «ПешКем» спроектирован как прогрессивное веб-приложение (PWA). Все карты, маршруты и аудиогиды мгновенно работают прямо в вашем мобильном браузере (Safari, Chrome, Яндекс, Firefox) без лишней траты памяти телефона.
+              </div>
+            </details>
+
+            <details class="faq-item" name="faq-group">
+              <summary class="faq-summary">
+                <span>Работает ли сервис без стабильного интернета?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-answer">
+                Да. Все основные данные маршрутов и карты кэшируются на вашем устройстве при первом открытии. Даже если в пути пропадёт сигнал связи, вы сможете видеть маршрут, читать описания остановок и слушать гид.
+              </div>
+            </details>
+
+            <details class="faq-item" name="faq-group">
+              <summary class="faq-summary">
+                <span>Как работает встроенный аудиогид?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-answer">
+                В карточке любого маршрута или отдельной достопримечательности нажмите кнопку «Слушать аудиогид». Браузерный движок Web Speech озвучит авторский экскурсионный рассказ на русском языке. В нижней панели плеера можно регулировать скорость (1x, 1.25x, 1.5x), ставить на паузу и переключать точки.
+              </div>
+            </details>
+
+            <details class="faq-item" name="faq-group">
+              <summary class="faq-summary">
+                <span>Откуда лучше начинать экскурсию?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-answer">
+                У каждого маршрута есть рекомендуемая начальная точка (например, Старый цирк или начало улицы Весенней), однако вы можете стартовать с любого удобного для вас места на карте — система сама определит ваше местоположение и покажет ближайшую точку.
+              </div>
+            </details>
+
+            <details class="faq-item" name="faq-group">
+              <summary class="faq-summary">
+                <span>Подходят ли маршруты для прогулок с детьми и на велосипеде?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-answer">
+                Маршруты №1 («По набережной Томи») и №2 («Кемеровский Арбат») проходят исключительно по широким пешеходным зонам, аллеям и скверам без крутых лестниц — они идеальны для прогулок с колясками, детьми, а также для неспешной поездки на самокате или велосипеде.
+              </div>
+            </details>
+
+            <details class="faq-item" name="faq-group">
+              <summary class="faq-summary">
+                <span>Как предложить свою историю или новую локацию для гида?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-answer">
+                Мы развиваем сообщество исследователей Кемерово! Напишите нам через форму внизу сайта или в нашей группе ВКонтакте — краеведы и команда «ПешКем» проверят исторические факты и добавят новую точку с указанием вашего авторства.
+              </div>
+            </details>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Reviews & Community Section -->
+    <section class="section" id="reviews-section" aria-labelledby="reviews-heading">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Отзывы туристов и горожан</span>
+          <h2 class="section-title" id="reviews-heading">Что говорят о прогулках</h2>
+          <p class="section-subtitle">
+            Более 500 человек уже прошли по нашим маршрутам и взглянули на знакомый город по-новому.
+          </p>
+        </div>
+
+        <div class="reviews-grid">
+          
+          <div class="review-card">
+            <div class="review-card-header">
+              <div class="review-avatar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              <div>
+                <h3 class="review-author">Елена Смирнова</h3>
+                <span class="review-role">Туристка из Новосибирска</span>
+              </div>
+            </div>
+            <div class="review-stars"><svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" style="margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" style="margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" style="margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" style="margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" style="margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+            <p class="review-text">
+              Приехала в Кемерово на выходные по делам и думала, что город исключительно индустриальный. Благодаря «ПешКем» открыла для себя потрясающую европейскую архитектуру на Весенней и невероятную историю деревянного цирка! Аудиогид прямо в браузере — просто восторг!
+            </p>
+            <span class="review-date">14 мая 2026</span>
+          </div>
+
+          <div class="review-card">
+            <div class="review-card-header">
+              <div class="review-avatar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              <div>
+                <h3 class="review-author">Михаил и Анна Власовы</h3>
+                <span class="review-role">Жители Кемерово (Центральный район)</span>
+              </div>
+            </div>
+            <div class="review-stars"><svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" style="margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" style="margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" style="margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" style="margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" style="margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+            <p class="review-text">
+              Живем в Кемерове больше 15 лет и каждый день ходили мимо дома партизан Губкиных, не зная, что это самый старый дом города! Прошли с детьми весь маршрут по набережной — интерактивная карта с точками супер удобная.
+            </p>
+            <span class="review-date">28 апреля 2026</span>
+          </div>
+
+          <div class="review-card">
+            <div class="review-card-header">
+              <div class="review-avatar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              <div>
+                <h3 class="review-author">Артем Белов</h3>
+                <span class="review-role">Урбанист & фотограф</span>
+              </div>
+            </div>
+            <div class="review-stars"><svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" style="margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" style="margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" style="margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" style="margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" style="margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+            <p class="review-text">
+              Маршрут по Красной Горке и домам ван Лохема — это жемчужина! Настоящий мировой конструктивизм посреди Сибири. Спасибо ребятам за стильный дизайн и бережное отношение к истории Кузбасса.
+            </p>
+            <span class="review-date">3 мая 2026</span>
+          </div>
+
+        </div>
+
+        <div style="text-align: center;">
+          <button type="button" class="btn-cta-primary" id="btn-add-review">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            <span>Оставить свой отзыв</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 9. Modern Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-main-grid">
+        
+        <div class="footer-brand-info">
+          <a href="#" aria-label="ПешКем главная">
+            <img class="footer-logo-svg" src="assets/peshkem/logofooter.svg" alt="ПешКем логотип в подвале" width="140" height="36">
+          </a>
+          <p class="footer-brand-desc">
+            Бесплатные авторские пешеходные маршруты и аудиогиды по городу Кемерово. Открываем сибирскую историю, архитектуру и уютные парки с 2022 года.
+          </p>
+          <div class="footer-socials">
+            <a href="https://vk.com/public214129984" target="_blank" rel="noopener noreferrer" class="btn-social" aria-label="Мы ВКонтакте">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.78 17.5c-5.32 0-8.36-3.65-8.49-9.73h2.67c.09 4.46 2.06 6.35 3.61 6.74V7.77h2.52v3.85c1.54-.17 3.16-1.92 3.71-3.85h2.52a6.9 6.9 0 0 1-3.23 4.88 7.3 7.3 0 0 1 3.79 4.85h-2.77c-.82-2.56-2.88-4.54-4.53-4.7v4.7z"/></svg>
+            </a>
+            <a href="https://t.me/" target="_blank" rel="noopener noreferrer" class="btn-social" aria-label="Наш Telegram-канал">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h4>Маршруты</h4>
+          <ul class="footer-links">
+            <li><a href="#routes-section" onclick="window.PESHKEM_APP?.openRouteDetail('embankment-legends')">По набережной Томи</a></li>
+            <li><a href="#routes-section" onclick="window.PESHKEM_APP?.openRouteDetail('vesennaya-arbat')">Кемеровский Арбат</a></li>
+            <li><a href="#routes-section" onclick="window.PESHKEM_APP?.openRouteDetail('krasnaya-gorka')">Красная Горка</a></li>
+            <li><a href="#map-section">Смотреть на карте</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>О проекте</h4>
+          <ul class="footer-links">
+            <li><a href="#features-section">Преимущества</a></li>
+            <li><a href="#faq-section">Частые вопросы</a></li>
+            <li><a href="#reviews-section">Отзывы туристов</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>Создано с душой</h4>
+          <p style="font-size: var(--fs-xs); color: var(--text-muted); line-height: 1.6; margin-bottom: 0.75rem;">
+            Проект «ПешКем» задуман как культурная инициатива для популяризации сибирской истории и комфортных пеших прогулок по Кемерово.
+          </p>
+          <p style="font-size: var(--fs-xs); color: var(--text-muted);">
+            Автор концепта & дизайна: <br>
+            <strong style="color: var(--text-main);">Александр Сергеевич Яровенко</strong>
+          </p>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom-bar">
+        <span>© 2022–2026 «ПешКем» • Пешеходные гиды по Кемерово</span>
+        <span>Разработано по стандартам современного UX/UI & Web APIs</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 10. Floating Sticky Audio Guide Dock -->
+  <aside id="peshkem-audio-dock" aria-label="Плеер аудиогида">
+    <div class="audio-progress-track">
+      <div class="audio-progress-bar"></div>
+    </div>
+    <div class="audio-dock-container">
+      
+      <div class="audio-dock-meta">
+        <div class="audio-waveform" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <div class="audio-dock-text">
+          <div class="audio-dock-route-title">Маршрут</div>
+          <div class="audio-dock-stop-title">Точка экскурсии</div>
+        </div>
+      </div>
+
+      <div class="audio-dock-controls">
+        <button type="button" class="btn-audio-ctrl btn-audio-prev" aria-label="Предыдущая остановка" title="Предыдущая точка">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+        </button>
+
+        <button type="button" class="btn-audio-ctrl btn-audio-playpause" aria-label="Воспроизвести / Пауза">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </button>
+
+        <button type="button" class="btn-audio-ctrl btn-audio-next" aria-label="Следующая остановка" title="Следующая точка">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+        </button>
+
+        <button type="button" class="btn-audio-rate" aria-label="Скорость озвучки" title="Изменить скорость">1.0x</button>
+
+        <button type="button" class="btn-audio-ctrl btn-audio-close" aria-label="Закрыть аудиогид" title="Закрыть">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- 11. Modals (Native <dialog> elements) -->
+
+  <!-- Modal: Route Detail Passport -->
+  <dialog id="dialog-route-detail" aria-labelledby="modal-route-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div>
+          <span class="modal-route-badge tag-badge" style="margin-bottom: 0.25rem;">Категория</span>
+          <h3 class="modal-route-title" id="modal-route-title" style="font-size: var(--fs-xl); font-weight: 700;">Название маршрута</h3>
+        </div>
+        <button type="button" class="btn-modal-close" aria-label="Закрыть окно">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-route-desc" style="font-size: var(--fs-sm); color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem;"></p>
+        
+        <!-- Metrics Row -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; background: var(--bg-card); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); margin-bottom: 1.5rem; text-align: center;">
+          <div>
+            <span style="font-size: 11px; color: var(--text-muted);">Время</span>
+            <p class="param-time" style="font-weight: 700; font-size: var(--fs-sm);"></p>
+          </div>
+          <div>
+            <span style="font-size: 11px; color: var(--text-muted);">Дистанция</span>
+            <p class="param-dist" style="font-weight: 700; font-size: var(--fs-sm);"></p>
+          </div>
+          <div>
+            <span style="font-size: 11px; color: var(--text-muted);">Остановки</span>
+            <p class="param-stops" style="font-weight: 700; font-size: var(--fs-sm);"></p>
+          </div>
+          <div>
+            <span style="font-size: 11px; color: var(--text-muted);">Сложность</span>
+            <p class="param-diff" style="font-weight: 700; font-size: var(--fs-sm);"></p>
+          </div>
+        </div>
+
+        <h4 style="font-size: var(--fs-base); font-weight: 700; margin-bottom: 1rem;">Программа и остановки маршрута:</h4>
+        <div class="modal-stops-timeline"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-route-action btn-route-detail btn-modal-share">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Поделиться
+        </button>
+        <button type="button" class="btn-route-action btn-route-audio btn-modal-listen-all">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Включить аудиогид
+        </button>
+        <button type="button" class="btn-cta-primary btn-modal-start-walk">
+          Начать прогулку
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Modal: Walk Mode Checklist -->
+  <dialog id="dialog-walk-mode" aria-labelledby="walk-mode-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div>
+          <span style="font-size: 11px; color: var(--color-primary); font-weight: 700; text-transform: uppercase;">Режим прогулки в реальном времени</span>
+          <h3 class="walk-route-title" id="walk-mode-title" style="font-size: var(--fs-lg); font-weight: 700;">Название</h3>
+        </div>
+        <button type="button" class="btn-modal-close" aria-label="Закрыть режим прогулки">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; font-size: var(--fs-xs); margin-bottom: 0.35rem;">
+            <span class="walk-progress-text">Прогресс маршрута</span>
+            <span style="color: var(--color-primary); font-weight: 700;">Отмечайте посещенные места</span>
+          </div>
+          <div style="height: 6px; background: var(--bg-card); border-radius: var(--radius-full); overflow: hidden; border: 1px solid var(--border-subtle);">
+            <div class="walk-progress-fill" style="height: 100%; width: 0%; background: var(--color-primary); transition: width 0.3s ease;"></div>
+          </div>
+        </div>
+
+        <div class="walk-stops-checklist"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cta-primary btn-modal-close">
+          Продолжить на карте
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+
+  <!-- Modal: Add Review -->
+  <dialog id="dialog-review" aria-labelledby="review-modal-title">
+    <div class="modal-box" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 id="review-modal-title" style="font-size: var(--fs-base); font-weight: 700;">Поделиться впечатлением о прогулке</h3>
+        <button type="button" class="btn-modal-close" aria-label="Закрыть окно">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="form-add-review">
+        <div class="modal-body" style="display: flex; flex-direction: column; gap: 1rem;">
+          <div>
+            <label for="review-author" style="display: block; font-size: var(--fs-xs); color: var(--text-muted); margin-bottom: 0.35rem;">Ваше имя</label>
+            <input type="text" id="review-author" required placeholder="Мария" style="width: 100%; padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); background: var(--bg-card); border: 1px solid var(--border-medium); color: var(--text-main);">
+          </div>
+          <div>
+            <label for="review-route" style="display: block; font-size: var(--fs-xs); color: var(--text-muted); margin-bottom: 0.35rem;">Какой маршрут вы проходили?</label>
+            <select id="review-route" style="width: 100%; padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); background: var(--bg-card); border: 1px solid var(--border-medium); color: var(--text-main);">
+              <option value="embankment-legends">По набережной Томи и городским легендам</option>
+              <option value="vesennaya-arbat">Кемеровский Арбат & Памятные места</option>
+              <option value="krasnaya-gorka">Индустриальный Кузбасс & Красная Горка</option>
+            </select>
+          </div>
+          <div>
+            <label for="review-text" style="display: block; font-size: var(--fs-xs); color: var(--text-muted); margin-bottom: 0.35rem;">Ваш отзыв</label>
+            <textarea id="review-text" rows="4" required placeholder="Что больше всего запомнилось? Удобен ли был аудиогид? Какие интересные детали заметили?" style="width: 100%; padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); background: var(--bg-card); border: 1px solid var(--border-medium); color: var(--text-main); font-family: inherit; font-size: var(--fs-sm);"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn-cta-primary">
+            Опубликовать отзыв
+          </button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- JavaScript Modules -->
+  <script src="assets/peshkem/vendor/leaflet/leaflet.js"></script>
+  <script src="scripts/peshkem-data.js"></script>
+  <script src="scripts/peshkem-map.js"></script>
+  <script src="scripts/peshkem-audio.js"></script>
+  <script src="scripts/peshkem-app.js"></script>
+</body>
+</html>

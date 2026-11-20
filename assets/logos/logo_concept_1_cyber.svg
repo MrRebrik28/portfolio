@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Concept 1: Cyber-Chamfer Monogram -->
+  <!-- Right Pillar with 45° chamfer -->
+  <path d="M64 16h14l6 6v62H64V16z" fill="#B3F77D"/>
+  <!-- Upper Bowl with 45° chamfer & inner cut -->
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M30 16h28v32H18V28l12-12zm-2 12l4-4h18v16H28V28z" fill="#B3F77D"/>
+  <!-- Diagonal Dynamic Leg -->
+  <path d="M46 54h12L32 84H18l28-30z" fill="#B3F77D"/>
+</svg>

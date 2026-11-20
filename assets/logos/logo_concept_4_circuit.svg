@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Concept 4: Circuit Kinetic / Dual Track -->
+  <!-- Subtle Radar Circle -->
+  <circle cx="50" cy="50" r="42" stroke="rgba(179,247,125,0.08)" stroke-dasharray="2 4"/>
+  <!-- Right Stem Track -->
+  <path d="M72 16v68" stroke="#B3F77D" stroke-width="7" stroke-linecap="round"/>
+  <!-- Flowing Outer Track -->
+  <path d="M72 20H42a16 16 0 0 0 0 32h14L24 84" stroke="#B3F77D" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Inner Circuit Echo Track -->
+  <path d="M72 28H44a8 8 0 0 0 0 16h6L34 76" stroke="rgba(179,247,125,0.4)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Terminal Circuit Nodes -->
+  <circle cx="72" cy="16" r="4" fill="#0B0E14" stroke="#B3F77D" stroke-width="2.5"/>
+  <circle cx="72" cy="84" r="4" fill="#0B0E14" stroke="#B3F77D" stroke-width="2.5"/>
+  <circle cx="24" cy="84" r="4" fill="#0B0E14" stroke="#B3F77D" stroke-width="2.5"/>
+</svg>
