@@ -86,8 +86,8 @@
     loadVoices() {
       if (!this.synth) return;
       this.voices = this.synth.getVoices();
-      // Look for Russian voice
-      this.selectedVoice = this.voices.find(v => v.lang.startsWith('ru') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Yuri') || v.name.includes('Pavel')))
+      // Look for Russian voice, prefer male narrators
+      this.selectedVoice = this.voices.find(v => v.lang.startsWith('ru') && (v.name.includes('Nikita') || v.name.includes('Dmitry') || v.name.includes('Yuri') || v.name.includes('Pavel') || v.name.includes('Natural') || v.name.includes('Google')))
         || this.voices.find(v => v.lang.startsWith('ru'))
         || null;
     }
@@ -164,7 +164,7 @@
         this.dockElement.classList.add('active');
         document.body.classList.add('has-audio-dock');
         if (this.titleEl) this.titleEl.textContent = route.title;
-        if (this.stopEl) this.stopEl.textContent = `Точка ${stop.order} из ${route.stops.length}: ${stop.title}`;
+        if (this.stopEl) this.stopEl.textContent = `Точка ${stop.order} из ${route.stops.length}: ${stop.title} • Диктор: Никита Калинин`;
         if (this.playPauseBtn) {
           this.playPauseBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
           this.playPauseBtn.setAttribute('aria-label', 'Пауза');
@@ -187,7 +187,7 @@
             this.isPaused = false;
             window.PeshkemMap?.focusStop(route.id, stop.id);
             if (announceToast) {
-              window.PESHKEM_APP?.showToast(`Слушаем (MP3): ${stop.title}`, 'info');
+              window.PESHKEM_APP?.showToast(`Слушаем: ${stop.title} (диктор: Никита Калинин)`, 'info');
             }
           })
           .catch((err) => {
@@ -212,7 +212,7 @@
 
       this.currentUtterance = new SpeechSynthesisUtterance(textToRead);
       this.currentUtterance.rate = this.playbackRate;
-      this.currentUtterance.pitch = 1.0;
+      this.currentUtterance.pitch = 0.95; // Adult baritone register for Nikita Kalinin narration
       if (this.selectedVoice) {
         this.currentUtterance.voice = this.selectedVoice;
       }
