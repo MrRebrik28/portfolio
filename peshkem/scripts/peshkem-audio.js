@@ -54,6 +54,30 @@
         this.onStopPlaybackEnded();
       });
 
+      this.audioElement.addEventListener('play', () => {
+        if (!this.isMp3Mode) return;
+        this.isPlaying = true;
+        this.isPaused = false;
+        this.waveformEl?.classList.add('playing');
+        if (this.playPauseBtn) {
+          this.playPauseBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
+          this.playPauseBtn.setAttribute('aria-label', 'Пауза');
+        }
+      });
+
+      this.audioElement.addEventListener('pause', () => {
+        if (!this.isMp3Mode) return;
+        if (!this.audioElement.ended) {
+          this.isPlaying = false;
+          this.isPaused = true;
+          this.waveformEl?.classList.remove('playing');
+          if (this.playPauseBtn) {
+            this.playPauseBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+            this.playPauseBtn.setAttribute('aria-label', 'Воспроизвести');
+          }
+        }
+      });
+
       this.audioElement.addEventListener('error', () => {
         if (this.isMp3Mode) {
           console.warn('MP3 playback failed, falling back to Web Speech Synthesis');
@@ -172,30 +196,35 @@
         this.waveformEl?.classList.add('playing');
       }
 
-      // Check for pre-rendered MP3 file
-      if (stop.audio) {
-        this.isMp3Mode = true;
-        this.audioElement.src = stop.audio;
-        this.audioElement.playbackRate = this.playbackRate;
+      // Exact MP3 file URL (pre-rendered high quality audio file)
+      const mp3Url = stop.audio || `assets/peshkem/audio/${stop.id}.mp3`;
+      
+      this.isMp3Mode = true;
+      if (!this.audioElement) {
+        this.audioElement = new Audio();
+        this.setupAudioElement();
+      }
+      this.audioElement.src = mp3Url;
+      this.audioElement.playbackRate = this.playbackRate;
 
-        this.audioElement.play()
+      // Mobile friendly: play() called synchronously in user click gesture
+      const playPromise = this.audioElement.play();
+      if (playPromise !== undefined) {
+        playPromise
           .then(() => {
             this.isPlaying = true;
             this.isPaused = false;
+            this.waveformEl?.classList.add('playing');
             window.PeshkemMap?.focusStop(route.id, stop.id);
             if (announceToast) {
               window.PESHKEM_APP?.showToast(`Слушаем: ${stop.title} (диктор: Никита Калинин)`, 'info');
             }
           })
           .catch((err) => {
-            console.info('Audio element playback error, falling back to Web Speech Synthesis:', err);
+            console.warn('Audio element play failed, falling back to Web Speech Synthesis:', err);
             this.isMp3Mode = false;
             this.speakViaSynth(stop, announceToast);
           });
-      } else {
-        // Direct synchronous speech synthesis: guaranteed to start on mobile touches
-        this.isMp3Mode = false;
-        this.speakViaSynth(stop, announceToast);
       }
     }
 
