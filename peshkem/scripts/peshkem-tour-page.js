@@ -142,12 +142,12 @@
       if (!this.map) return;
       if (this.tileLayer) this.map.removeLayer(this.tileLayer);
 
-      const url = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+      // OpenStreetMap standard tile URL (100% free, reliable, no API key required)
+      const url = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 
       this.tileLayer = L.tileLayer(url, {
-        subdomains: 'abcd',
         maxZoom: 19,
-        attribution: '&copy; OpenStreetMap &copy; CARTO'
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(this.map);
     }
 

@@ -807,6 +807,8 @@ textarea,
 
 .map-container-wrapper {
   position: relative;
+  z-index: 1;
+  isolation: isolate;
   height: clamp(480px, 65vh, 680px);
   border-radius: var(--radius-xl);
   overflow: hidden;
@@ -1870,17 +1872,21 @@ dialog[open] .modal-box {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
-  background: var(--bg-glass);
-  backdrop-filter: var(--backdrop-filter);
-  -webkit-backdrop-filter: var(--backdrop-filter);
+  z-index: 1200;
+  background: #FFFFFF !important;
   border-bottom: 1px solid var(--border-subtle);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
 .tour-page-header-row {
   padding-block: 0.75rem;
+  background: #FFFFFF;
   border-bottom: 1px solid var(--border-subtle);
+}
+
+.tour-quick-nav {
+  padding-block: 0.55rem;
+  background: #FFFFFF;
 }
 
 .tour-header-container {
@@ -2336,6 +2342,105 @@ dialog[open] .modal-box {
 @media (max-width: 768px) {
   .tour-pagination-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* 1. Hide breadcrumbs on mobile to prevent vertical stacking */
+  .tour-breadcrumbs {
+    display: none !important;
+  }
+
+  .tour-header-container {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .tour-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .tour-progress-stat-pill {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
+  }
+
+  /* 2. Stop Card Mobile Layout - No overflow, tight boundaries */
+  .tour-stop-card {
+    grid-template-columns: 1fr;
+    padding: 1.15rem 0.95rem !important;
+    gap: 1.25rem;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .tour-stop-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  .stop-number-wrap {
+    width: 100%;
+    gap: 0.65rem;
+  }
+
+  .stop-big-badge {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .stop-title-text {
+    font-size: 1.2rem !important;
+    line-height: 1.25;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .stop-checkbox-wrap {
+    align-self: flex-start;
+  }
+
+  .stop-narrative-text p {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .stop-tip-box {
+    padding: 0.75rem 0.85rem;
+    font-size: 0.82rem;
+    margin-bottom: 1.25rem;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .stop-actions-bar {
+    gap: 0.45rem;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .btn-stop-audio,
+  .btn-stop-map,
+  .btn-stop-nav {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .tour-hero-cover-img {
+    max-height: 250px;
+    width: 100%;
+    object-fit: cover;
   }
 }
 

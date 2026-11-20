@@ -17,10 +17,10 @@
       this.userMarker = null;
       this.watchId = null;
 
-      // CartoDB tile URLs (Clean Light Map)
-      this.tileUrl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
-      this.subdomains = 'abcd';
-      this.attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+      // OpenStreetMap standard tile URL (100% free, reliable, no API key required)
+      this.tileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+      this.subdomains = 'abc';
+      this.attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
     }
 
     init(containerId = 'peshkem-map') {

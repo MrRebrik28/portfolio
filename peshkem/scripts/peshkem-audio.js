@@ -172,13 +172,10 @@
         this.waveformEl?.classList.add('playing');
       }
 
-      // Check for pre-rendered MP3 file (from FreeTTS Audio Agent)
-      const mp3Url = stop.audio || `assets/peshkem/audio/${stop.id}.mp3`;
-      
-      // Try playing MP3 first
-      if (this.audioElement) {
+      // Check for pre-rendered MP3 file
+      if (stop.audio) {
         this.isMp3Mode = true;
-        this.audioElement.src = mp3Url;
+        this.audioElement.src = stop.audio;
         this.audioElement.playbackRate = this.playbackRate;
 
         this.audioElement.play()
@@ -191,12 +188,13 @@
             }
           })
           .catch((err) => {
-            // File not found or autoplay policy, fallback to Web Speech Synthesis
-            console.info('Pre-recorded audio not found, using Web Speech Synthesis fallback.');
+            console.info('Audio element playback error, falling back to Web Speech Synthesis:', err);
             this.isMp3Mode = false;
             this.speakViaSynth(stop, announceToast);
           });
       } else {
+        // Direct synchronous speech synthesis: guaranteed to start on mobile touches
+        this.isMp3Mode = false;
         this.speakViaSynth(stop, announceToast);
       }
     }
@@ -207,12 +205,25 @@
         return;
       }
 
+      // Android Chrome & Safari mobile audio unlock
+      try {
+        this.synth.cancel();
+        if (this.synth.paused) {
+          this.synth.resume();
+        }
+      } catch (e) {}
+
       const textToRead = stop.audioText || stop.fullText;
       this.estimatedDuration = Math.max(10, Math.round(textToRead.length / (15 * this.playbackRate)));
 
       this.currentUtterance = new SpeechSynthesisUtterance(textToRead);
       this.currentUtterance.rate = this.playbackRate;
       this.currentUtterance.pitch = 0.95; // Adult baritone register for Nikita Kalinin narration
+      this.currentUtterance.lang = 'ru-RU';
+
+      if (!this.selectedVoice) {
+        this.loadVoices();
+      }
       if (this.selectedVoice) {
         this.currentUtterance.voice = this.selectedVoice;
       }
@@ -221,6 +232,16 @@
       this.isPlaying = true;
       this.isPaused = false;
       this.startProgress();
+
+      this.currentUtterance.onstart = () => {
+        this.isPlaying = true;
+        this.isPaused = false;
+        this.waveformEl?.classList.add('playing');
+        if (this.playPauseBtn) {
+          this.playPauseBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
+          this.playPauseBtn.setAttribute('aria-label', 'Пауза');
+        }
+      };
 
       this.currentUtterance.onend = () => {
         this.onStopPlaybackEnded();
@@ -232,13 +253,32 @@
         this.isPaused = false;
         this.stopProgress();
         this.waveformEl?.classList.remove('playing');
+        if (this.playPauseBtn) {
+          this.playPauseBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+          this.playPauseBtn.setAttribute('aria-label', 'Воспроизвести');
+        }
       };
 
-      this.synth.speak(this.currentUtterance);
+      try {
+        this.synth.speak(this.currentUtterance);
+        // Keep-alive for Chromium engines on long stories
+        if (this.synthResumeInterval) clearInterval(this.synthResumeInterval);
+        this.synthResumeInterval = setInterval(() => {
+          if (this.isPlaying && !this.isPaused && this.synth.speaking) {
+            this.synth.pause();
+            this.synth.resume();
+          } else {
+            clearInterval(this.synthResumeInterval);
+          }
+        }, 12000);
+      } catch (err) {
+        console.error('Speech speak failed:', err);
+      }
+
       window.PeshkemMap?.focusStop(this.currentRoute.id, stop.id);
 
       if (announceToast) {
-        window.PESHKEM_APP?.showToast(`Слушаем: ${stop.title}`, 'info');
+        window.PESHKEM_APP?.showToast(`Слушаем: ${stop.title} (диктор: Никита Калинин)`, 'info');
       }
     }
 
@@ -311,6 +351,10 @@
       }
       if (this.synth) {
         this.synth.cancel();
+      }
+      if (this.synthResumeInterval) {
+        clearInterval(this.synthResumeInterval);
+        this.synthResumeInterval = null;
       }
       this.isPlaying = false;
       this.isPaused = false;
