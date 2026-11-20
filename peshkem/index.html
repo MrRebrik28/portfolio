@@ -52,7 +52,6 @@
           <li><a href="#routes-section">Маршруты</a></li>
           <li><a href="#map-section">Интерактивная карта</a></li>
           <li><a href="#features-section">О сервисе</a></li>
-          <li><a href="#faq-section">FAQ</a></li>
           <li><a href="#reviews-section">Отзывы</a></li>
         </ul>
       </nav>
@@ -96,7 +95,6 @@
         <li><a href="#routes-section">Маршруты</a></li>
         <li><a href="#map-section">Интерактивная карта</a></li>
         <li><a href="#features-section">О сервисе</a></li>
-        <li><a href="#faq-section">FAQ</a></li>
         <li><a href="#reviews-section">Отзывы</a></li>
       </ul>
     </div>
@@ -424,101 +422,6 @@
     </section>
 
     <!-- 6. FAQ Accordion (Compliant with Modern Web Guidance) -->
-    <section class="section" id="faq-section" aria-labelledby="faq-heading">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">Вопросы и ответы</span>
-          <h2 class="section-title" id="faq-heading">Часто задаваемые вопросы</h2>
-          <p class="section-subtitle">
-            Все, что нужно знать перед тем, как надеть удобную обувь и отправиться на прогулку по городу.
-          </p>
-        </div>
-
-        <div class="faq-wrap">
-          <div class="faq-top-actions">
-            <!-- Expand all / Collapse all button with aria-expanded -->
-            <button type="button" class="btn-expand-all" id="btn-faq-toggle-all" aria-expanded="false">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 11l5 5 5-5M7 7l5 5 5-5"/></svg>
-              <span class="btn-text">Развернуть все</span>
-            </button>
-          </div>
-
-          <div class="faq-list">
-            
-            <details class="faq-item" name="faq-group">
-              <summary class="faq-summary">
-                <span>Это действительно бесплатно?</span>
-                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-              </summary>
-              <div class="faq-answer">
-                Да, абсолютно все пешеходные гиды, исторические справки, интерактивная карта и голосовой аудиогид на платформе «ПешКем» бесплатны для всех жителей и гостей города без скрытых платежей и платных подписок.
-              </div>
-            </details>
-
-            <details class="faq-item" name="faq-group">
-              <summary class="faq-summary">
-                <span>Нужно ли устанавливать отдельное мобильное приложение?</span>
-                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-              </summary>
-              <div class="faq-answer">
-                Нет! Сайт «ПешКем» спроектирован как прогрессивное веб-приложение (PWA). Все карты, маршруты и аудиогиды мгновенно работают прямо в вашем мобильном браузере (Safari, Chrome, Яндекс, Firefox) без лишней траты памяти телефона.
-              </div>
-            </details>
-
-            <details class="faq-item" name="faq-group">
-              <summary class="faq-summary">
-                <span>Работает ли сервис без стабильного интернета?</span>
-                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-              </summary>
-              <div class="faq-answer">
-                Да. Все основные данные маршрутов и карты кэшируются на вашем устройстве при первом открытии. Даже если в пути пропадёт сигнал связи, вы сможете видеть маршрут, читать описания остановок и слушать гид.
-              </div>
-            </details>
-
-            <details class="faq-item" name="faq-group">
-              <summary class="faq-summary">
-                <span>Как работает встроенный аудиогид?</span>
-                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-              </summary>
-              <div class="faq-answer">
-                В карточке любого маршрута или отдельной достопримечательности нажмите кнопку «Слушать аудиогид». Браузерный движок Web Speech озвучит авторский экскурсионный рассказ на русском языке. В нижней панели плеера можно регулировать скорость (1x, 1.25x, 1.5x), ставить на паузу и переключать точки.
-              </div>
-            </details>
-
-            <details class="faq-item" name="faq-group">
-              <summary class="faq-summary">
-                <span>Откуда лучше начинать экскурсию?</span>
-                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-              </summary>
-              <div class="faq-answer">
-                У каждого маршрута есть рекомендуемая начальная точка (например, Старый цирк или начало улицы Весенней), однако вы можете стартовать с любого удобного для вас места на карте — система сама определит ваше местоположение и покажет ближайшую точку.
-              </div>
-            </details>
-
-            <details class="faq-item" name="faq-group">
-              <summary class="faq-summary">
-                <span>Подходят ли маршруты для прогулок с детьми и на велосипеде?</span>
-                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-              </summary>
-              <div class="faq-answer">
-                Маршруты №1 («По набережной Томи») и №2 («Кемеровский Арбат») проходят исключительно по широким пешеходным зонам, аллеям и скверам без крутых лестниц — они идеальны для прогулок с колясками, детьми, а также для неспешной поездки на самокате или велосипеде.
-              </div>
-            </details>
-
-            <details class="faq-item" name="faq-group">
-              <summary class="faq-summary">
-                <span>Как предложить свою историю или новую локацию для гида?</span>
-                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-              </summary>
-              <div class="faq-answer">
-                Мы развиваем сообщество исследователей Кемерово! Напишите нам через форму внизу сайта или в нашей группе ВКонтакте — краеведы и команда «ПешКем» проверят исторические факты и добавят новую точку с указанием вашего авторства.
-              </div>
-            </details>
-
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- 8. Reviews & Community Section -->
     <section class="section" id="reviews-section" aria-labelledby="reviews-heading">
@@ -627,7 +530,6 @@
           <h4>О проекте</h4>
           <ul class="footer-links">
             <li><a href="#features-section">Преимущества</a></li>
-            <li><a href="#faq-section">Частые вопросы</a></li>
             <li><a href="#reviews-section">Отзывы туристов</a></li>
           </ul>
         </div>
