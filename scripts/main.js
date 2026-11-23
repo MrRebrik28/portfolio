@@ -412,11 +412,6 @@ function openProjectModal(id) {
   heroImg.src = item.image;
   heroImg.alt = item.title;
 
-  document.getElementById('modal-client').textContent = item.formatLabel || item.client || 'Авторский концепт';
-  document.getElementById('modal-role').textContent = item.role;
-  document.getElementById('modal-year').textContent = item.year;
-  document.getElementById('modal-tools').textContent = item.tags.slice(0, 3).join(', ');
-
   document.getElementById('modal-tagline').textContent = item.tagline;
   document.getElementById('modal-desc').textContent = item.description;
 
