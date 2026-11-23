@@ -157,17 +157,39 @@
       }
 
       // "Слушать весь маршрут" button in Hero
-      document.getElementById('btn-hero-listen-tour')?.addEventListener('click', () => {
-        window.PeshkemAudio?.startRoute(this.route.id, 0);
+      document.getElementById('btn-hero-listen-tour')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const pa = window.PeshkemAudio;
+        if (pa && pa.currentRoute?.id === this.route.id) {
+          if (pa.isPlaying) {
+            pa.pause();
+            return;
+          } else if (pa.isPaused) {
+            pa.resume();
+            return;
+          }
+        }
+        pa?.startRoute(this.route.id, 0);
       });
     }
 
     bindStopActions() {
-      // Individual Stop Listen Buttons
+      // Individual Stop Listen Buttons (toggle play/pause for active stop)
       document.querySelectorAll('.btn-stop-audio').forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
           const idx = parseInt(btn.getAttribute('data-index'), 10);
-          window.PeshkemAudio?.playStop(this.route.id, idx);
+          const pa = window.PeshkemAudio;
+          if (pa && pa.currentRoute?.id === this.route.id && pa.currentStopIndex === idx) {
+            if (pa.isPlaying) {
+              pa.pause();
+              return;
+            } else if (pa.isPaused) {
+              pa.resume();
+              return;
+            }
+          }
+          pa?.playStop(this.route.id, idx);
         });
       });
 

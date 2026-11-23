@@ -63,6 +63,7 @@
           this.playPauseBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
           this.playPauseBtn.setAttribute('aria-label', 'Пауза');
         }
+        this.updateCardButtons();
       });
 
       this.audioElement.addEventListener('pause', () => {
@@ -75,6 +76,7 @@
             this.playPauseBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
             this.playPauseBtn.setAttribute('aria-label', 'Воспроизвести');
           }
+          this.updateCardButtons();
         }
       });
 
@@ -88,8 +90,10 @@
     }
 
     init() {
+      if (this.isInitialized) return;
       this.dockElement = document.getElementById('peshkem-audio-dock');
       if (!this.dockElement) return;
+      this.isInitialized = true;
 
       this.progressBar = this.dockElement.querySelector('.audio-progress-bar');
       this.playPauseBtn = this.dockElement.querySelector('.btn-audio-playpause');
@@ -211,6 +215,10 @@
       this.audioElement.src = mp3Url;
       this.audioElement.playbackRate = this.playbackRate;
 
+      this.isPlaying = true;
+      this.isPaused = false;
+      this.updateCardButtons();
+
       // Mobile friendly: play() called synchronously in user click gesture
       const playPromise = this.audioElement.play();
       if (playPromise !== undefined) {
@@ -219,6 +227,7 @@
             this.isPlaying = true;
             this.isPaused = false;
             this.waveformEl?.classList.add('playing');
+            this.updateCardButtons();
             window.PeshkemMap?.focusStop(route.id, stop.id);
             if (announceToast) {
               window.PESHKEM_APP?.showToast(`Слушаем: ${stop.title} (диктор: Никита Калинин)`, 'info');
@@ -340,42 +349,79 @@
       }
     }
 
+    updateCardButtons() {
+      document.querySelectorAll('.btn-stop-audio').forEach(btn => {
+        const idx = parseInt(btn.getAttribute('data-index'), 10);
+        const isActive = this.currentRoute && this.currentStopIndex === idx;
+
+        if (isActive && this.isPlaying) {
+          btn.classList.add('playing');
+          btn.classList.remove('paused');
+          btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg><span>Пауза</span>`;
+        } else if (isActive && this.isPaused) {
+          btn.classList.remove('playing');
+          btn.classList.add('paused');
+          btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>Продолжить</span>`;
+        } else {
+          btn.classList.remove('playing', 'paused');
+          btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>Слушать аудиогид</span>`;
+        }
+      });
+
+      const heroListenBtn = document.getElementById('btn-hero-listen-tour');
+      if (heroListenBtn) {
+        if (this.isPlaying) {
+          heroListenBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right:6px;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>Пауза аудиогида`;
+        } else if (this.isPaused) {
+          heroListenBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right:6px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>Продолжить слушать`;
+        } else {
+          heroListenBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right:6px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>Слушать весь аудиогид`;
+        }
+      }
+    }
+
     pause() {
-      if (this.isMp3Mode && this.audioElement && this.isPlaying) {
-        this.audioElement.pause();
-        this.isPlaying = false;
-        this.isPaused = true;
+      if (this.isMp3Mode && this.audioElement && !this.audioElement.paused) {
+        try {
+          this.audioElement.pause();
+        } catch (e) {}
       } else if (this.synth && this.isPlaying) {
-        this.synth.pause();
-        this.isPlaying = false;
-        this.isPaused = true;
+        try {
+          this.synth.pause();
+        } catch (e) {}
         clearInterval(this.progressInterval);
       }
 
+      this.isPlaying = false;
+      this.isPaused = true;
       this.waveformEl?.classList.remove('playing');
       if (this.playPauseBtn) {
         this.playPauseBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
         this.playPauseBtn.setAttribute('aria-label', 'Продолжить');
       }
+      this.updateCardButtons();
     }
 
     resume() {
-      if (this.isMp3Mode && this.audioElement && this.isPaused) {
-        this.audioElement.play();
-        this.isPlaying = true;
-        this.isPaused = false;
+      if (this.isMp3Mode && this.audioElement && this.audioElement.paused) {
+        try {
+          this.audioElement.play().catch(() => {});
+        } catch (e) {}
       } else if (this.synth && this.isPaused) {
-        this.synth.resume();
-        this.isPlaying = true;
-        this.isPaused = false;
+        try {
+          this.synth.resume();
+        } catch (e) {}
         this.startProgress();
       }
 
+      this.isPlaying = true;
+      this.isPaused = false;
       this.waveformEl?.classList.add('playing');
       if (this.playPauseBtn) {
         this.playPauseBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
         this.playPauseBtn.setAttribute('aria-label', 'Пауза');
       }
+      this.updateCardButtons();
     }
 
     stop() {
@@ -403,6 +449,7 @@
         this.playPauseBtn.setAttribute('aria-label', 'Воспроизвести');
       }
       if (this.progressBar) this.progressBar.style.width = '0%';
+      this.updateCardButtons();
     }
 
     nextStop() {
