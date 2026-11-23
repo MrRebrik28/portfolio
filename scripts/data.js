@@ -6,6 +6,36 @@
 
 const portfolioData = [
   {
+    id: "aetherray",
+    title: "AetherRay",
+    tagline: "3D Architectural Acoustic Simulator // Интерактивный симулятор пространственной акустики и трассировки звуковых лучей",
+    category: "ui-ux",
+    categoryLabel: "3D & Web App",
+    projectType: "Живой продакшен",
+    formatLabel: "Интерактивный 3D WebApp // WebAssembly & Web Audio DSP",
+    isLive: true,
+    liveUrl: "https://mrrebrik28.github.io/portfolio/aetherray/",
+    githubUrl: "https://github.com/MrRebrik28/portfolio/tree/main/aetherray",
+    image: "assets/projects/aetherray_cover.jpg",
+    gallery: [
+      "assets/projects/aetherray_cover.jpg"
+    ],
+    galleryCaptions: [
+      "Интерфейс AetherRay: интерактивная 3D-сцена с архитектурными стеклянными и бетонными перегородками, трассировкой звуковых лучей (Ray Tracing) и панелью инженерной телеметрии DSP"
+    ],
+    tags: ["Live Web", "Three.js (WebGL)", "WebAssembly (WASM)", "Web Audio API", "AudioWorklet", "Spatial Audio 3D", "Ray Tracing"],
+    year: "2026",
+    client: "Собственный исследовательский 3D/AudioTech продукт",
+    role: "UX/UI Дизайнер, 3D/WASM & DSP Архитектор",
+    description: "Высокотехнологичный интерактивный симулятор архитектурной акустики реального времени, работающий прямо в браузере. Объединяет трехмерный вьюпорт на Three.js, физический движок трассировки звуковых лучей на WebAssembly (WASM), бинауральную пространственную обработку звука в AudioWorklet (HRTF, ITD/ILD задержки) и полноценный инженерный дашборд с расчетом RT60, импульсной характеристики (IR) и спектральной окклюзии материалов.",
+    designHighlights: [
+      "Кибернетический стеклянный UI в концепции Glassmorphism с глубоким темным фоном (--bg-space: #07090e) и неоновыми акцентами Cyan (#00e5ff) и Emerald (#00e676).",
+      "Интерактивная 3D-манипуляция сценой: свободное перемещение источника звука (Source), слушателя (Listener) и добавление динамических стен с физическими материалами (бетон, дерево, стекло, поролон).",
+      "Инженерная панель телеметрии реального времени: замер времени рендера DSP (бюджет < 2.66 ms на 128 сэмплов), тик физики воркера (40 Hz), расчет времени реверберации RT60, графика импульсной характеристики (IR Canvas) и раздельное прослушивание акустических слоев.",
+      "Архитектура на передовых веб-стандартах: Coi-ServiceWorker для Cross-Origin Isolation, SharedArrayBuffer для нулевых задержек между потоками физики и аудио-рендерера."
+    ]
+  },
+  {
     id: "peshkem",
     title: "ПешКем",
     tagline: "Интерактивные пешеходные гиды и аудиоэкскурсии по Кемерово // Веб-сервис и аудиогид",

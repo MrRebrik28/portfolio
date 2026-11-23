@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>AetherRay — Пространственная акустика</title>
+    <script src="coi-serviceworker.js"></script>
+    <style>
+      :root {
+        --bg-space: #07090e;
+        --glass-bg: rgba(13, 18, 27, 0.82);
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --glass-hover: rgba(255, 255, 255, 0.14);
+        --accent-cyan: #00e5ff;
+        --accent-emerald: #00e676;
+        --accent-amber: #ffd600;
+        --accent-orange: #ff9100;
+        --accent-rose: #ff3366;
+        --text-primary: #f0f6fc;
+        --text-secondary: #8b9bb4;
+        --text-muted: #5c6c82;
+        --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-space);
+        color: var(--text-primary);
+        font-family: var(--font-sans);
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      #appContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      /* 3D Viewport - Takes full screen */
+      #threeContainer {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        outline: none;
+      }
+
+      /* 3D Projected Screen Badges */
+      #badgesLayer {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 5;
+        overflow: hidden;
+      }
+
+      .scene-badge {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translate(-50%, -100%);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        background: rgba(10, 14, 22, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+        color: var(--text-primary);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        white-space: nowrap;
+        transition: opacity 0.2s ease;
+        opacity: 0;
+      }
+
+      .badge-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      .dot-amber {
+        background: var(--accent-orange);
+        box-shadow: 0 0 8px var(--accent-orange);
+      }
+
+      .dot-cyan {
+        background: var(--accent-cyan);
+        box-shadow: 0 0 8px var(--accent-cyan);
+      }
+
+      /* Top Bar */
+      .top-bar {
+        position: absolute;
+        top: 14px;
+        left: 16px;
+        right: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 20;
+        pointer-events: none;
+        gap: 12px;
+      }
+
+      .top-bar > * {
+        pointer-events: auto;
+      }
+
+      .brand-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--glass-border);
+        padding: 7px 14px;
+        border-radius: 12px;
+      }
+
+      .brand-logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--font-mono);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        color: var(--accent-cyan);
+      }
+
+      .headphone-pill {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.73rem;
+        color: var(--text-secondary);
+        border-left: 1px solid var(--glass-border);
+        padding-left: 10px;
+      }
+
+      /* Presets Strip */
+      .preset-strip {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--glass-border);
+        padding: 5px;
+        border-radius: 14px;
+      }
+
+      .preset-card {
+        background: transparent;
+        border: 1px solid transparent;
+        color: var(--text-secondary);
+        padding: 6px 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+        text-align: left;
+      }
+
+      .preset-card:hover {
+        background: var(--glass-hover);
+        color: var(--text-primary);
+      }
+
+      .preset-card-active {
+        background: rgba(0, 229, 255, 0.12) !important;
+        border-color: rgba(0, 229, 255, 0.35) !important;
+        color: var(--accent-cyan) !important;
+      }
+
+      .preset-card-info {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .preset-card-title {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        line-height: 1.2;
+      }
+
+      .preset-card-active .preset-card-title {
+        color: var(--accent-cyan);
+      }
+
+      .preset-card-desc {
+        font-size: 0.67rem;
+        color: var(--text-muted);
+      }
+
+      /* Top Right Controls */
+      .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .lang-switcher {
+        display: flex;
+        background: var(--glass-bg);
+        backdrop-filter: blur(16px);
+        border: 1px solid var(--glass-border);
+        border-radius: 10px;
+        padding: 2px;
+      }
+
+      .lang-btn {
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        padding: 5px 9px;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 700;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .lang-btn-active {
+        background: rgba(255, 255, 255, 0.12);
+        color: var(--text-primary);
+      }
+
+      .engineer-toggle-pill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(16px);
+        border: 1px solid var(--glass-border);
+        padding: 6px 12px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      .engineer-toggle-label {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      /* Switch toggle */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 34px;
+        height: 18px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        inset: 0;
+        background-color: rgba(255, 255, 255, 0.15);
+        transition: 0.25s;
+        border-radius: 20px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 12px;
+        width: 12px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.25s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: var(--accent-cyan);
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(16px);
+        background-color: #000;
+      }
+
+      /* Bottom Floating Dock */
+      .bottom-dock {
+        position: absolute;
+        bottom: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        padding: 8px 14px;
+        border-radius: 18px;
+        z-index: 20;
+        max-width: 95vw;
+      }
+
+      .dock-divider {
+        width: 1px;
+        height: 22px;
+        background: var(--glass-border);
+        flex-shrink: 0;
+      }
+
+      .btn-play-pause {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: var(--accent-cyan);
+        color: #000;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 0 16px rgba(0, 229, 255, 0.3);
+        flex-shrink: 0;
+      }
+
+      .btn-play-pause:hover {
+        background: #33ebff;
+        box-shadow: 0 0 24px rgba(0, 229, 255, 0.5);
+        transform: scale(1.04);
+      }
+
+      .btn-playing {
+        background: #1e293b;
+        color: var(--accent-cyan);
+        border: 1px solid var(--accent-cyan);
+        box-shadow: none;
+      }
+
+      .btn-playing:hover {
+        background: rgba(0, 229, 255, 0.15);
+      }
+
+      .source-selector {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: rgba(7, 9, 14, 0.5);
+        padding: 3px;
+        border-radius: 12px;
+        border: 1px solid var(--glass-border);
+      }
+
+      .source-pill {
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        padding: 6px 11px;
+        border-radius: 9px;
+        font-size: 0.76rem;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.18s ease;
+        white-space: nowrap;
+      }
+
+      .source-pill:hover {
+        color: var(--text-primary);
+      }
+
+      .source-pill-active {
+        background: rgba(255, 255, 255, 0.12);
+        color: var(--text-primary);
+        font-weight: 600;
+      }
+
+      /* Motion Switch */
+      .switch-pill-group {
+        display: flex;
+        align-items: center;
+        background: rgba(7, 9, 14, 0.5);
+        padding: 3px;
+        border-radius: 12px;
+        border: 1px solid var(--glass-border);
+      }
+
+      .switch-pill {
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        padding: 6px 10px;
+        border-radius: 9px;
+        font-size: 0.74rem;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.18s ease;
+        white-space: nowrap;
+      }
+
+      .switch-pill-active {
+        background: rgba(255, 255, 255, 0.12);
+        color: var(--accent-cyan);
+      }
+
+      /* Volume Group */
+      .volume-group {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--text-secondary);
+      }
+
+      .volume-slider {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 68px;
+        height: 4px;
+        background: var(--glass-border);
+        border-radius: 2px;
+        outline: none;
+      }
+
+      .volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--accent-cyan);
+        cursor: pointer;
+      }
+
+      /* Action button */
+      .btn-dock-action {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid var(--glass-border);
+        color: var(--text-primary);
+        padding: 7px 12px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+      }
+
+      .btn-dock-action:hover {
+        background: var(--glass-hover);
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+
+      /* Add Wall Popover Modal */
+      .modal-popover {
+        position: fixed;
+        bottom: 84px;
+        left: 50%;
+        transform: translateX(-50%) translateY(10px);
+        background: rgba(14, 20, 30, 0.95);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+        padding: 14px;
+        z-index: 30;
+        width: 320px;
+        max-width: 90vw;
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+
+      .modal-visible {
+        display: flex;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        border-bottom: 1px solid var(--glass-border);
+        padding-bottom: 8px;
+      }
+
+      .btn-close {
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        padding: 2px;
+        display: flex;
+      }
+
+      .btn-close:hover {
+        color: var(--text-primary);
+      }
+
+      .mat-option-btn {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--glass-border);
+        border-radius: 10px;
+        padding: 8px 12px;
+        color: var(--text-primary);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+        transition: all 0.2s ease;
+        text-align: left;
+      }
+
+      .mat-option-btn:hover {
+        background: rgba(0, 229, 255, 0.08);
+        border-color: var(--accent-cyan);
+      }
+
+      .mat-option-title {
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+
+      .mat-option-desc {
+        font-size: 0.7rem;
+        color: var(--text-secondary);
+      }
+
+      /* Wall Context Menu (When wall is selected) */
+      .wall-context-card {
+        position: absolute;
+        top: 76px;
+        left: 16px;
+        background: rgba(13, 18, 27, 0.92);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--accent-cyan);
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+        border-radius: 14px;
+        padding: 14px;
+        width: 280px;
+        display: none;
+        flex-direction: column;
+        gap: 12px;
+        z-index: 25;
+      }
+
+      .wall-card-visible {
+        display: flex;
+      }
+
+      .control-field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .field-label {
+        font-size: 0.72rem;
+        color: var(--text-secondary);
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .field-val {
+        color: var(--accent-cyan);
+        font-family: var(--font-mono);
+      }
+
+      .custom-select {
+        background: rgba(7, 9, 14, 0.6);
+        border: 1px solid var(--glass-border);
+        color: var(--text-primary);
+        padding: 7px 10px;
+        border-radius: 8px;
+        font-size: 0.76rem;
+        outline: none;
+      }
+
+      .custom-select:focus {
+        border-color: var(--accent-cyan);
+      }
+
+      .slider-range {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 4px;
+        background: var(--glass-border);
+        border-radius: 2px;
+        outline: none;
+      }
+
+      .slider-range::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--accent-cyan);
+        cursor: pointer;
+      }
+
+      .btn-danger-outline {
+        background: transparent;
+        border: 1px solid rgba(255, 51, 102, 0.4);
+        color: var(--accent-rose);
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 0.74rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: all 0.2s ease;
+      }
+
+      .btn-danger-outline:hover {
+        background: rgba(255, 51, 102, 0.15);
+        border-color: var(--accent-rose);
+      }
+
+      /* Engineer Mode Drawer Panel */
+      .engineer-panel {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 330px;
+        background: rgba(10, 14, 22, 0.94);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border-left: 1px solid var(--glass-border);
+        box-shadow: -8px 0 32px rgba(0, 0, 0, 0.6);
+        z-index: 22;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        overflow-y: auto;
+        transform: translateX(100%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .engineer-mode-active .engineer-panel {
+        transform: translateX(0);
+      }
+
+      .panel-section-title {
+        font-family: var(--font-mono);
+        font-size: 0.74rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--accent-cyan);
+        letter-spacing: 0.8px;
+        border-bottom: 1px solid var(--glass-border);
+        padding-bottom: 4px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .telemetry-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: var(--font-mono);
+        font-size: 0.73rem;
+      }
+
+      .telemetry-table td {
+        padding: 3px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      }
+
+      .telemetry-table td:last-child {
+        text-align: right;
+        color: var(--accent-cyan);
+        font-weight: 600;
+      }
+
+      .budget-bar-container {
+        height: 4px;
+        background: var(--glass-border);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-top: 2px;
+      }
+
+      .budget-bar {
+        height: 100%;
+        width: 0%;
+        background: var(--accent-emerald);
+        transition: width 0.1s ease;
+      }
+
+      .ir-box {
+        background: #05070a;
+        border: 1px solid var(--glass-border);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      #irCanvas {
+        width: 100%;
+        height: 100px;
+        display: block;
+      }
+
+      .layer-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5px;
+      }
+
+      .layer-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        color: var(--text-secondary);
+        padding: 6px;
+        border-radius: 6px;
+        font-size: 0.72rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .layer-btn-active {
+        background: rgba(0, 229, 255, 0.12);
+        border-color: var(--accent-cyan);
+        color: var(--accent-cyan);
+      }
+
+      /* 1-Click Onboarding Start Overlay */
+      #startOverlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(5, 7, 11, 0.85);
+        backdrop-filter: blur(28px);
+        -webkit-backdrop-filter: blur(28px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        padding: 20px;
+        transition: opacity 0.4s ease;
+      }
+
+      .onboarding-card {
+        background: #0d121b;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 0 60px rgba(0, 229, 255, 0.15);
+        border-radius: 18px;
+        padding: 36px 32px;
+        max-width: 520px;
+        width: 100%;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .onboarding-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: rgba(0, 229, 255, 0.1);
+        border: 1px solid rgba(0, 229, 255, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent-cyan);
+      }
+
+      .onboarding-title {
+        font-size: 1.35rem;
+        font-weight: 700;
+        letter-spacing: -0.2px;
+        color: var(--text-primary);
+        line-height: 1.3;
+      }
+
+      .onboarding-sub {
+        font-size: 0.88rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+        max-width: 440px;
+      }
+
+      .onboarding-btn {
+        background: var(--accent-cyan);
+        color: #000;
+        border: none;
+        padding: 14px 28px;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.25s ease;
+        box-shadow: 0 0 24px rgba(0, 229, 255, 0.35);
+      }
+
+      .onboarding-btn:hover {
+        background: #33ebff;
+        box-shadow: 0 0 36px rgba(0, 229, 255, 0.55);
+        transform: translateY(-1px);
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      /* Mobile responsiveness */
+      @media (max-width: 900px) {
+        .headphone-pill {
+          display: none;
+        }
+
+        .top-bar {
+          top: 10px;
+          left: 10px;
+          right: 10px;
+          flex-wrap: wrap;
+        }
+
+        .preset-strip {
+          order: 3;
+          width: 100%;
+          overflow-x: auto;
+          scrollbar-width: none;
+        }
+
+        .preset-strip::-webkit-scrollbar {
+          display: none;
+        }
+
+        .preset-card-desc {
+          display: none;
+        }
+
+        .bottom-dock {
+          bottom: 12px;
+          padding: 6px 10px;
+          gap: 6px;
+          overflow-x: auto;
+          scrollbar-width: none;
+        }
+
+        .bottom-dock::-webkit-scrollbar {
+          display: none;
+        }
+
+        .engineer-panel {
+          width: 100%;
+        }
+
+        .wall-context-card {
+          left: 10px;
+          right: 10px;
+          width: auto;
+        }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index-B-AB1RZg.js"></script>
+  </head>
+  <body>
+    <div id="appContainer">
+      <!-- 1-Click Onboarding Start Screen -->
+      <div id="startOverlay">
+        <div class="onboarding-card">
+          <div class="onboarding-icon">
+            <!-- Headphones SVG icon -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/>
+            </svg>
+          </div>
+          <div class="onboarding-title" data-i18n="onboardingTitle">AetherRay — Пространственная акустика в реальном времени</div>
+          <div class="onboarding-sub" data-i18n="onboardingSubtitle">
+            Рекомендуется использовать наушники — звук меняет громкость, отражения и направление в зависимости от геометрии стен и расстояния.
+          </div>
+          <button id="btnStartExperience" class="onboarding-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            <span data-i18n="onboardingBtn">Запустить звук и войти в сцену</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Center 3D Viewport (Three.js WebGL2) -->
+      <div id="threeContainer"></div>
+
+      <!-- 3D Projected Badges Layer -->
+      <div id="badgesLayer">
+        <div id="badgeSource" class="scene-badge">
+          <span class="badge-dot dot-amber"></span>
+          <span data-i18n="badgeSource">Источник звука (перетащите)</span>
+        </div>
+        <div id="badgeListener" class="scene-badge">
+          <span class="badge-dot dot-cyan"></span>
+          <span data-i18n="badgeListener">Слушатель</span>
+        </div>
+      </div>
+
+      <!-- Top Bar: Brand + Presets Strip + Mode Toggle -->
+      <div class="top-bar">
+        <div class="brand-group">
+          <div class="brand-logo">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 10v4"/>
+              <path d="M6 6v12"/>
+              <path d="M10 3v18"/>
+              <path d="M14 7v10"/>
+              <path d="M18 5v14"/>
+              <path d="M22 10v4"/>
+            </svg>
+            <span data-i18n="appTitle">AetherRay</span>
+          </div>
+          <div class="headphone-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/>
+            </svg>
+            <span data-i18n="headphonesNotice">Наденьте наушники для 3D-звука</span>
+          </div>
+        </div>
+
+        <!-- 4 Acoustic Presets with Clear Human Labels -->
+        <div class="preset-strip">
+          <button class="preset-card preset-card-active" data-preset="bunker">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path d="M9 3v18"/>
+              <path d="M15 3v18"/>
+            </svg>
+            <div class="preset-card-info">
+              <div class="preset-card-title" data-i18n="presetEchoTitle">Гулко и звонко</div>
+              <div class="preset-card-desc" data-i18n="presetEchoDesc">Бетонный зал</div>
+            </div>
+          </button>
+
+          <button class="preset-card" data-preset="studio">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M9 10a3 3 0 0 1 6 0v4a3 3 0 0 1-6 0z"/>
+            </svg>
+            <div class="preset-card-info">
+              <div class="preset-card-title" data-i18n="presetStudioTitle">Мягко и тихо</div>
+              <div class="preset-card-desc" data-i18n="presetStudioDesc">Студия звукозаписи</div>
+            </div>
+          </button>
+
+          <button class="preset-card" data-preset="corridor">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="16" rx="1"/>
+              <path d="M12 4v16"/>
+              <path d="M3 12h18"/>
+            </svg>
+            <div class="preset-card-info">
+              <div class="preset-card-title" data-i18n="presetGlassTitle">Стеклянный офис</div>
+              <div class="preset-card-desc" data-i18n="presetGlassDesc">Звук проходит сквозь перегородки</div>
+            </div>
+          </button>
+
+          <button class="preset-card" data-preset="maze">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 7h10v6h4"/>
+              <path d="M7 3v14h10v4"/>
+            </svg>
+            <div class="preset-card-info">
+              <div class="preset-card-title" data-i18n="presetMazeTitle">Лабиринт</div>
+              <div class="preset-card-desc" data-i18n="presetMazeDesc">Распространение звука за углом</div>
+            </div>
+          </button>
+        </div>
+
+        <!-- Top Right Actions: Language + Engineer Mode Toggle -->
+        <div class="top-actions">
+          <div class="lang-switcher">
+            <button id="btnLangRu" class="lang-btn lang-btn-active">RU</button>
+            <button id="btnLangEn" class="lang-btn">EN</button>
+          </div>
+
+          <label class="engineer-toggle-pill" for="toggleEngineerMode">
+            <span class="engineer-toggle-label">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="4" y1="21" x2="4" y2="14"/>
+                <line x1="4" y1="10" x2="4" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12" y2="3"/>
+                <line x1="20" y1="21" x2="20" y2="16"/>
+                <line x1="20" y1="12" x2="20" y2="3"/>
+                <line x1="1" y1="14" x2="7" y2="14"/>
+                <line x1="9" y1="8" x2="15" y2="8"/>
+                <line x1="17" y1="16" x2="23" y2="16"/>
+              </svg>
+              <span data-i18n="engineerMode">Режим инженера</span>
+            </span>
+            <div class="switch">
+              <input type="checkbox" id="toggleEngineerMode" />
+              <span class="slider"></span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Selected Wall Context Floating Menu -->
+      <div id="wallMenuCard" class="wall-context-card">
+        <div class="modal-header">
+          <span data-i18n="wallMenuTitle">Параметры стены</span>
+          <button id="btnCloseWallMenu" class="btn-close">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="control-field">
+          <label class="field-label" data-i18n="wallChooseMaterial">Материал</label>
+          <select id="selWallMaterial" class="custom-select">
+            <option value="concrete" data-i18n="matConcreteDesc">Бетон — глушит прямой звук</option>
+            <option value="wood" data-i18n="matWoodDesc">Дерево — тёплые отражения</option>
+            <option value="glass" data-i18n="matGlassDesc">Стекло — пропускает часть звука</option>
+            <option value="foam" data-i18n="matFoamDesc">Поролон — поглощает эхо</option>
+          </select>
+        </div>
+
+        <div class="control-field">
+          <div class="field-label">
+            <span data-i18n="wallRotate">Поворот</span>
+            <span id="valWallRot" class="field-val">0°</span>
+          </div>
+          <input type="range" id="rngWallRot" class="slider-range" min="0" max="360" step="5" value="0" />
+        </div>
+
+        <div class="control-field">
+          <div class="field-label">
+            <span data-i18n="wallLength">Длина</span>
+            <span id="valWallLen" class="field-val">4.0 m</span>
+          </div>
+          <input type="range" id="rngWallLen" class="slider-range" min="1.0" max="14.0" step="0.5" value="4.0" />
+        </div>
+
+        <button id="btnDeleteWall" class="btn-danger-outline">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          </svg>
+          <span data-i18n="wallDelete">Удалить стену</span>
+        </button>
+      </div>
+
+      <!-- Add Wall Modal Popover -->
+      <div id="addWallModal" class="modal-popover">
+        <div class="modal-header">
+          <span data-i18n="wallChooseMaterial">Выберите материал новой стены</span>
+          <button id="btnCloseAddWallModal" class="btn-close">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <button class="mat-option-btn" data-add-mat="concrete">
+          <span class="mat-option-title" data-i18n="matConcreteTitle">Бетон</span>
+          <span class="mat-option-desc" data-i18n="matConcreteDesc">Бетон — глушит прямой звук</span>
+        </button>
+
+        <button class="mat-option-btn" data-add-mat="wood">
+          <span class="mat-option-title" data-i18n="matWoodTitle">Дерево</span>
+          <span class="mat-option-desc" data-i18n="matWoodDesc">Дерево — тёплые отражения</span>
+        </button>
+
+        <button class="mat-option-btn" data-add-mat="glass">
+          <span class="mat-option-title" data-i18n="matGlassTitle">Стекло</span>
+          <span class="mat-option-desc" data-i18n="matGlassDesc">Стекло — пропускает часть звука</span>
+        </button>
+
+        <button class="mat-option-btn" data-add-mat="foam">
+          <span class="mat-option-title" data-i18n="matFoamTitle">Поролон</span>
+          <span class="mat-option-desc" data-i18n="matFoamDesc">Поролон — поглощает эхо</span>
+        </button>
+      </div>
+
+      <!-- Bottom Floating Audio Dock -->
+      <div class="bottom-dock">
+        <!-- Play / Pause -->
+        <button id="btnPlayPause" class="btn-play-pause" title="Play / Pause">
+          <svg id="iconPlay" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          <svg id="iconPause" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="6" y="4" width="4" height="16"/>
+            <rect x="14" y="4" width="4" height="16"/>
+          </svg>
+        </button>
+
+        <div class="dock-divider"></div>
+
+        <!-- Audio Source Selector -->
+        <div class="source-selector">
+          <button class="source-pill source-pill-active" data-source="melody">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18V5l12-2v13"/>
+              <circle cx="6" cy="18" r="3"/>
+              <circle cx="18" cy="16" r="3"/>
+            </svg>
+            <span data-i18n="sourceMelody">Мелодия</span>
+          </button>
+
+          <button class="source-pill" data-source="voice">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+            </svg>
+            <span data-i18n="sourceVoice">Голос</span>
+          </button>
+
+          <button class="source-pill" data-source="siren">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4.93 4.93l4.24 4.24"/>
+              <path d="M14.83 9.17l4.24-4.24"/>
+              <path d="M14 14l5.66 5.66"/>
+              <path d="M4.34 19.66L10 14"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <span data-i18n="sourceSiren">Сирена</span>
+          </button>
+
+          <button class="source-pill" data-source="file">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span data-i18n="sourceFile">Загрузить файл</span>
+          </button>
+          <input type="file" id="fileAudioInput" accept="audio/*" style="display: none;" />
+        </div>
+
+        <div class="dock-divider"></div>
+
+        <!-- Motion: Manual vs Auto Orbit -->
+        <div class="switch-pill-group">
+          <button id="btnMotionManual" class="switch-pill switch-pill-active">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/>
+            </svg>
+            <span data-i18n="motionManual">Вручную</span>
+          </button>
+          <button id="btnMotionAuto" class="switch-pill">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/>
+              <path d="M21 3v5h-5"/>
+              <path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
+              <path d="M3 21v-5h5"/>
+            </svg>
+            <span data-i18n="motionAuto">Авто-полёт</span>
+          </button>
+        </div>
+
+        <div class="dock-divider"></div>
+
+        <!-- Volume -->
+        <div class="volume-group">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
+          <input type="range" id="rngVolume" class="volume-slider" min="0" max="1" step="0.01" value="0.6" title="Volume" />
+        </div>
+
+        <div class="dock-divider"></div>
+
+        <!-- Add Wall Button -->
+        <button id="btnAddWallBtn" class="btn-dock-action">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span data-i18n="addWallBtn">Добавить стену</span>
+        </button>
+      </div>
+
+      <!-- Engineer Mode Drawer Panel (Hidden by default, slides out when active) -->
+      <aside id="engineerPanel" class="engineer-panel">
+        <div class="panel-section-title">
+          <span data-i18n="telemetryTitle">Инженерная телеметрия</span>
+          <span style="font-size: 0.72rem; color: var(--accent-emerald);" id="statusIndicator">ГОТОВ</span>
+        </div>
+
+        <table class="telemetry-table">
+          <tr>
+            <td data-i18n="dspRenderTime">Время рендера DSP</td>
+            <td id="telDspTime">0.00 ms</td>
+          </tr>
+          <tr>
+            <td data-i18n="dspBudget">Бюджет блока DSP (128 spl)</td>
+            <td>&lt; 2.66 ms</td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <div class="budget-bar-container">
+                <div id="dspBudgetBar" class="budget-bar"></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td data-i18n="physicsTick">Тик физики воркера</td>
+            <td id="telPhysicsTick">0.0 ms (40 Hz)</td>
+          </tr>
+          <tr>
+            <td data-i18n="activeReflections">Ранние отражения</td>
+            <td id="telReflections">0 / 32</td>
+          </tr>
+          <tr>
+            <td data-i18n="calculatedRt60">Расчётный RT60</td>
+            <td id="telRt60">0.50 s</td>
+          </tr>
+          <tr>
+            <td data-i18n="meanAbsorption">Среднее поглощение ᾱ</td>
+            <td id="telMeanAbs">0.03</td>
+          </tr>
+          <tr>
+            <td data-i18n="directOcclusion">Окклюзия прямого звука</td>
+            <td id="telOcclusion">0.0 dB</td>
+          </tr>
+          <tr>
+            <td data-i18n="lowPassCutoff">Срез фильтра ВЧ</td>
+            <td id="telCutoff">20 000 Hz</td>
+          </tr>
+          <tr>
+            <td data-i18n="directDelay">Прямая задержка</td>
+            <td id="telDelay">0 spl (0.0 ms)</td>
+          </tr>
+          <tr>
+            <td data-i18n="itdTitle">Межушная задержка (ITD)</td>
+            <td id="telItd">0.00 ms</td>
+          </tr>
+          <tr>
+            <td data-i18n="azimuthAngle">Угол азимута</td>
+            <td id="telAzimuth">0.0°</td>
+          </tr>
+        </table>
+
+        <!-- IR Graph Canvas -->
+        <div class="panel-section-title">
+          <span data-i18n="irTitle">Импульсная характеристика (IR)</span>
+        </div>
+        <div class="ir-box">
+          <canvas id="irCanvas"></canvas>
+        </div>
+
+        <!-- Listening Layers -->
+        <div class="panel-section-title">
+          <span data-i18n="listeningLayers">Слои прослушивания</span>
+        </div>
+        <div class="layer-grid">
+          <button class="layer-btn layer-btn-active" data-layer-mode="0" data-i18n="layerAll">Все слои</button>
+          <button class="layer-btn" data-layer-mode="1" data-i18n="layerDirect">Только прямой</button>
+          <button class="layer-btn" data-layer-mode="2" data-i18n="layerReflections">Отражения</button>
+          <button class="layer-btn" data-layer-mode="3" data-i18n="layerReverb">Реверберация</button>
+        </div>
+
+        <!-- Ray Tracer Parameters -->
+        <div class="panel-section-title">
+          <span data-i18n="tracerParams">Параметры трассировки</span>
+        </div>
+        <div class="control-field">
+          <div class="field-label">
+            <span data-i18n="raysPerFrame">Лучей в кадре</span>
+            <span id="valRays" class="field-val">512</span>
+          </div>
+          <input type="range" id="rngRays" class="slider-range" min="128" max="2048" step="128" value="512" />
+        </div>
+
+        <div class="control-field">
+          <div class="field-label">
+            <span data-i18n="maxBounces">Макс. отскоков</span>
+            <span id="valBounces" class="field-val">4</span>
+          </div>
+          <input type="range" id="rngBounces" class="slider-range" min="1" max="4" step="1" value="4" />
+        </div>
+
+        <button id="btnResetPreset" class="btn-dock-action" style="margin-top: 6px; justify-content: center;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/>
+            <path d="M21 3v5h-5"/>
+            <path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
+            <path d="M3 21v-5h5"/>
+          </svg>
+          <span data-i18n="resetPreset">Сбросить сцену</span>
+        </button>
+      </aside>
+    </div>
+
+  </body>
+</html>

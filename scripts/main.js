@@ -594,9 +594,10 @@ function initCostCalculator() {
 
     const finalPrice = Math.round((basePrice * scopeMultiplier * urgencyMultiplier) / 500) * 500;
     const finalDays = Math.max(Math.round(baseDays * scopeDaysMultiplier * urgencyDaysMultiplier), 2);
+    const formattedPrice = finalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
     if (priceEl) {
-      priceEl.textContent = `от ${finalPrice.toLocaleString('ru-RU')} ₽`;
+      priceEl.textContent = `от ${formattedPrice} ₽`;
     }
     if (timeEl) {
       timeEl.textContent = `Ориентировочный срок: ~${finalDays} рабочих дней`;
@@ -612,7 +613,7 @@ function initCostCalculator() {
         `• Задача: ${encodeURIComponent(serviceName)}%0A` +
         `• Объем: ${encodeURIComponent(scopeName)}%0A` +
         `• Сроки: ${encodeURIComponent(urgencyName)}%0A` +
-        `• Примерная смета: ~${finalPrice.toLocaleString('ru-RU')} ₽ (~${finalDays} раб. дн.)%0A%0A` +
+        `• Примерная смета: ~${formattedPrice} ₽ (~${finalDays} раб. дн.)%0A%0A` +
         `Хочу обсудить детали.`;
 
       ctaBtn.href = `https://t.me/MrRebrik?text=${message}`;

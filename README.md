@@ -14,6 +14,8 @@
 
 | Проект | Стек и технологии | Ссылка на сайт | Репозиторий на GitHub |
 |---|---|---|---|
+| 🔮 **AetherRay** | Three.js (WebGL2), WebAssembly (WASM), Web Audio API, AudioWorklet DSP, Spatial 3D Audio | [mrrebrik28.github.io/portfolio/aetherray ↗](https://mrrebrik28.github.io/portfolio/aetherray/) | [MrRebrik28/portfolio ↗](https://github.com/MrRebrik28/portfolio/tree/main/aetherray) |
+| 🗺️ **«ПешКем»** | Leaflet.js, Audio Web Player, PWA, Mobile First UX/UI, 3 маршрута, 26 точек | [mrrebrik28.github.io/portfolio/peshkem ↗](https://mrrebrik28.github.io/portfolio/peshkem/) | [MrRebrik28/portfolio ↗](https://github.com/MrRebrik28/portfolio/tree/main/peshkem) |
 |  **«Всё зачётно»** | Next.js 16 (App Router), NestJS 12, TypeScript, PostgreSQL (Neon), Prisma ORM, Docker, Amvera | [vse-zachetno...amvera.tech ↗](https://vse-zachetno-mrrebrik.msk1.amvera.tech/) | [MrRebrik28/vse-zachetno ↗](https://github.com/MrRebrik28/vse-zachetno) |
 |  **«Моё восстановление» (zazozh)** | Vite, TypeScript, PWA, Service Worker, IndexedDB, HTML5 Canvas Retina Charts, Telegram Mini App | [mrrebrik28.github.io/zazozh ↗](https://mrrebrik28.github.io/zazozh/) | [MrRebrik28/zazozh ↗](https://github.com/MrRebrik28/zazozh) |
 |  **Конструктор резюме Soft Skills** | Modern HTML5/CSS Grid, Vanilla JS, html2canvas (масштаб 2.5x HD), Web Share API | [mrrebrik28.github.io/softskills-resume ↗](https://mrrebrik28.github.io/softskills-resume/) | [MrRebrik28/softskills-resume ↗](https://github.com/MrRebrik28/softskills-resume) |
