@@ -173,6 +173,10 @@
     }
 
     playStop(routeId, stopIndex, announceToast = true) {
+      if (!this.dockElement) {
+        this.init();
+      }
+
       const route = window.PESHKEM_DATA.routes.find(r => r.id === routeId);
       if (!route || !route.stops[stopIndex]) return;
 
@@ -221,6 +225,7 @@
             }
           })
           .catch((err) => {
+            if (err && err.name === 'AbortError') return;
             console.warn('Audio element play failed, falling back to Web Speech Synthesis:', err);
             this.isMp3Mode = false;
             this.speakViaSynth(stop, announceToast);
@@ -374,12 +379,16 @@
     }
 
     stop() {
-      if (this.isMp3Mode && this.audioElement) {
-        this.audioElement.pause();
-        this.audioElement.currentTime = 0;
+      if (this.audioElement) {
+        try {
+          this.audioElement.pause();
+          this.audioElement.currentTime = 0;
+        } catch (e) {}
       }
       if (this.synth) {
-        this.synth.cancel();
+        try {
+          this.synth.cancel();
+        } catch (e) {}
       }
       if (this.synthResumeInterval) {
         clearInterval(this.synthResumeInterval);
@@ -392,14 +401,6 @@
       if (this.playPauseBtn) {
         this.playPauseBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
         this.playPauseBtn.setAttribute('aria-label', 'Воспроизвести');
-      }
-      if (this.progressBar) this.progressBar.style.width = '0%';
-    }
-      this.isPaused = false;
-      this.stopProgress();
-      this.waveformEl?.classList.remove('playing');
-      if (this.playPauseBtn) {
-        this.playPauseBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
       }
       if (this.progressBar) this.progressBar.style.width = '0%';
     }
@@ -440,4 +441,9 @@
   }
 
   window.PeshkemAudio = new PeshkemAudio();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => window.PeshkemAudio.init());
+  } else {
+    window.PeshkemAudio.init();
+  }
 })();
