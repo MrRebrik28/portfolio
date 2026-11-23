@@ -46,7 +46,7 @@ const portfolioData = [
     isLive: true,
     liveUrl: "https://mrrebrik28.github.io/portfolio/peshkem/",
     githubUrl: "https://github.com/MrRebrik28/portfolio/tree/main/peshkem",
-    image: "peshkem/assets/peshkem/glavimg.png",
+    image: "assets/projects/peshkem_cover.jpg",
     gallery: [
       "peshkem/assets/peshkem/glavimg.png",
       "peshkem/assets/peshkem/tur.png",
@@ -83,7 +83,7 @@ const portfolioData = [
     isLive: false,
     liveUrl: null,
     githubUrl: null,
-    image: "assets/projects/rodnaya_sibir_filters.jpg",
+    image: "assets/projects/rodnaya_sibir_cover.jpg",
     gallery: [
       "assets/projects/rodnaya_sibir_filters.jpg",
       "assets/projects/rodnaya_sibir_main.jpg"
@@ -121,7 +121,13 @@ const portfolioData = [
     isLive: true,
     liveUrl: "https://vse-zachetno-mrrebrik.msk1.amvera.tech/",
     githubUrl: "https://github.com/MrRebrik28/vse-zachetno-frontend",
-    image: "assets/projects/vse_zachetno_live.jpg",
+    image: "assets/projects/vse_zachetno_cover.jpg",
+    gallery: [
+      "assets/projects/vse_zachetno_live.jpg"
+    ],
+    galleryCaptions: [
+      "Экран 1 // Интерфейс образовательного SaaS-сервиса «Всё зачётно»"
+    ],
     tags: ["Live Web", "Next.js 16", "React 19", "NestJS", "TypeScript", "Tailwind CSS", "PostgreSQL", "Docker"],
     year: "2026",
     client: "Собственный коммерческий SaaS-продукт",
@@ -151,7 +157,13 @@ const portfolioData = [
     isLive: true,
     liveUrl: "https://mrrebrik28.github.io/zazozh/",
     githubUrl: "https://github.com/MrRebrik28/zazozh",
-    image: "assets/projects/zazozh_live.jpg",
+    image: "assets/projects/zazozh_cover.jpg",
+    gallery: [
+      "assets/projects/zazozh_live.jpg"
+    ],
+    galleryCaptions: [
+      "Экран 1 // Интерфейс автономного PWA-трекера «Моё восстановление»"
+    ],
     tags: ["Live Web", "PWA Offline", "TypeScript", "IndexedDB", "Canvas Retina", "Telegram WebApp", "Tailwind"],
     year: "2026",
     client: "Оpen Source / HealthTech",
@@ -181,12 +193,12 @@ const portfolioData = [
     isLive: true,
     liveUrl: "https://local-web.ru/timetry/index.html",
     githubUrl: "https://github.com/MrRebrik28/timetry-bikes",
-    image: "assets/projects/timetry_bikes_live.jpg",
+    image: "assets/projects/timetry_bikes_cover.jpg",
     gallery: [
       "assets/projects/timetry_bikes_live.jpg"
     ],
     galleryCaptions: [
-      "Интерфейс официального каталога TIMETRY BIKES: боковые фильтры по моделям, диаметру колес и скоростям, товарная сетка с модификациями, статусами наличия и панелью управления"
+      "Экран 1 // Интерфейс официального каталога TIMETRY BIKES: боковые фильтры, товарная сетка с модификациями"
     ],
     tags: ["Live Web", "E-commerce", "JavaScript ES6+", "CSS3 Grid", "Mobile First", "Каталог 106 SKU"],
     year: "2026",
@@ -217,7 +229,13 @@ const portfolioData = [
     isLive: true,
     liveUrl: "https://mrrebrik28.github.io/softskills-resume/",
     githubUrl: "https://github.com/MrRebrik28/softskills-resume",
-    image: "assets/projects/softskills_resume_live.png",
+    image: "assets/projects/softskills_resume_cover.jpg",
+    gallery: [
+      "assets/projects/softskills_resume_live.png"
+    ],
+    galleryCaptions: [
+      "Экран 1 // Интерактивный редактор резюме Soft Skills и живой лист А4"
+    ],
     tags: ["Live Web", "EdTech", "html2canvas 2.5x", "Print CSS A4", "JavaScript", "Responsive UI"],
     year: "2026",
     client: "Учебный проект для студентов IT-колледжа",
@@ -247,7 +265,13 @@ const portfolioData = [
     isLive: true,
     liveUrl: "https://local-web.ru/",
     githubUrl: "https://github.com/MrRebrik28/turboweb-",
-    image: "assets/projects/local_web_live.png",
+    image: "assets/projects/local_web_cover.jpg",
+    gallery: [
+      "assets/projects/local_web_live.png"
+    ],
+    galleryCaptions: [
+      "Экран 1 // Интерфейс сайта студии быстрой веб-разработки LocalWeb.ru"
+    ],
     tags: ["Live Web", "Tailwind CSS", "Telegram API", "Google Sheets", "Cloudflare", "Open Source"],
     year: "2026",
     client: "Собственный продакшен // LocalWeb",
