@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollProgressFallback();
   initMarqueeToggle();
   initLiveClock();
-  initCustomCursor();
   initHeaderScroll();
   initMobileNav();
   renderWorks('all');
@@ -83,72 +82,6 @@ function initLiveClock() {
 
   update();
   setInterval(update, 1000);
-}
-
-/* --------------------------------------------------------------------------
-   2. Smooth Custom Cursor with Physics
-   -------------------------------------------------------------------------- */
-function initCustomCursor() {
-  // Only enable on desktop pointer devices
-  if (window.matchMedia('(pointer: coarse)').matches) return;
-
-  const dot = document.querySelector('.cursor-dot');
-  const outline = document.querySelector('.cursor-outline');
-  if (!dot || !outline) return;
-
-  document.body.classList.add('has-custom-cursor');
-
-  // Top Layer elevation support via Popover API (so custom cursor stays above native dialogs)
-  if (typeof dot.showPopover === 'function') {
-    try {
-      if (!dot.matches(':popover-open')) dot.showPopover();
-      if (!outline.matches(':popover-open')) outline.showPopover();
-    } catch (_e) {}
-  }
-
-  let mouseX = window.innerWidth / 2;
-  let mouseY = window.innerHeight / 2;
-  let outlineX = mouseX;
-  let outlineY = mouseY;
-
-  window.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
-  }, { passive: true });
-
-  function renderCursor() {
-    // Smooth lerp trailing
-    outlineX += (mouseX - outlineX) * 0.18;
-    outlineY += (mouseY - outlineY) * 0.18;
-    outline.style.transform = `translate3d(${outlineX}px, ${outlineY}px, 0) translate(-50%, -50%)`;
-    requestAnimationFrame(renderCursor);
-  }
-  requestAnimationFrame(renderCursor);
-
-  // Hover states on interactive elements
-  const interactiveTargets = 'a, button, input, label, .work-card, .filter-btn';
-  document.addEventListener('mouseover', (e) => {
-    const card = e.target.closest('.work-card');
-    const interactive = e.target.closest(interactiveTargets);
-
-    if (card) {
-      outline.classList.add('view-project');
-    } else if (interactive) {
-      outline.classList.add('hover');
-    }
-  });
-
-  document.addEventListener('mouseout', (e) => {
-    const card = e.target.closest('.work-card');
-    const interactive = e.target.closest(interactiveTargets);
-
-    if (card) {
-      outline.classList.remove('view-project');
-    } else if (interactive) {
-      outline.classList.remove('hover');
-    }
-  });
 }
 
 /* --------------------------------------------------------------------------
@@ -500,31 +433,11 @@ function openProjectModal(id) {
     }
   }
 
-  // Reset any lingering .view-project state from hovering the card
-  const outline = document.querySelector('.cursor-outline');
-  const dot = document.querySelector('.cursor-dot');
-  if (outline) {
-    outline.classList.remove('view-project');
-  }
-
   // Show native modal & sync URL hash
   if (history.replaceState) {
     history.replaceState(null, '', `#case-${item.id}`);
   }
   modal.showModal();
-
-  // Elevate custom cursor above modal in browser's Top Layer
-  if (dot && outline && typeof dot.showPopover === 'function') {
-    try {
-      if (outline.matches(':popover-open')) outline.hidePopover();
-      if (dot.matches(':popover-open')) dot.hidePopover();
-      outline.showPopover();
-      dot.showPopover();
-    } catch (_e) {}
-  } else {
-    // Fallback for older browsers: restore native cursor inside modal
-    document.body.classList.remove('has-custom-cursor');
-  }
 
   if (window.sfx) window.sfx.modalOpen();
 }
@@ -538,16 +451,6 @@ function closeProjectModal() {
     history.replaceState(null, '', window.location.pathname + window.location.search);
   }
   closeTopLayer(modal);
-
-  const outline = document.querySelector('.cursor-outline');
-  if (outline) {
-    outline.classList.remove('hover', 'view-project');
-  }
-
-  // Restore custom cursor class if disabled in fallback
-  if (!document.body.classList.contains('has-custom-cursor') && !window.matchMedia('(pointer: coarse)').matches) {
-    document.body.classList.add('has-custom-cursor');
-  }
 
   if (window.sfx) window.sfx.modalClose();
 }
